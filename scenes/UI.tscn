@@ -1,0 +1,164 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/GameUI.gd" id="1_ui"]
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_ui")
+
+[node name="NetworkPanel" type="PanelContainer" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 520.0
+offset_bottom = 210.0
+
+[node name="NetworkMargin" type="MarginContainer" parent="NetworkPanel"]
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="NetworkColumn" type="VBoxContainer" parent="NetworkPanel/NetworkMargin"]
+theme_override_constants/separation = 8
+
+[node name="NetworkStatusLabel" type="Label" parent="NetworkPanel/NetworkMargin/NetworkColumn"]
+custom_minimum_size = Vector2(448, 24)
+text = "Network: Offline"
+
+[node name="NetworkAddressInput" type="LineEdit" parent="NetworkPanel/NetworkMargin/NetworkColumn"]
+custom_minimum_size = Vector2(448, 32)
+text = "ws://127.0.0.1:8910"
+placeholder_text = "ws://127.0.0.1:8910"
+
+[node name="HostOpenSeatCheckBox" type="CheckBox" parent="NetworkPanel/NetworkMargin/NetworkColumn"]
+custom_minimum_size = Vector2(448, 28)
+button_pressed = true
+text = "Host controls open seats"
+
+[node name="NetworkActions" type="HBoxContainer" parent="NetworkPanel/NetworkMargin/NetworkColumn"]
+custom_minimum_size = Vector2(448, 38)
+theme_override_constants/separation = 10
+
+[node name="HostButton" type="Button" parent="NetworkPanel/NetworkMargin/NetworkColumn/NetworkActions"]
+size_flags_horizontal = 3
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="NetworkPanel/NetworkMargin/NetworkColumn/NetworkActions"]
+size_flags_horizontal = 3
+text = "Join"
+
+[node name="StatusPanel" type="PanelContainer" parent="."]
+offset_left = 1400.0
+offset_top = 535.0
+offset_right = 1856.0
+offset_bottom = 1000.0
+
+[node name="StatusMargin" type="MarginContainer" parent="StatusPanel"]
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="StatusColumn" type="VBoxContainer" parent="StatusPanel/StatusMargin"]
+theme_override_constants/separation = 10
+
+[node name="RoundLabel" type="Label" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 28)
+horizontal_alignment = 1
+text = "Round 1"
+
+[node name="TurnLabel" type="Label" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 32)
+horizontal_alignment = 1
+text = "Player 1 Turn"
+
+[node name="DiceLabel" type="Label" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 32)
+horizontal_alignment = 1
+text = "Dice: -"
+
+[node name="TileLabel" type="Label" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 44)
+horizontal_alignment = 1
+autowrap_mode = 3
+text = "Landed: -"
+
+[node name="MoneyLabel" type="Label" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 32)
+horizontal_alignment = 1
+text = "Money: -"
+
+[node name="EventLabel" type="Label" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 52)
+horizontal_alignment = 1
+autowrap_mode = 3
+text = "Event: -"
+
+[node name="RouteActions" type="HBoxContainer" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 48)
+theme_override_constants/separation = 10
+
+[node name="UpButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn/RouteActions"]
+size_flags_horizontal = 3
+text = "^"
+tooltip_text = "Northwest"
+
+[node name="RightButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn/RouteActions"]
+size_flags_horizontal = 3
+text = ">"
+tooltip_text = "Northeast"
+
+[node name="DownButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn/RouteActions"]
+size_flags_horizontal = 3
+text = "v"
+tooltip_text = "Southeast"
+
+[node name="LeftButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn/RouteActions"]
+size_flags_horizontal = 3
+text = "<"
+tooltip_text = "Southwest"
+
+[node name="PropertyActions" type="HBoxContainer" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 44)
+theme_override_constants/separation = 10
+
+[node name="BuyButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn/PropertyActions"]
+size_flags_horizontal = 3
+text = "Buy"
+
+[node name="SkipButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn/PropertyActions"]
+size_flags_horizontal = 3
+text = "Skip"
+
+[node name="RollButton" type="Button" parent="StatusPanel/StatusMargin/StatusColumn"]
+custom_minimum_size = Vector2(416, 56)
+text = "Roll"
+
+[node name="LogPanel" type="PanelContainer" parent="."]
+offset_left = 1400.0
+offset_top = 80.0
+offset_right = 1856.0
+offset_bottom = 520.0
+
+[node name="LogMargin" type="MarginContainer" parent="LogPanel"]
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="LogScroll" type="ScrollContainer" parent="LogPanel/LogMargin"]
+custom_minimum_size = Vector2(416, 404)
+horizontal_scroll_mode = 0
+
+[node name="LogContent" type="VBoxContainer" parent="LogPanel/LogMargin/LogScroll"]
+custom_minimum_size = Vector2(416, 404)
+size_flags_horizontal = 3
+
+[node name="LogLabel" type="Label" parent="LogPanel/LogMargin/LogScroll/LogContent"]
+custom_minimum_size = Vector2(416, 404)
+size_flags_horizontal = 3
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 24
+text = "Log: -"
+
+[node name="LogBottomMarker" type="Control" parent="LogPanel/LogMargin/LogScroll/LogContent"]
+custom_minimum_size = Vector2(1, 1)

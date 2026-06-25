@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/Board.gd" id="1_board"]
+[ext_resource type="Resource" path="res://resources/tiles/default_board.tres" id="2_board_data"]
+
+[node name="Board" type="Node2D"]
+script = ExtResource("1_board")
+board_data = ExtResource("2_board_data")

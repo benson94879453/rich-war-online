@@ -1,0 +1,372 @@
+[gd_resource type="Resource" script_class="BoardData" format=3 uid="uid://bboc4dvng0l1b"]
+
+[ext_resource type="Script" uid="uid://bq8w244ap0241" path="res://scripts/data/BoardData.gd" id="1_board_data"]
+[ext_resource type="Script" uid="uid://bi455muo41i5" path="res://scripts/data/TileData.gd" id="2_tile_data"]
+
+[sub_resource type="Resource" id="TileData_00"]
+script = ExtResource("2_tile_data")
+index = 0
+tile_type = 0
+display_name = "Start"
+description = "Collect salary when passing or landing here."
+color = Color(0.12, 0.5, 0.32, 1)
+salary = 200
+effect_id = &"start"
+
+[sub_resource type="Resource" id="TileData_01"]
+script = ExtResource("2_tile_data")
+index = 1
+tile_type = 1
+display_name = "Prop A1"
+color = Color(0.43, 0.29, 0.18, 1)
+price = 60
+base_rent = 10
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_02"]
+script = ExtResource("2_tile_data")
+index = 2
+tile_type = 3
+display_name = "Draw"
+color = Color(0.22, 0.45, 0.8, 1)
+deck_id = &"intervention"
+effect_id = &"draw_card"
+
+[sub_resource type="Resource" id="TileData_03"]
+script = ExtResource("2_tile_data")
+index = 3
+tile_type = 1
+display_name = "Prop A2"
+color = Color(0.43, 0.29, 0.18, 1)
+price = 60
+base_rent = 10
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_04"]
+script = ExtResource("2_tile_data")
+index = 4
+tile_type = 9
+display_name = "Safe"
+color = Color(0.36, 0.38, 0.42, 1)
+effect_id = &"safe"
+
+[sub_resource type="Resource" id="TileData_05"]
+script = ExtResource("2_tile_data")
+index = 5
+tile_type = 2
+display_name = "Stock"
+color = Color(0.14, 0.46, 0.48, 1)
+effect_id = &"stock_market"
+
+[sub_resource type="Resource" id="TileData_06"]
+script = ExtResource("2_tile_data")
+index = 6
+tile_type = 1
+display_name = "Prop B1"
+color = Color(0.21, 0.48, 0.7, 1)
+price = 100
+base_rent = 14
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_07"]
+script = ExtResource("2_tile_data")
+index = 7
+tile_type = 4
+display_name = "Chance"
+color = Color(0.86, 0.48, 0.18, 1)
+deck_id = &"chance"
+effect_id = &"event_card"
+
+[sub_resource type="Resource" id="TileData_08"]
+script = ExtResource("2_tile_data")
+index = 8
+tile_type = 1
+display_name = "Prop B2"
+color = Color(0.21, 0.48, 0.7, 1)
+price = 100
+base_rent = 14
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_09"]
+script = ExtResource("2_tile_data")
+index = 9
+tile_type = 1
+display_name = "Prop B3"
+color = Color(0.21, 0.48, 0.7, 1)
+price = 120
+base_rent = 16
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_10"]
+script = ExtResource("2_tile_data")
+index = 10
+tile_type = 8
+display_name = "Hospital"
+color = Color(0.72, 0.18, 0.2, 1)
+effect_id = &"hospital"
+
+[sub_resource type="Resource" id="TileData_11"]
+script = ExtResource("2_tile_data")
+index = 11
+tile_type = 1
+display_name = "Prop C1"
+color = Color(0.56, 0.3, 0.74, 1)
+price = 140
+base_rent = 18
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_12"]
+script = ExtResource("2_tile_data")
+index = 12
+tile_type = 3
+display_name = "Draw"
+color = Color(0.22, 0.45, 0.8, 1)
+deck_id = &"intervention"
+effect_id = &"draw_card"
+
+[sub_resource type="Resource" id="TileData_13"]
+script = ExtResource("2_tile_data")
+index = 13
+tile_type = 1
+display_name = "Prop C2"
+color = Color(0.56, 0.3, 0.74, 1)
+price = 140
+base_rent = 18
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_14"]
+script = ExtResource("2_tile_data")
+index = 14
+tile_type = 5
+display_name = "Fate"
+color = Color(0.58, 0.42, 0.13, 1)
+deck_id = &"fate"
+effect_id = &"event_card"
+
+[sub_resource type="Resource" id="TileData_15"]
+script = ExtResource("2_tile_data")
+index = 15
+tile_type = 2
+display_name = "Stock"
+color = Color(0.14, 0.46, 0.48, 1)
+effect_id = &"stock_market"
+
+[sub_resource type="Resource" id="TileData_16"]
+script = ExtResource("2_tile_data")
+index = 16
+tile_type = 1
+display_name = "Prop D1"
+color = Color(0.18, 0.56, 0.26, 1)
+price = 160
+base_rent = 22
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_17"]
+script = ExtResource("2_tile_data")
+index = 17
+tile_type = 9
+display_name = "Safe"
+color = Color(0.36, 0.38, 0.42, 1)
+effect_id = &"safe"
+
+[sub_resource type="Resource" id="TileData_18"]
+script = ExtResource("2_tile_data")
+index = 18
+tile_type = 1
+display_name = "Prop D2"
+color = Color(0.18, 0.56, 0.26, 1)
+price = 180
+base_rent = 24
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_19"]
+script = ExtResource("2_tile_data")
+index = 19
+tile_type = 6
+display_name = "Bless"
+color = Color(0.78, 0.7, 0.24, 1)
+effect_id = &"blessing"
+
+[sub_resource type="Resource" id="TileData_20"]
+script = ExtResource("2_tile_data")
+index = 20
+tile_type = 8
+display_name = "Jail"
+color = Color(0.28, 0.31, 0.37, 1)
+effect_id = &"jail"
+
+[sub_resource type="Resource" id="TileData_21"]
+script = ExtResource("2_tile_data")
+index = 21
+tile_type = 1
+display_name = "Prop E1"
+color = Color(0.74, 0.26, 0.18, 1)
+price = 200
+base_rent = 28
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_22"]
+script = ExtResource("2_tile_data")
+index = 22
+tile_type = 4
+display_name = "Chance"
+color = Color(0.86, 0.48, 0.18, 1)
+deck_id = &"chance"
+effect_id = &"event_card"
+
+[sub_resource type="Resource" id="TileData_23"]
+script = ExtResource("2_tile_data")
+index = 23
+tile_type = 1
+display_name = "Prop E2"
+color = Color(0.74, 0.26, 0.18, 1)
+price = 220
+base_rent = 30
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_24"]
+script = ExtResource("2_tile_data")
+index = 24
+tile_type = 7
+display_name = "Curse"
+color = Color(0.32, 0.2, 0.42, 1)
+effect_id = &"curse"
+
+[sub_resource type="Resource" id="TileData_25"]
+script = ExtResource("2_tile_data")
+index = 25
+tile_type = 2
+display_name = "Stock"
+color = Color(0.14, 0.46, 0.48, 1)
+effect_id = &"stock_market"
+
+[sub_resource type="Resource" id="TileData_26"]
+script = ExtResource("2_tile_data")
+index = 26
+tile_type = 1
+display_name = "Prop F1"
+color = Color(0.14, 0.54, 0.58, 1)
+price = 240
+base_rent = 34
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_27"]
+script = ExtResource("2_tile_data")
+index = 27
+tile_type = 3
+display_name = "Draw"
+color = Color(0.22, 0.45, 0.8, 1)
+deck_id = &"intervention"
+effect_id = &"draw_card"
+
+[sub_resource type="Resource" id="TileData_28"]
+script = ExtResource("2_tile_data")
+index = 28
+tile_type = 1
+display_name = "Prop F2"
+color = Color(0.14, 0.54, 0.58, 1)
+price = 260
+base_rent = 36
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_29"]
+script = ExtResource("2_tile_data")
+index = 29
+tile_type = 9
+display_name = "Safe"
+color = Color(0.36, 0.38, 0.42, 1)
+effect_id = &"safe"
+
+[sub_resource type="Resource" id="TileData_30"]
+script = ExtResource("2_tile_data")
+index = 30
+tile_type = 8
+display_name = "Station"
+color = Color(0.25, 0.25, 0.26, 1)
+effect_id = &"special_place"
+
+[sub_resource type="Resource" id="TileData_31"]
+script = ExtResource("2_tile_data")
+index = 31
+tile_type = 1
+display_name = "Prop G1"
+color = Color(0.62, 0.52, 0.18, 1)
+price = 280
+base_rent = 40
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_32"]
+script = ExtResource("2_tile_data")
+index = 32
+tile_type = 5
+display_name = "Fate"
+color = Color(0.58, 0.42, 0.13, 1)
+deck_id = &"fate"
+effect_id = &"event_card"
+
+[sub_resource type="Resource" id="TileData_33"]
+script = ExtResource("2_tile_data")
+index = 33
+tile_type = 1
+display_name = "Prop G2"
+color = Color(0.62, 0.52, 0.18, 1)
+price = 300
+base_rent = 42
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_34"]
+script = ExtResource("2_tile_data")
+index = 34
+tile_type = 3
+display_name = "Draw"
+color = Color(0.22, 0.45, 0.8, 1)
+deck_id = &"intervention"
+effect_id = &"draw_card"
+
+[sub_resource type="Resource" id="TileData_35"]
+script = ExtResource("2_tile_data")
+index = 35
+tile_type = 2
+display_name = "Stock"
+color = Color(0.14, 0.46, 0.48, 1)
+effect_id = &"stock_market"
+
+[sub_resource type="Resource" id="TileData_36"]
+script = ExtResource("2_tile_data")
+index = 36
+tile_type = 1
+display_name = "Prop H1"
+color = Color(0.5, 0.44, 0.78, 1)
+price = 320
+base_rent = 46
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_37"]
+script = ExtResource("2_tile_data")
+index = 37
+tile_type = 7
+display_name = "Curse"
+color = Color(0.32, 0.2, 0.42, 1)
+effect_id = &"curse"
+
+[sub_resource type="Resource" id="TileData_38"]
+script = ExtResource("2_tile_data")
+index = 38
+tile_type = 1
+display_name = "Prop H2"
+color = Color(0.5, 0.44, 0.78, 1)
+price = 350
+base_rent = 50
+effect_id = &"property"
+
+[sub_resource type="Resource" id="TileData_39"]
+script = ExtResource("2_tile_data")
+index = 39
+tile_type = 6
+display_name = "Bless"
+color = Color(0.78, 0.7, 0.24, 1)
+effect_id = &"blessing"
+
+[resource]
+script = ExtResource("1_board_data")
+tiles = Array[Resource]([SubResource("TileData_00"), SubResource("TileData_01"), SubResource("TileData_02"), SubResource("TileData_03"), SubResource("TileData_04"), SubResource("TileData_05"), SubResource("TileData_06"), SubResource("TileData_07"), SubResource("TileData_08"), SubResource("TileData_09"), SubResource("TileData_10"), SubResource("TileData_11"), SubResource("TileData_12"), SubResource("TileData_13"), SubResource("TileData_14"), SubResource("TileData_15"), SubResource("TileData_16"), SubResource("TileData_17"), SubResource("TileData_18"), SubResource("TileData_19"), SubResource("TileData_20"), SubResource("TileData_21"), SubResource("TileData_22"), SubResource("TileData_23"), SubResource("TileData_24"), SubResource("TileData_25"), SubResource("TileData_26"), SubResource("TileData_27"), SubResource("TileData_28"), SubResource("TileData_29"), SubResource("TileData_30"), SubResource("TileData_31"), SubResource("TileData_32"), SubResource("TileData_33"), SubResource("TileData_34"), SubResource("TileData_35"), SubResource("TileData_36"), SubResource("TileData_37"), SubResource("TileData_38"), SubResource("TileData_39")])

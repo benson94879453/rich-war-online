@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/StarQGame.gd" id="1_game"]
+[ext_resource type="Script" path="res://scripts/core/MapViewController.gd" id="2_map_view"]
+[ext_resource type="Script" path="res://scripts/core/Board.gd" id="3_board"]
+[ext_resource type="Resource" path="res://resources/maps/starq_board.tres" id="4_board_data"]
+[ext_resource type="PackedScene" path="res://scenes/PlayerPiece.tscn" id="5_piece"]
+[ext_resource type="PackedScene" path="res://scenes/UI.tscn" id="6_ui"]
+
+[node name="StarQGame" type="Node"]
+script = ExtResource("1_game")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0.11, 0.13, 0.15, 1)
+
+[node name="MapView" type="Node2D" parent="."]
+script = ExtResource("2_map_view")
+
+[node name="Board" type="Node2D" parent="MapView"]
+script = ExtResource("3_board")
+board_data = ExtResource("4_board_data")
+tile_size = Vector2(68, 40)
+tile_shape = 1
+show_tile_indices = false
+tile_name_font_size = 10
+
+[node name="Pieces" type="Node2D" parent="MapView"]
+
+[node name="Player1" parent="MapView/Pieces" instance=ExtResource("5_piece")]
+player_id = 0
+piece_color = Color(0.96, 0.23, 0.2, 1)
+radius = 12.0
+
+[node name="Player2" parent="MapView/Pieces" instance=ExtResource("5_piece")]
+player_id = 1
+piece_color = Color(0.18, 0.45, 0.95, 1)
+radius = 12.0
+
+[node name="Player3" parent="MapView/Pieces" instance=ExtResource("5_piece")]
+player_id = 2
+piece_color = Color(0.2, 0.72, 0.35, 1)
+radius = 12.0
+
+[node name="Player4" parent="MapView/Pieces" instance=ExtResource("5_piece")]
+player_id = 3
+piece_color = Color(0.94, 0.72, 0.2, 1)
+radius = 12.0
+
+[node name="UI" parent="." instance=ExtResource("6_ui")]

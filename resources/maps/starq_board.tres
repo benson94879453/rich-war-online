@@ -1,0 +1,3172 @@
+[gd_resource type="Resource" script_class="BoardData" format=3 uid="uid://b2y5fbyko8b3r"]
+
+[ext_resource type="Script" uid="uid://bq8w244ap0241" path="res://scripts/data/BoardData.gd" id="1_board_data"]
+[ext_resource type="Script" uid="uid://bi455muo41i5" path="res://scripts/data/TileData.gd" id="2_tile_data"]
+[ext_resource type="Script" uid="uid://bilolgncyn2mg" path="res://scripts/data/BoardTilePlacementData.gd" id="3_placement"]
+[ext_resource type="Script" uid="uid://do5kxcs2e5x2k" path="res://scripts/data/BoardPropertyDecorationData.gd" id="4_property_decoration"]
+[ext_resource type="Script" uid="uid://daltu7uxo07g0" path="res://scripts/data/BoardMapGridData.gd" id="5_map_grid"]
+[ext_resource type="Script" uid="uid://bf1g6xrjxnh4o" path="res://scripts/data/BoardPlayerSpawnData.gd" id="6_player_spawn"]
+
+[sub_resource type="Resource" id="MapGrid_001"]
+script = ExtResource("5_map_grid")
+width = 41
+height = 43
+node_ids = PackedInt32Array(233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 162, 162, 162, 162, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 161, 162, 162, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 165, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 188, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 178, 0, 0, 233, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 138, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 195, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 138, 138, 138, 0, 0, 0, 124, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 177, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 138, 0, 218, 0, 124, 124, 124, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 0, 0, 133, 0, 0, 0, 171, 0, 118, 0, 0, 0, 0, 233, 233, 233, 233, 0, 0, 0, 0, 0, 104, 0, 134, 0, 122, 0, 124, 0, 158, 0, 0, 0, 233, 233, 233, 233, 0, 0, 0, 0, 133, 133, 133, 0, 205, 0, 118, 118, 118, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 0, 102, 0, 103, 0, 0, 0, 123, 0, 158, 158, 158, 0, 0, 233, 233, 233, 0, 0, 0, 0, 153, 0, 133, 0, 132, 0, 116, 0, 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 101, 0, 0, 0, 0, 0, 221, 0, 158, 0, 0, 0, 233, 233, 233, 0, 0, 0, 153, 153, 153, 0, 131, 0, 0, 0, 117, 0, 66, 0, 0, 0, 0, 0, 0, 0, 92, 0, 220, 0, 99, 0, 0, 0, 0, 0, 111, 0, 157, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 153, 0, 150, 0, 0, 0, 0, 0, 65, 0, 68, 0, 0, 0, 0, 0, 90, 0, 91, 0, 219, 0, 0, 0, 0, 0, 109, 0, 112, 0, 194, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 0, 149, 0, 0, 0, 0, 0, 0, 0, 67, 0, 70, 0, 143, 0, 88, 0, 89, 0, 0, 0, 0, 0, 0, 0, 107, 0, 110, 0, 0, 0, 202, 0, 0, 233, 233, 233, 0, 0, 0, 0, 206, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69, 0, 143, 143, 143, 0, 87, 0, 0, 0, 0, 0, 0, 0, 105, 0, 108, 0, 0, 0, 0, 0, 187, 0, 233, 233, 233, 0, 0, 0, 138, 0, 137, 0, 0, 0, 0, 0, 0, 0, 56, 0, 224, 0, 143, 0, 172, 0, 0, 0, 0, 0, 0, 0, 217, 0, 106, 0, 0, 0, 0, 0, 0, 0, 216, 233, 233, 233, 0, 0, 138, 138, 138, 0, 27, 0, 0, 0, 0, 0, 54, 0, 55, 0, 142, 0, 141, 0, 0, 0, 0, 0, 0, 0, 0, 0, 222, 0, 0, 0, 0, 0, 0, 0, 183, 0, 233, 233, 233, 0, 0, 0, 138, 0, 28, 0, 29, 0, 0, 0, 52, 0, 53, 0, 0, 0, 229, 0, 72, 0, 0, 0, 0, 0, 0, 0, 97, 0, 193, 0, 0, 0, 0, 0, 203, 0, 0, 233, 233, 233, 233, 0, 0, 0, 0, 0, 30, 0, 31, 0, 50, 0, 51, 0, 0, 0, 166, 0, 71, 0, 74, 0, 0, 0, 0, 0, 95, 0, 98, 0, 186, 0, 0, 0, 190, 0, 0, 0, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 32, 0, 33, 0, 49, 0, 0, 0, 155, 0, 0, 0, 73, 0, 76, 0, 0, 0, 93, 0, 96, 0, 0, 0, 198, 0, 200, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 34, 0, 227, 0, 0, 0, 154, 0, 156, 0, 0, 0, 75, 0, 78, 0, 167, 0, 94, 0, 0, 0, 0, 0, 215, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 148, 0, 145, 0, 173, 0, 156, 156, 156, 0, 0, 0, 77, 0, 144, 0, 148, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 148, 148, 148, 0, 232, 0, 0, 0, 156, 0, 121, 0, 0, 0, 230, 0, 148, 148, 148, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 148, 0, 146, 0, 35, 0, 0, 0, 121, 121, 121, 0, 174, 0, 147, 0, 148, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 0, 207, 0, 0, 0, 0, 0, 20, 0, 168, 0, 36, 0, 37, 0, 0, 0, 121, 0, 120, 0, 0, 0, 223, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 181, 0, 201, 0, 0, 0, 18, 0, 19, 0, 0, 0, 38, 0, 39, 0, 0, 0, 119, 0, 0, 0, 63, 0, 79, 0, 82, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 199, 0, 0, 0, 192, 0, 16, 0, 17, 0, 0, 0, 0, 0, 40, 0, 41, 0, 169, 0, 0, 0, 61, 0, 64, 0, 81, 0, 84, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 182, 0, 0, 0, 0, 0, 185, 0, 15, 0, 0, 0, 0, 0, 0, 0, 42, 0, 231, 0, 0, 0, 59, 0, 62, 0, 0, 0, 83, 0, 86, 0, 138, 0, 0, 0, 233, 233, 233, 0, 197, 0, 0, 0, 0, 0, 0, 0, 226, 0, 0, 0, 0, 0, 0, 0, 0, 0, 139, 0, 140, 0, 57, 0, 60, 0, 0, 0, 0, 0, 85, 0, 138, 138, 138, 0, 0, 233, 233, 233, 208, 0, 0, 0, 0, 0, 0, 0, 8, 0, 209, 0, 0, 0, 0, 0, 0, 0, 176, 0, 143, 0, 228, 0, 58, 0, 0, 0, 0, 0, 0, 0, 135, 0, 138, 0, 0, 0, 0, 233, 233, 0, 204, 0, 0, 0, 0, 0, 6, 0, 7, 0, 0, 0, 0, 0, 0, 0, 25, 0, 143, 143, 143, 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 214, 0, 0, 0, 0, 0, 233, 233, 0, 0, 184, 0, 0, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 23, 0, 26, 0, 143, 0, 44, 0, 45, 0, 0, 0, 0, 0, 0, 0, 152, 0, 0, 0, 0, 0, 0, 233, 233, 0, 0, 0, 191, 0, 2, 0, 3, 0, 0, 0, 0, 0, 211, 0, 21, 0, 24, 0, 0, 0, 0, 0, 46, 0, 47, 0, 0, 0, 0, 0, 151, 0, 153, 0, 0, 0, 0, 0, 233, 233, 0, 0, 0, 0, 159, 0, 1, 0, 0, 0, 0, 0, 13, 0, 212, 0, 22, 0, 0, 0, 0, 0, 0, 0, 48, 0, 113, 0, 0, 0, 126, 0, 153, 153, 153, 0, 0, 0, 233, 233, 233, 0, 0, 0, 160, 0, 225, 0, 0, 0, 0, 0, 11, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 0, 114, 0, 125, 0, 127, 0, 153, 0, 0, 0, 233, 233, 233, 233, 0, 0, 160, 160, 160, 0, 129, 0, 0, 0, 9, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 115, 115, 0, 213, 0, 127, 127, 127, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 0, 160, 0, 130, 0, 128, 0, 136, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 115, 0, 170, 0, 0, 0, 127, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 0, 0, 130, 130, 130, 0, 210, 0, 138, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 180, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 130, 0, 0, 0, 138, 138, 138, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 196, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 138, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 189, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 179, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 0, 0, 0, 0, 0, 175, 0, 0, 233, 233, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 0, 0, 0, 164, 163, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 0, 0, 0, 0, 0, 0, 233, 233, 233, 233, 233, 0, 0, 0, 164, 164, 164, 164, 0, 0, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233, 233)
+node_directions_by_id = {
+1: PackedInt32Array(3),
+3: PackedInt32Array(3),
+5: PackedInt32Array(3),
+7: PackedInt32Array(3),
+9: PackedInt32Array(1),
+11: PackedInt32Array(1),
+13: PackedInt32Array(1),
+15: PackedInt32Array(3),
+17: PackedInt32Array(3),
+19: PackedInt32Array(3),
+21: PackedInt32Array(1),
+23: PackedInt32Array(1),
+25: PackedInt32Array(1),
+27: PackedInt32Array(2),
+29: PackedInt32Array(2),
+31: PackedInt32Array(2),
+33: PackedInt32Array(2),
+35: PackedInt32Array(2),
+37: PackedInt32Array(2),
+39: PackedInt32Array(2),
+41: PackedInt32Array(2),
+43: PackedInt32Array(2),
+45: PackedInt32Array(2),
+47: PackedInt32Array(2),
+49: PackedInt32Array(3),
+51: PackedInt32Array(3),
+53: PackedInt32Array(3),
+55: PackedInt32Array(3),
+57: PackedInt32Array(1),
+59: PackedInt32Array(1),
+61: PackedInt32Array(1),
+63: PackedInt32Array(1),
+65: PackedInt32Array(4),
+67: PackedInt32Array(4),
+69: PackedInt32Array(4),
+71: PackedInt32Array(4),
+73: PackedInt32Array(4),
+75: PackedInt32Array(4),
+77: PackedInt32Array(4),
+79: PackedInt32Array(4),
+81: PackedInt32Array(4),
+83: PackedInt32Array(4),
+85: PackedInt32Array(4),
+87: PackedInt32Array(3),
+89: PackedInt32Array(3),
+91: PackedInt32Array(3),
+93: PackedInt32Array(1),
+95: PackedInt32Array(1),
+97: PackedInt32Array(1),
+99: PackedInt32Array(3),
+101: PackedInt32Array(3),
+103: PackedInt32Array(3),
+105: PackedInt32Array(1),
+107: PackedInt32Array(1),
+109: PackedInt32Array(1),
+111: PackedInt32Array(1),
+113: PackedInt32Array(2),
+114: PackedInt32Array(2),
+116: PackedInt32Array(4),
+117: PackedInt32Array(4),
+119: PackedInt32Array(3),
+120: PackedInt32Array(3),
+122: PackedInt32Array(4),
+123: PackedInt32Array(4),
+125: PackedInt32Array(1),
+126: PackedInt32Array(1),
+128: PackedInt32Array(2),
+129: PackedInt32Array(2),
+131: PackedInt32Array(3),
+132: PackedInt32Array(3),
+134: PackedInt32Array(3),
+135: PackedInt32Array(4),
+136: PackedInt32Array(1),
+137: PackedInt32Array(2),
+139: PackedInt32Array(1),
+140: PackedInt32Array(2),
+141: PackedInt32Array(3),
+142: PackedInt32Array(4),
+144: PackedInt32Array(1),
+145: PackedInt32Array(2),
+146: PackedInt32Array(3),
+147: PackedInt32Array(4),
+149: PackedInt32Array(3),
+150: PackedInt32Array(3),
+151: PackedInt32Array(1),
+152: PackedInt32Array(1),
+154: PackedInt32Array(1),
+155: PackedInt32Array(1),
+157: PackedInt32Array(4),
+159: PackedInt32Array(2),
+161: PackedInt32Array(2),
+163: PackedInt32Array(4),
+165: PackedInt32Array(1),
+166: PackedInt32Array(1),
+167: PackedInt32Array(1),
+168: PackedInt32Array(1),
+169: PackedInt32Array(1),
+170: PackedInt32Array(1),
+171: PackedInt32Array(1),
+172: PackedInt32Array(1),
+173: PackedInt32Array(1),
+174: PackedInt32Array(1),
+175: PackedInt32Array(1),
+176: PackedInt32Array(1),
+177: PackedInt32Array(1),
+178: PackedInt32Array(1),
+179: PackedInt32Array(1),
+180: PackedInt32Array(1),
+181: PackedInt32Array(1),
+182: PackedInt32Array(1),
+183: PackedInt32Array(1),
+184: PackedInt32Array(2),
+185: PackedInt32Array(2),
+186: PackedInt32Array(2),
+187: PackedInt32Array(2),
+188: PackedInt32Array(1),
+189: PackedInt32Array(1),
+190: PackedInt32Array(1),
+191: PackedInt32Array(2),
+192: PackedInt32Array(2),
+193: PackedInt32Array(2),
+194: PackedInt32Array(2),
+195: PackedInt32Array(1),
+196: PackedInt32Array(1),
+197: PackedInt32Array(1),
+198: PackedInt32Array(2),
+199: PackedInt32Array(1),
+200: PackedInt32Array(1),
+201: PackedInt32Array(2),
+202: PackedInt32Array(2),
+203: PackedInt32Array(1),
+204: PackedInt32Array(2),
+205: PackedInt32Array(1, 2),
+206: PackedInt32Array(1, 4),
+207: PackedInt32Array(1, 2),
+208: PackedInt32Array(1, 4),
+209: PackedInt32Array(2, 3),
+210: PackedInt32Array(3, 4),
+211: PackedInt32Array(2, 1),
+212: PackedInt32Array(3, 4),
+213: PackedInt32Array(3, 4),
+214: PackedInt32Array(2, 3),
+215: PackedInt32Array(3, 4),
+216: PackedInt32Array(2, 3),
+217: PackedInt32Array(4, 1),
+218: PackedInt32Array(2, 1),
+219: PackedInt32Array(3, 4),
+220: PackedInt32Array(2, 1),
+221: PackedInt32Array(1, 2, 3),
+222: PackedInt32Array(1, 2, 3),
+223: PackedInt32Array(1, 2, 3),
+224: PackedInt32Array(1, 2, 3),
+225: PackedInt32Array(1, 3, 4),
+226: PackedInt32Array(1, 4, 3),
+227: PackedInt32Array(1, 4, 3),
+228: PackedInt32Array(1, 3, 4),
+229: PackedInt32Array(1, 2, 3, 4),
+230: PackedInt32Array(1, 2, 3, 4),
+231: PackedInt32Array(1, 2, 3, 4),
+232: PackedInt32Array(1, 2, 3, 4)
+}
+walkable_node_ids = {
+1: true,
+3: true,
+5: true,
+7: true,
+9: true,
+11: true,
+13: true,
+15: true,
+17: true,
+19: true,
+21: true,
+23: true,
+25: true,
+27: true,
+29: true,
+31: true,
+33: true,
+35: true,
+37: true,
+39: true,
+41: true,
+43: true,
+45: true,
+47: true,
+49: true,
+51: true,
+53: true,
+55: true,
+57: true,
+59: true,
+61: true,
+63: true,
+65: true,
+67: true,
+69: true,
+71: true,
+73: true,
+75: true,
+77: true,
+79: true,
+81: true,
+83: true,
+85: true,
+87: true,
+89: true,
+91: true,
+93: true,
+95: true,
+97: true,
+99: true,
+101: true,
+103: true,
+105: true,
+107: true,
+109: true,
+111: true,
+113: true,
+114: true,
+116: true,
+117: true,
+119: true,
+120: true,
+122: true,
+123: true,
+125: true,
+126: true,
+128: true,
+129: true,
+131: true,
+132: true,
+134: true,
+135: true,
+136: true,
+137: true,
+139: true,
+140: true,
+141: true,
+142: true,
+144: true,
+145: true,
+146: true,
+147: true,
+149: true,
+150: true,
+151: true,
+152: true,
+154: true,
+155: true,
+157: true,
+159: true,
+161: true,
+163: true,
+165: true,
+166: true,
+167: true,
+168: true,
+169: true,
+170: true,
+171: true,
+172: true,
+173: true,
+174: true,
+175: true,
+176: true,
+177: true,
+178: true,
+179: true,
+180: true,
+181: true,
+182: true,
+183: true,
+184: true,
+185: true,
+186: true,
+187: true,
+188: true,
+189: true,
+190: true,
+191: true,
+192: true,
+193: true,
+194: true,
+195: true,
+196: true,
+197: true,
+198: true,
+199: true,
+200: true,
+201: true,
+202: true,
+203: true,
+204: true,
+205: true,
+206: true,
+207: true,
+208: true,
+209: true,
+210: true,
+211: true,
+212: true,
+213: true,
+214: true,
+215: true,
+216: true,
+217: true,
+218: true,
+219: true,
+220: true,
+221: true,
+222: true,
+223: true,
+224: true,
+225: true,
+226: true,
+227: true,
+228: true,
+229: true,
+230: true,
+231: true,
+232: true
+}
+junction_directions_by_node_id = {
+205: PackedInt32Array(1, 2),
+206: PackedInt32Array(1, 4),
+207: PackedInt32Array(1, 2),
+208: PackedInt32Array(1, 4),
+209: PackedInt32Array(2, 3),
+210: PackedInt32Array(3, 4),
+211: PackedInt32Array(2, 1),
+212: PackedInt32Array(3, 4),
+213: PackedInt32Array(3, 4),
+214: PackedInt32Array(2, 3),
+215: PackedInt32Array(3, 4),
+216: PackedInt32Array(2, 3),
+217: PackedInt32Array(4, 1),
+218: PackedInt32Array(2, 1),
+219: PackedInt32Array(3, 4),
+220: PackedInt32Array(2, 1),
+221: PackedInt32Array(1, 2, 3),
+222: PackedInt32Array(1, 2, 3),
+223: PackedInt32Array(1, 2, 3),
+224: PackedInt32Array(1, 2, 3),
+225: PackedInt32Array(1, 3, 4),
+226: PackedInt32Array(1, 4, 3),
+227: PackedInt32Array(1, 4, 3),
+228: PackedInt32Array(1, 3, 4),
+229: PackedInt32Array(1, 2, 3, 4),
+230: PackedInt32Array(1, 2, 3, 4),
+231: PackedInt32Array(1, 2, 3, 4),
+232: PackedInt32Array(1, 2, 3, 4)
+}
+
+[sub_resource type="Resource" id="Placement_000"]
+script = ExtResource("3_placement")
+tile_index = 0
+center_position = Vector2(204, 620)
+
+[sub_resource type="Resource" id="Placement_001"]
+script = ExtResource("3_placement")
+tile_index = 1
+center_position = Vector2(238, 600)
+
+[sub_resource type="Resource" id="Placement_002"]
+script = ExtResource("3_placement")
+tile_index = 2
+center_position = Vector2(272, 580)
+
+[sub_resource type="Resource" id="Placement_003"]
+script = ExtResource("3_placement")
+tile_index = 3
+center_position = Vector2(306, 560)
+
+[sub_resource type="Resource" id="Placement_004"]
+script = ExtResource("3_placement")
+tile_index = 4
+center_position = Vector2(340, 660)
+
+[sub_resource type="Resource" id="Placement_005"]
+script = ExtResource("3_placement")
+tile_index = 5
+center_position = Vector2(374, 640)
+
+[sub_resource type="Resource" id="Placement_006"]
+script = ExtResource("3_placement")
+tile_index = 6
+center_position = Vector2(408, 620)
+
+[sub_resource type="Resource" id="Placement_007"]
+script = ExtResource("3_placement")
+tile_index = 7
+center_position = Vector2(340, 500)
+
+[sub_resource type="Resource" id="Placement_008"]
+script = ExtResource("3_placement")
+tile_index = 8
+center_position = Vector2(374, 480)
+
+[sub_resource type="Resource" id="Placement_009"]
+script = ExtResource("3_placement")
+tile_index = 9
+center_position = Vector2(408, 460)
+
+[sub_resource type="Resource" id="Placement_010"]
+script = ExtResource("3_placement")
+tile_index = 10
+center_position = Vector2(510, 600)
+
+[sub_resource type="Resource" id="Placement_011"]
+script = ExtResource("3_placement")
+tile_index = 11
+center_position = Vector2(544, 580)
+
+[sub_resource type="Resource" id="Placement_012"]
+script = ExtResource("3_placement")
+tile_index = 12
+center_position = Vector2(578, 560)
+
+[sub_resource type="Resource" id="Placement_013"]
+script = ExtResource("3_placement")
+tile_index = 13
+center_position = Vector2(306, 280)
+
+[sub_resource type="Resource" id="Placement_014"]
+script = ExtResource("3_placement")
+tile_index = 14
+center_position = Vector2(340, 300)
+
+[sub_resource type="Resource" id="Placement_015"]
+script = ExtResource("3_placement")
+tile_index = 15
+center_position = Vector2(374, 320)
+
+[sub_resource type="Resource" id="Placement_016"]
+script = ExtResource("3_placement")
+tile_index = 16
+center_position = Vector2(408, 340)
+
+[sub_resource type="Resource" id="Placement_017"]
+script = ExtResource("3_placement")
+tile_index = 17
+center_position = Vector2(544, 420)
+
+[sub_resource type="Resource" id="Placement_018"]
+script = ExtResource("3_placement")
+tile_index = 18
+center_position = Vector2(578, 440)
+
+[sub_resource type="Resource" id="Placement_019"]
+script = ExtResource("3_placement")
+tile_index = 19
+center_position = Vector2(612, 460)
+
+[sub_resource type="Resource" id="Placement_020"]
+script = ExtResource("3_placement")
+tile_index = 20
+center_position = Vector2(646, 480)
+
+[sub_resource type="Resource" id="Placement_021"]
+script = ExtResource("3_placement")
+tile_index = 21
+center_position = Vector2(782, 560)
+
+[sub_resource type="Resource" id="Placement_022"]
+script = ExtResource("3_placement")
+tile_index = 22
+center_position = Vector2(816, 580)
+
+[sub_resource type="Resource" id="Placement_023"]
+script = ExtResource("3_placement")
+tile_index = 23
+center_position = Vector2(850, 600)
+
+[sub_resource type="Resource" id="Placement_024"]
+script = ExtResource("3_placement")
+tile_index = 24
+center_position = Vector2(476, 340)
+
+[sub_resource type="Resource" id="Placement_025"]
+script = ExtResource("3_placement")
+tile_index = 25
+center_position = Vector2(510, 320)
+
+[sub_resource type="Resource" id="Placement_026"]
+script = ExtResource("3_placement")
+tile_index = 26
+center_position = Vector2(544, 300)
+
+[sub_resource type="Resource" id="Placement_027"]
+script = ExtResource("3_placement")
+tile_index = 27
+center_position = Vector2(578, 280)
+
+[sub_resource type="Resource" id="Placement_028"]
+script = ExtResource("3_placement")
+tile_index = 28
+center_position = Vector2(782, 520)
+
+[sub_resource type="Resource" id="Placement_029"]
+script = ExtResource("3_placement")
+tile_index = 29
+center_position = Vector2(816, 500)
+
+[sub_resource type="Resource" id="Placement_030"]
+script = ExtResource("3_placement")
+tile_index = 30
+center_position = Vector2(850, 480)
+
+[sub_resource type="Resource" id="Placement_031"]
+script = ExtResource("3_placement")
+tile_index = 31
+center_position = Vector2(884, 460)
+
+[sub_resource type="Resource" id="Placement_032"]
+script = ExtResource("3_placement")
+tile_index = 32
+center_position = Vector2(510, 200)
+
+[sub_resource type="Resource" id="Placement_033"]
+script = ExtResource("3_placement")
+tile_index = 33
+center_position = Vector2(544, 220)
+
+[sub_resource type="Resource" id="Placement_034"]
+script = ExtResource("3_placement")
+tile_index = 34
+center_position = Vector2(578, 240)
+
+[sub_resource type="Resource" id="Placement_035"]
+script = ExtResource("3_placement")
+tile_index = 35
+center_position = Vector2(714, 320)
+
+[sub_resource type="Resource" id="Placement_036"]
+script = ExtResource("3_placement")
+tile_index = 36
+center_position = Vector2(748, 340)
+
+[sub_resource type="Resource" id="Placement_037"]
+script = ExtResource("3_placement")
+tile_index = 37
+center_position = Vector2(782, 360)
+
+[sub_resource type="Resource" id="Placement_038"]
+script = ExtResource("3_placement")
+tile_index = 38
+center_position = Vector2(816, 380)
+
+[sub_resource type="Resource" id="Placement_039"]
+script = ExtResource("3_placement")
+tile_index = 39
+center_position = Vector2(952, 460)
+
+[sub_resource type="Resource" id="Placement_040"]
+script = ExtResource("3_placement")
+tile_index = 40
+center_position = Vector2(986, 480)
+
+[sub_resource type="Resource" id="Placement_041"]
+script = ExtResource("3_placement")
+tile_index = 41
+center_position = Vector2(1020, 500)
+
+[sub_resource type="Resource" id="Placement_042"]
+script = ExtResource("3_placement")
+tile_index = 42
+center_position = Vector2(1054, 520)
+
+[sub_resource type="Resource" id="Placement_043"]
+script = ExtResource("3_placement")
+tile_index = 43
+center_position = Vector2(782, 240)
+
+[sub_resource type="Resource" id="Placement_044"]
+script = ExtResource("3_placement")
+tile_index = 44
+center_position = Vector2(816, 220)
+
+[sub_resource type="Resource" id="Placement_045"]
+script = ExtResource("3_placement")
+tile_index = 45
+center_position = Vector2(850, 200)
+
+[sub_resource type="Resource" id="Placement_046"]
+script = ExtResource("3_placement")
+tile_index = 46
+center_position = Vector2(952, 340)
+
+[sub_resource type="Resource" id="Placement_047"]
+script = ExtResource("3_placement")
+tile_index = 47
+center_position = Vector2(986, 320)
+
+[sub_resource type="Resource" id="Placement_048"]
+script = ExtResource("3_placement")
+tile_index = 48
+center_position = Vector2(1020, 300)
+
+[sub_resource type="Resource" id="Placement_049"]
+script = ExtResource("3_placement")
+tile_index = 49
+center_position = Vector2(952, 180)
+
+[sub_resource type="Resource" id="Placement_050"]
+script = ExtResource("3_placement")
+tile_index = 50
+center_position = Vector2(986, 160)
+
+[sub_resource type="Resource" id="Placement_051"]
+script = ExtResource("3_placement")
+tile_index = 51
+center_position = Vector2(1020, 140)
+
+[sub_resource type="Resource" id="Placement_052"]
+script = ExtResource("3_placement")
+tile_index = 52
+center_position = Vector2(1054, 240)
+
+[sub_resource type="Resource" id="Placement_053"]
+script = ExtResource("3_placement")
+tile_index = 53
+center_position = Vector2(1088, 220)
+
+[sub_resource type="Resource" id="Placement_054"]
+script = ExtResource("3_placement")
+tile_index = 54
+center_position = Vector2(1122, 200)
+
+[sub_resource type="Resource" id="Placement_055"]
+script = ExtResource("3_placement")
+tile_index = 55
+center_position = Vector2(1156, 180)
+
+[sub_resource type="Resource" id="Placement_056"]
+script = ExtResource("3_placement")
+tile_index = 56
+center_position = Vector2(884, 620)
+
+[sub_resource type="Resource" id="Placement_057"]
+script = ExtResource("3_placement")
+tile_index = 57
+center_position = Vector2(918, 640)
+
+[sub_resource type="Resource" id="Placement_058"]
+script = ExtResource("3_placement")
+tile_index = 58
+center_position = Vector2(442, 160)
+
+[sub_resource type="Resource" id="Placement_059"]
+script = ExtResource("3_placement")
+tile_index = 59
+center_position = Vector2(476, 180)
+
+[sub_resource type="Resource" id="Placement_060"]
+script = ExtResource("3_placement")
+tile_index = 60
+center_position = Vector2(748, 460)
+
+[sub_resource type="Resource" id="Placement_061"]
+script = ExtResource("3_placement")
+tile_index = 61
+center_position = Vector2(782, 440)
+
+[sub_resource type="Resource" id="Placement_062"]
+script = ExtResource("3_placement")
+tile_index = 62
+center_position = Vector2(1122, 120)
+
+[sub_resource type="Resource" id="Placement_063"]
+script = ExtResource("3_placement")
+tile_index = 63
+center_position = Vector2(1156, 140)
+
+[sub_resource type="Resource" id="Placement_064"]
+script = ExtResource("3_placement")
+tile_index = 64
+center_position = Vector2(986, 640)
+
+[sub_resource type="Resource" id="Placement_065"]
+script = ExtResource("3_placement")
+tile_index = 65
+center_position = Vector2(1020, 620)
+
+[sub_resource type="Resource" id="Placement_066"]
+script = ExtResource("3_placement")
+tile_index = 66
+center_position = Vector2(238, 680)
+
+[sub_resource type="Resource" id="Placement_067"]
+script = ExtResource("3_placement")
+tile_index = 67
+center_position = Vector2(204, 660)
+
+[sub_resource type="Resource" id="Placement_068"]
+script = ExtResource("3_placement")
+tile_index = 68
+center_position = Vector2(340, 180)
+
+[sub_resource type="Resource" id="Placement_069"]
+script = ExtResource("3_placement")
+tile_index = 69
+center_position = Vector2(374, 160)
+
+[sub_resource type="Resource" id="Placement_070"]
+script = ExtResource("3_placement")
+tile_index = 70
+center_position = Vector2(1054, 120)
+
+[sub_resource type="Resource" id="Placement_071"]
+script = ExtResource("3_placement")
+tile_index = 71
+center_position = Vector2(1088, 540)
+
+[sub_resource type="Resource" id="Placement_072"]
+script = ExtResource("3_placement")
+tile_index = 72
+center_position = Vector2(306, 680)
+
+[sub_resource type="Resource" id="Placement_073"]
+script = ExtResource("3_placement")
+tile_index = 73
+center_position = Vector2(272, 260)
+
+[sub_resource type="Resource" id="Placement_074"]
+script = ExtResource("3_placement")
+tile_index = 74
+center_position = Vector2(646, 520)
+
+[sub_resource type="Resource" id="Placement_075"]
+script = ExtResource("3_placement")
+tile_index = 75
+center_position = Vector2(714, 520)
+
+[sub_resource type="Resource" id="Placement_076"]
+script = ExtResource("3_placement")
+tile_index = 76
+center_position = Vector2(714, 280)
+
+[sub_resource type="Resource" id="Placement_077"]
+script = ExtResource("3_placement")
+tile_index = 77
+center_position = Vector2(646, 280)
+
+[sub_resource type="Resource" id="Placement_078"]
+script = ExtResource("3_placement")
+tile_index = 78
+center_position = Vector2(884, 380)
+
+[sub_resource type="Resource" id="Placement_079"]
+script = ExtResource("3_placement")
+tile_index = 79
+center_position = Vector2(476, 380)
+
+[sub_resource type="Resource" id="Placement_080"]
+script = ExtResource("3_placement")
+tile_index = 80
+center_position = Vector2(476, 420)
+
+[sub_resource type="Resource" id="Placement_081"]
+script = ExtResource("3_placement")
+tile_index = 81
+center_position = Vector2(884, 420)
+
+[sub_resource type="Resource" id="Placement_082"]
+script = ExtResource("3_placement")
+tile_index = 82
+center_position = Vector2(272, 220)
+
+[sub_resource type="Resource" id="Placement_083"]
+script = ExtResource("3_placement")
+tile_index = 83
+center_position = Vector2(306, 200)
+
+[sub_resource type="Resource" id="Placement_084"]
+script = ExtResource("3_placement")
+tile_index = 84
+center_position = Vector2(1054, 600)
+
+[sub_resource type="Resource" id="Placement_085"]
+script = ExtResource("3_placement")
+tile_index = 85
+center_position = Vector2(1088, 580)
+
+[sub_resource type="Resource" id="Placement_086"]
+script = ExtResource("3_placement")
+tile_index = 86
+center_position = Vector2(578, 360)
+
+[sub_resource type="Resource" id="Placement_087"]
+script = ExtResource("3_placement")
+tile_index = 87
+center_position = Vector2(612, 340)
+
+[sub_resource type="Resource" id="Placement_088"]
+script = ExtResource("3_placement")
+tile_index = 88
+center_position = Vector2(1224, 180)
+
+[sub_resource type="Resource" id="Placement_089"]
+script = ExtResource("3_placement")
+tile_index = 89
+center_position = Vector2(136, 620)
+
+[sub_resource type="Resource" id="Placement_090"]
+script = ExtResource("3_placement")
+tile_index = 90
+center_position = Vector2(646, 0)
+
+[sub_resource type="Resource" id="Placement_091"]
+script = ExtResource("3_placement")
+tile_index = 91
+center_position = Vector2(714, 800)
+
+[sub_resource type="Resource" id="Placement_092"]
+script = ExtResource("3_placement")
+tile_index = 92
+center_position = Vector2(612, 20)
+
+[sub_resource type="Resource" id="Placement_093"]
+script = ExtResource("3_placement")
+tile_index = 93
+center_position = Vector2(646, 320)
+
+[sub_resource type="Resource" id="Placement_094"]
+script = ExtResource("3_placement")
+tile_index = 94
+center_position = Vector2(918, 360)
+
+[sub_resource type="Resource" id="Placement_095"]
+script = ExtResource("3_placement")
+tile_index = 95
+center_position = Vector2(442, 440)
+
+[sub_resource type="Resource" id="Placement_096"]
+script = ExtResource("3_placement")
+tile_index = 96
+center_position = Vector2(714, 480)
+
+[sub_resource type="Resource" id="Placement_097"]
+script = ExtResource("3_placement")
+tile_index = 97
+center_position = Vector2(918, 680)
+
+[sub_resource type="Resource" id="Placement_098"]
+script = ExtResource("3_placement")
+tile_index = 98
+center_position = Vector2(442, 120)
+
+[sub_resource type="Resource" id="Placement_099"]
+script = ExtResource("3_placement")
+tile_index = 99
+center_position = Vector2(748, 260)
+
+[sub_resource type="Resource" id="Placement_100"]
+script = ExtResource("3_placement")
+tile_index = 100
+center_position = Vector2(544, 380)
+
+[sub_resource type="Resource" id="Placement_101"]
+script = ExtResource("3_placement")
+tile_index = 101
+center_position = Vector2(816, 420)
+
+[sub_resource type="Resource" id="Placement_102"]
+script = ExtResource("3_placement")
+tile_index = 102
+center_position = Vector2(748, 780)
+
+[sub_resource type="Resource" id="Placement_103"]
+script = ExtResource("3_placement")
+tile_index = 103
+center_position = Vector2(612, 540)
+
+[sub_resource type="Resource" id="Placement_104"]
+script = ExtResource("3_placement")
+tile_index = 104
+center_position = Vector2(476, 100)
+
+[sub_resource type="Resource" id="Placement_105"]
+script = ExtResource("3_placement")
+tile_index = 105
+center_position = Vector2(544, 60)
+
+[sub_resource type="Resource" id="Placement_106"]
+script = ExtResource("3_placement")
+tile_index = 106
+center_position = Vector2(782, 760)
+
+[sub_resource type="Resource" id="Placement_107"]
+script = ExtResource("3_placement")
+tile_index = 107
+center_position = Vector2(884, 700)
+
+[sub_resource type="Resource" id="Placement_108"]
+script = ExtResource("3_placement")
+tile_index = 108
+center_position = Vector2(136, 460)
+
+[sub_resource type="Resource" id="Placement_109"]
+script = ExtResource("3_placement")
+tile_index = 109
+center_position = Vector2(68, 500)
+
+[sub_resource type="Resource" id="Placement_110"]
+script = ExtResource("3_placement")
+tile_index = 110
+center_position = Vector2(1326, 280)
+
+[sub_resource type="Resource" id="Placement_111"]
+script = ExtResource("3_placement")
+tile_index = 111
+center_position = Vector2(68, 580)
+
+[sub_resource type="Resource" id="Placement_112"]
+script = ExtResource("3_placement")
+tile_index = 112
+center_position = Vector2(272, 500)
+
+[sub_resource type="Resource" id="Placement_113"]
+script = ExtResource("3_placement")
+tile_index = 113
+center_position = Vector2(1122, 320)
+
+[sub_resource type="Resource" id="Placement_114"]
+script = ExtResource("3_placement")
+tile_index = 114
+center_position = Vector2(1326, 240)
+
+[sub_resource type="Resource" id="Placement_115"]
+script = ExtResource("3_placement")
+tile_index = 115
+center_position = Vector2(578, 40)
+
+[sub_resource type="Resource" id="Placement_116"]
+script = ExtResource("3_placement")
+tile_index = 116
+center_position = Vector2(816, 740)
+
+[sub_resource type="Resource" id="Placement_117"]
+script = ExtResource("3_placement")
+tile_index = 117
+center_position = Vector2(1258, 320)
+
+[sub_resource type="Resource" id="Placement_118"]
+script = ExtResource("3_placement")
+tile_index = 118
+center_position = Vector2(102, 600)
+
+[sub_resource type="Resource" id="Placement_119"]
+script = ExtResource("3_placement")
+tile_index = 119
+center_position = Vector2(238, 480)
+
+[sub_resource type="Resource" id="Placement_120"]
+script = ExtResource("3_placement")
+tile_index = 120
+center_position = Vector2(1088, 300)
+
+[sub_resource type="Resource" id="Placement_121"]
+script = ExtResource("3_placement")
+tile_index = 121
+center_position = Vector2(1258, 200)
+
+[sub_resource type="Resource" id="Placement_122"]
+script = ExtResource("3_placement")
+tile_index = 122
+center_position = Vector2(510, 80)
+
+[sub_resource type="Resource" id="Placement_123"]
+script = ExtResource("3_placement")
+tile_index = 123
+center_position = Vector2(850, 720)
+
+[sub_resource type="Resource" id="Placement_124"]
+script = ExtResource("3_placement")
+tile_index = 124
+center_position = Vector2(34, 520)
+
+[sub_resource type="Resource" id="Placement_125"]
+script = ExtResource("3_placement")
+tile_index = 125
+center_position = Vector2(1156, 340)
+
+[sub_resource type="Resource" id="Placement_126"]
+script = ExtResource("3_placement")
+tile_index = 126
+center_position = Vector2(102, 480)
+
+[sub_resource type="Resource" id="Placement_127"]
+script = ExtResource("3_placement")
+tile_index = 127
+center_position = Vector2(1224, 340)
+
+[sub_resource type="Resource" id="Placement_128"]
+script = ExtResource("3_placement")
+tile_index = 128
+center_position = Vector2(204, 460)
+
+[sub_resource type="Resource" id="Placement_129"]
+script = ExtResource("3_placement")
+tile_index = 129
+center_position = Vector2(1292, 220)
+
+[sub_resource type="Resource" id="Placement_130"]
+script = ExtResource("3_placement")
+tile_index = 130
+center_position = Vector2(1292, 300)
+
+[sub_resource type="Resource" id="Placement_131"]
+script = ExtResource("3_placement")
+tile_index = 131
+center_position = Vector2(34, 560)
+
+[sub_resource type="Resource" id="Placement_132"]
+script = ExtResource("3_placement")
+tile_index = 132
+center_position = Vector2(408, 140)
+
+[sub_resource type="Resource" id="Placement_133"]
+script = ExtResource("3_placement")
+tile_index = 133
+center_position = Vector2(238, 240)
+
+[sub_resource type="Resource" id="Placement_134"]
+script = ExtResource("3_placement")
+tile_index = 134
+center_position = Vector2(170, 440)
+
+[sub_resource type="Resource" id="Placement_135"]
+script = ExtResource("3_placement")
+tile_index = 135
+center_position = Vector2(0, 540)
+
+[sub_resource type="Resource" id="Placement_136"]
+script = ExtResource("3_placement")
+tile_index = 136
+center_position = Vector2(340, 540)
+
+[sub_resource type="Resource" id="Placement_137"]
+script = ExtResource("3_placement")
+tile_index = 137
+center_position = Vector2(272, 700)
+
+[sub_resource type="Resource" id="Placement_138"]
+script = ExtResource("3_placement")
+tile_index = 138
+center_position = Vector2(442, 600)
+
+[sub_resource type="Resource" id="Placement_139"]
+script = ExtResource("3_placement")
+tile_index = 139
+center_position = Vector2(476, 620)
+
+[sub_resource type="Resource" id="Placement_140"]
+script = ExtResource("3_placement")
+tile_index = 140
+center_position = Vector2(952, 660)
+
+[sub_resource type="Resource" id="Placement_141"]
+script = ExtResource("3_placement")
+tile_index = 141
+center_position = Vector2(1122, 560)
+
+[sub_resource type="Resource" id="Placement_142"]
+script = ExtResource("3_placement")
+tile_index = 142
+center_position = Vector2(1190, 360)
+
+[sub_resource type="Resource" id="Placement_143"]
+script = ExtResource("3_placement")
+tile_index = 143
+center_position = Vector2(1360, 260)
+
+[sub_resource type="Resource" id="Placement_144"]
+script = ExtResource("3_placement")
+tile_index = 144
+center_position = Vector2(1020, 260)
+
+[sub_resource type="Resource" id="Placement_145"]
+script = ExtResource("3_placement")
+tile_index = 145
+center_position = Vector2(1088, 100)
+
+[sub_resource type="Resource" id="Placement_146"]
+script = ExtResource("3_placement")
+tile_index = 146
+center_position = Vector2(918, 200)
+
+[sub_resource type="Resource" id="Placement_147"]
+script = ExtResource("3_placement")
+tile_index = 147
+center_position = Vector2(884, 180)
+
+[sub_resource type="Resource" id="Placement_148"]
+script = ExtResource("3_placement")
+tile_index = 148
+center_position = Vector2(1190, 160)
+
+[sub_resource type="Resource" id="Placement_149"]
+script = ExtResource("3_placement")
+tile_index = 149
+center_position = Vector2(1054, 280)
+
+[sub_resource type="Resource" id="Placement_150"]
+script = ExtResource("3_placement")
+tile_index = 150
+center_position = Vector2(918, 440)
+
+[sub_resource type="Resource" id="Placement_151"]
+script = ExtResource("3_placement")
+tile_index = 151
+center_position = Vector2(612, 260)
+
+[sub_resource type="Resource" id="Placement_152"]
+script = ExtResource("3_placement")
+tile_index = 152
+center_position = Vector2(170, 640)
+
+[sub_resource type="Resource" id="Placement_153"]
+script = ExtResource("3_placement")
+tile_index = 153
+center_position = Vector2(306, 520)
+
+[sub_resource type="Resource" id="Placement_154"]
+script = ExtResource("3_placement")
+tile_index = 154
+center_position = Vector2(442, 360)
+
+[sub_resource type="Resource" id="Placement_155"]
+script = ExtResource("3_placement")
+tile_index = 155
+center_position = Vector2(748, 540)
+
+[sub_resource type="Resource" id="Placement_156"]
+script = ExtResource("3_placement")
+tile_index = 156
+center_position = Vector2(680, 300)
+
+[sub_resource type="Resource" id="Placement_157"]
+script = ExtResource("3_placement")
+tile_index = 157
+center_position = Vector2(850, 400)
+
+[sub_resource type="Resource" id="Placement_158"]
+script = ExtResource("3_placement")
+tile_index = 158
+center_position = Vector2(680, 500)
+
+[sub_resource type="Resource" id="Placement_159"]
+script = ExtResource("3_placement")
+tile_index = 159
+center_position = Vector2(510, 400)
+
+[sub_resource type="Resource" id="PlayerSpawn_000"]
+script = ExtResource("6_player_spawn")
+player_id = 0
+tile_index = 62
+grid_position = Vector2i(33, 7)
+initial_direction = 1
+
+[sub_resource type="Resource" id="PlayerSpawn_001"]
+script = ExtResource("6_player_spawn")
+player_id = 1
+tile_index = 64
+grid_position = Vector2i(29, 33)
+initial_direction = 4
+
+[sub_resource type="Resource" id="PlayerSpawn_002"]
+script = ExtResource("6_player_spawn")
+player_id = 2
+tile_index = 68
+grid_position = Vector2i(10, 10)
+initial_direction = 2
+
+[sub_resource type="Resource" id="PlayerSpawn_003"]
+script = ExtResource("6_player_spawn")
+player_id = 3
+tile_index = 66
+grid_position = Vector2i(7, 35)
+initial_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_000"]
+script = ExtResource("4_property_decoration")
+tile_index = 0
+center_position = Vector2(170, 600)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_001"]
+script = ExtResource("4_property_decoration")
+tile_index = 1
+center_position = Vector2(204, 580)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_002"]
+script = ExtResource("4_property_decoration")
+tile_index = 2
+center_position = Vector2(238, 560)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_003"]
+script = ExtResource("4_property_decoration")
+tile_index = 3
+center_position = Vector2(272, 540)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_004"]
+script = ExtResource("4_property_decoration")
+tile_index = 4
+center_position = Vector2(374, 680)
+
+[sub_resource type="Resource" id="PropertyDecoration_005"]
+script = ExtResource("4_property_decoration")
+tile_index = 5
+center_position = Vector2(408, 660)
+
+[sub_resource type="Resource" id="PropertyDecoration_006"]
+script = ExtResource("4_property_decoration")
+tile_index = 6
+center_position = Vector2(442, 640)
+
+[sub_resource type="Resource" id="PropertyDecoration_007"]
+script = ExtResource("4_property_decoration")
+tile_index = 7
+center_position = Vector2(306, 480)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_008"]
+script = ExtResource("4_property_decoration")
+tile_index = 8
+center_position = Vector2(340, 460)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_009"]
+script = ExtResource("4_property_decoration")
+tile_index = 9
+center_position = Vector2(374, 440)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_010"]
+script = ExtResource("4_property_decoration")
+tile_index = 10
+center_position = Vector2(544, 620)
+
+[sub_resource type="Resource" id="PropertyDecoration_011"]
+script = ExtResource("4_property_decoration")
+tile_index = 11
+center_position = Vector2(578, 600)
+
+[sub_resource type="Resource" id="PropertyDecoration_012"]
+script = ExtResource("4_property_decoration")
+tile_index = 12
+center_position = Vector2(612, 580)
+
+[sub_resource type="Resource" id="PropertyDecoration_013"]
+script = ExtResource("4_property_decoration")
+tile_index = 13
+center_position = Vector2(272, 300)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_014"]
+script = ExtResource("4_property_decoration")
+tile_index = 14
+center_position = Vector2(306, 320)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_015"]
+script = ExtResource("4_property_decoration")
+tile_index = 15
+center_position = Vector2(340, 340)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_016"]
+script = ExtResource("4_property_decoration")
+tile_index = 16
+center_position = Vector2(374, 360)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_017"]
+script = ExtResource("4_property_decoration")
+tile_index = 17
+center_position = Vector2(510, 440)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_018"]
+script = ExtResource("4_property_decoration")
+tile_index = 18
+center_position = Vector2(544, 460)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_019"]
+script = ExtResource("4_property_decoration")
+tile_index = 19
+center_position = Vector2(578, 480)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_020"]
+script = ExtResource("4_property_decoration")
+tile_index = 20
+center_position = Vector2(612, 500)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_021"]
+script = ExtResource("4_property_decoration")
+tile_index = 21
+center_position = Vector2(748, 580)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_022"]
+script = ExtResource("4_property_decoration")
+tile_index = 22
+center_position = Vector2(782, 600)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_023"]
+script = ExtResource("4_property_decoration")
+tile_index = 23
+center_position = Vector2(816, 620)
+facing_direction = 2
+
+[sub_resource type="Resource" id="PropertyDecoration_024"]
+script = ExtResource("4_property_decoration")
+tile_index = 24
+center_position = Vector2(442, 320)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_025"]
+script = ExtResource("4_property_decoration")
+tile_index = 25
+center_position = Vector2(476, 300)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_026"]
+script = ExtResource("4_property_decoration")
+tile_index = 26
+center_position = Vector2(510, 280)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_027"]
+script = ExtResource("4_property_decoration")
+tile_index = 27
+center_position = Vector2(544, 260)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_028"]
+script = ExtResource("4_property_decoration")
+tile_index = 28
+center_position = Vector2(816, 540)
+
+[sub_resource type="Resource" id="PropertyDecoration_029"]
+script = ExtResource("4_property_decoration")
+tile_index = 29
+center_position = Vector2(850, 520)
+
+[sub_resource type="Resource" id="PropertyDecoration_030"]
+script = ExtResource("4_property_decoration")
+tile_index = 30
+center_position = Vector2(884, 500)
+
+[sub_resource type="Resource" id="PropertyDecoration_031"]
+script = ExtResource("4_property_decoration")
+tile_index = 31
+center_position = Vector2(918, 480)
+
+[sub_resource type="Resource" id="PropertyDecoration_032"]
+script = ExtResource("4_property_decoration")
+tile_index = 32
+center_position = Vector2(544, 180)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_033"]
+script = ExtResource("4_property_decoration")
+tile_index = 33
+center_position = Vector2(578, 200)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_034"]
+script = ExtResource("4_property_decoration")
+tile_index = 34
+center_position = Vector2(612, 220)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_035"]
+script = ExtResource("4_property_decoration")
+tile_index = 35
+center_position = Vector2(748, 300)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_036"]
+script = ExtResource("4_property_decoration")
+tile_index = 36
+center_position = Vector2(782, 320)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_037"]
+script = ExtResource("4_property_decoration")
+tile_index = 37
+center_position = Vector2(816, 340)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_038"]
+script = ExtResource("4_property_decoration")
+tile_index = 38
+center_position = Vector2(850, 360)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_039"]
+script = ExtResource("4_property_decoration")
+tile_index = 39
+center_position = Vector2(986, 440)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_040"]
+script = ExtResource("4_property_decoration")
+tile_index = 40
+center_position = Vector2(1020, 460)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_041"]
+script = ExtResource("4_property_decoration")
+tile_index = 41
+center_position = Vector2(1054, 480)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_042"]
+script = ExtResource("4_property_decoration")
+tile_index = 42
+center_position = Vector2(1088, 500)
+facing_direction = 4
+
+[sub_resource type="Resource" id="PropertyDecoration_043"]
+script = ExtResource("4_property_decoration")
+tile_index = 43
+center_position = Vector2(748, 220)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_044"]
+script = ExtResource("4_property_decoration")
+tile_index = 44
+center_position = Vector2(782, 200)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_045"]
+script = ExtResource("4_property_decoration")
+tile_index = 45
+center_position = Vector2(816, 180)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_046"]
+script = ExtResource("4_property_decoration")
+tile_index = 46
+center_position = Vector2(986, 360)
+
+[sub_resource type="Resource" id="PropertyDecoration_047"]
+script = ExtResource("4_property_decoration")
+tile_index = 47
+center_position = Vector2(1020, 340)
+
+[sub_resource type="Resource" id="PropertyDecoration_048"]
+script = ExtResource("4_property_decoration")
+tile_index = 48
+center_position = Vector2(1054, 320)
+
+[sub_resource type="Resource" id="PropertyDecoration_049"]
+script = ExtResource("4_property_decoration")
+tile_index = 49
+center_position = Vector2(918, 160)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_050"]
+script = ExtResource("4_property_decoration")
+tile_index = 50
+center_position = Vector2(952, 140)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_051"]
+script = ExtResource("4_property_decoration")
+tile_index = 51
+center_position = Vector2(986, 120)
+facing_direction = 3
+
+[sub_resource type="Resource" id="PropertyDecoration_052"]
+script = ExtResource("4_property_decoration")
+tile_index = 52
+center_position = Vector2(1088, 260)
+
+[sub_resource type="Resource" id="PropertyDecoration_053"]
+script = ExtResource("4_property_decoration")
+tile_index = 53
+center_position = Vector2(1122, 240)
+
+[sub_resource type="Resource" id="PropertyDecoration_054"]
+script = ExtResource("4_property_decoration")
+tile_index = 54
+center_position = Vector2(1156, 220)
+
+[sub_resource type="Resource" id="PropertyDecoration_055"]
+script = ExtResource("4_property_decoration")
+tile_index = 55
+center_position = Vector2(1190, 200)
+
+[sub_resource type="Resource" id="TileData_000"]
+script = ExtResource("2_tile_data")
+source_node_id = 1
+tile_type = 1
+display_name = "金星大道"
+description = "StarQ source node 1, type 16, district 1."
+color = Color(0.75, 0.31, 0.3, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_001"]
+script = ExtResource("2_tile_data")
+index = 1
+source_node_id = 3
+tile_type = 1
+display_name = "金星大道"
+description = "StarQ source node 3, type 16, district 1."
+color = Color(0.75, 0.31, 0.3, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_002"]
+script = ExtResource("2_tile_data")
+index = 2
+source_node_id = 5
+tile_type = 1
+display_name = "金星大道"
+description = "StarQ source node 5, type 16, district 1."
+color = Color(0.75, 0.31, 0.3, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_003"]
+script = ExtResource("2_tile_data")
+index = 3
+source_node_id = 7
+tile_type = 1
+display_name = "金星大道"
+description = "StarQ source node 7, type 16, district 1."
+color = Color(0.75, 0.31, 0.3, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_004"]
+script = ExtResource("2_tile_data")
+index = 4
+source_node_id = 9
+tile_type = 1
+display_name = "木星路"
+description = "StarQ source node 9, type 16, district 2."
+color = Color(0.79, 0.44, 0.24, 1)
+price = 1200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_005"]
+script = ExtResource("2_tile_data")
+index = 5
+source_node_id = 11
+tile_type = 1
+display_name = "木星路"
+description = "StarQ source node 11, type 16, district 2."
+color = Color(0.79, 0.44, 0.24, 1)
+price = 1200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_006"]
+script = ExtResource("2_tile_data")
+index = 6
+source_node_id = 13
+tile_type = 1
+display_name = "木星路"
+description = "StarQ source node 13, type 16, district 2."
+color = Color(0.79, 0.44, 0.24, 1)
+price = 1200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_007"]
+script = ExtResource("2_tile_data")
+index = 7
+source_node_id = 15
+tile_type = 1
+display_name = "水星街"
+description = "StarQ source node 15, type 16, district 3."
+color = Color(0.73, 0.6, 0.22, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_008"]
+script = ExtResource("2_tile_data")
+index = 8
+source_node_id = 17
+tile_type = 1
+display_name = "水星街"
+description = "StarQ source node 17, type 16, district 3."
+color = Color(0.73, 0.6, 0.22, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_009"]
+script = ExtResource("2_tile_data")
+index = 9
+source_node_id = 19
+tile_type = 1
+display_name = "水星街"
+description = "StarQ source node 19, type 16, district 3."
+color = Color(0.73, 0.6, 0.22, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_010"]
+script = ExtResource("2_tile_data")
+index = 10
+source_node_id = 21
+tile_type = 1
+display_name = "火星环线"
+description = "StarQ source node 21, type 16, district 4."
+color = Color(0.4, 0.63, 0.25, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_011"]
+script = ExtResource("2_tile_data")
+index = 11
+source_node_id = 23
+tile_type = 1
+display_name = "火星环线"
+description = "StarQ source node 23, type 16, district 4."
+color = Color(0.4, 0.63, 0.25, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_012"]
+script = ExtResource("2_tile_data")
+index = 12
+source_node_id = 25
+tile_type = 1
+display_name = "火星环线"
+description = "StarQ source node 25, type 16, district 4."
+color = Color(0.4, 0.63, 0.25, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_013"]
+script = ExtResource("2_tile_data")
+index = 13
+source_node_id = 27
+tile_type = 1
+display_name = "太阳村"
+description = "StarQ source node 27, type 16, district 5."
+color = Color(0.2, 0.62, 0.45, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_014"]
+script = ExtResource("2_tile_data")
+index = 14
+source_node_id = 29
+tile_type = 1
+display_name = "太阳村"
+description = "StarQ source node 29, type 16, district 5."
+color = Color(0.2, 0.62, 0.45, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_015"]
+script = ExtResource("2_tile_data")
+index = 15
+source_node_id = 31
+tile_type = 1
+display_name = "太阳村"
+description = "StarQ source node 31, type 16, district 5."
+color = Color(0.2, 0.62, 0.45, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_016"]
+script = ExtResource("2_tile_data")
+index = 16
+source_node_id = 33
+tile_type = 1
+display_name = "太阳村"
+description = "StarQ source node 33, type 16, district 5."
+color = Color(0.2, 0.62, 0.45, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_017"]
+script = ExtResource("2_tile_data")
+index = 17
+source_node_id = 35
+tile_type = 1
+display_name = "银河街"
+description = "StarQ source node 35, type 16, district 6."
+color = Color(0.18, 0.57, 0.66, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_018"]
+script = ExtResource("2_tile_data")
+index = 18
+source_node_id = 37
+tile_type = 1
+display_name = "银河街"
+description = "StarQ source node 37, type 16, district 6."
+color = Color(0.18, 0.57, 0.66, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_019"]
+script = ExtResource("2_tile_data")
+index = 19
+source_node_id = 39
+tile_type = 1
+display_name = "银河街"
+description = "StarQ source node 39, type 16, district 6."
+color = Color(0.18, 0.57, 0.66, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_020"]
+script = ExtResource("2_tile_data")
+index = 20
+source_node_id = 41
+tile_type = 1
+display_name = "银河街"
+description = "StarQ source node 41, type 16, district 6."
+color = Color(0.18, 0.57, 0.66, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_021"]
+script = ExtResource("2_tile_data")
+index = 21
+source_node_id = 43
+tile_type = 1
+display_name = "新月街"
+description = "StarQ source node 43, type 16, district 7."
+color = Color(0.24, 0.43, 0.76, 1)
+price = 2000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_022"]
+script = ExtResource("2_tile_data")
+index = 22
+source_node_id = 45
+tile_type = 1
+display_name = "新月街"
+description = "StarQ source node 45, type 16, district 7."
+color = Color(0.24, 0.43, 0.76, 1)
+price = 2000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_023"]
+script = ExtResource("2_tile_data")
+index = 23
+source_node_id = 47
+tile_type = 1
+display_name = "新月街"
+description = "StarQ source node 47, type 16, district 7."
+color = Color(0.24, 0.43, 0.76, 1)
+price = 2000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_024"]
+script = ExtResource("2_tile_data")
+index = 24
+source_node_id = 49
+tile_type = 1
+display_name = "共想大道"
+description = "StarQ source node 49, type 16, district 8."
+color = Color(0.42, 0.32, 0.73, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_025"]
+script = ExtResource("2_tile_data")
+index = 25
+source_node_id = 51
+tile_type = 1
+display_name = "共想大道"
+description = "StarQ source node 51, type 16, district 8."
+color = Color(0.42, 0.32, 0.73, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_026"]
+script = ExtResource("2_tile_data")
+index = 26
+source_node_id = 53
+tile_type = 1
+display_name = "共想大道"
+description = "StarQ source node 53, type 16, district 8."
+color = Color(0.42, 0.32, 0.73, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_027"]
+script = ExtResource("2_tile_data")
+index = 27
+source_node_id = 55
+tile_type = 1
+display_name = "共想大道"
+description = "StarQ source node 55, type 16, district 8."
+color = Color(0.42, 0.32, 0.73, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_028"]
+script = ExtResource("2_tile_data")
+index = 28
+source_node_id = 57
+tile_type = 1
+display_name = "明日广场"
+description = "StarQ source node 57, type 16, district 9."
+color = Color(0.63, 0.29, 0.7, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_029"]
+script = ExtResource("2_tile_data")
+index = 29
+source_node_id = 59
+tile_type = 1
+display_name = "明日广场"
+description = "StarQ source node 59, type 16, district 9."
+color = Color(0.63, 0.29, 0.7, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_030"]
+script = ExtResource("2_tile_data")
+index = 30
+source_node_id = 61
+tile_type = 1
+display_name = "明日广场"
+description = "StarQ source node 61, type 16, district 9."
+color = Color(0.63, 0.29, 0.7, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_031"]
+script = ExtResource("2_tile_data")
+index = 31
+source_node_id = 63
+tile_type = 1
+display_name = "明日广场"
+description = "StarQ source node 63, type 16, district 9."
+color = Color(0.63, 0.29, 0.7, 1)
+price = 3000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_032"]
+script = ExtResource("2_tile_data")
+index = 32
+source_node_id = 65
+tile_type = 1
+display_name = "地球村"
+description = "StarQ source node 65, type 16, district 10."
+color = Color(0.75, 0.29, 0.52, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_033"]
+script = ExtResource("2_tile_data")
+index = 33
+source_node_id = 67
+tile_type = 1
+display_name = "地球村"
+description = "StarQ source node 67, type 16, district 10."
+color = Color(0.75, 0.29, 0.52, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_034"]
+script = ExtResource("2_tile_data")
+index = 34
+source_node_id = 69
+tile_type = 1
+display_name = "地球村"
+description = "StarQ source node 69, type 16, district 10."
+color = Color(0.75, 0.29, 0.52, 1)
+price = 2200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_035"]
+script = ExtResource("2_tile_data")
+index = 35
+source_node_id = 71
+tile_type = 1
+display_name = "五星大道"
+description = "StarQ source node 71, type 16, district 11."
+color = Color(0.68, 0.42, 0.25, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_036"]
+script = ExtResource("2_tile_data")
+index = 36
+source_node_id = 73
+tile_type = 1
+display_name = "五星大道"
+description = "StarQ source node 73, type 16, district 11."
+color = Color(0.68, 0.42, 0.25, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_037"]
+script = ExtResource("2_tile_data")
+index = 37
+source_node_id = 75
+tile_type = 1
+display_name = "五星大道"
+description = "StarQ source node 75, type 16, district 11."
+color = Color(0.68, 0.42, 0.25, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_038"]
+script = ExtResource("2_tile_data")
+index = 38
+source_node_id = 77
+tile_type = 1
+display_name = "五星大道"
+description = "StarQ source node 77, type 16, district 11."
+color = Color(0.68, 0.42, 0.25, 1)
+price = 2500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_039"]
+script = ExtResource("2_tile_data")
+index = 39
+source_node_id = 79
+tile_type = 1
+display_name = "土星北路"
+description = "StarQ source node 79, type 16, district 12."
+color = Color(0.47, 0.34, 0.68, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_040"]
+script = ExtResource("2_tile_data")
+index = 40
+source_node_id = 81
+tile_type = 1
+display_name = "土星北路"
+description = "StarQ source node 81, type 16, district 12."
+color = Color(0.47, 0.34, 0.68, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_041"]
+script = ExtResource("2_tile_data")
+index = 41
+source_node_id = 83
+tile_type = 1
+display_name = "土星北路"
+description = "StarQ source node 83, type 16, district 12."
+color = Color(0.47, 0.34, 0.68, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_042"]
+script = ExtResource("2_tile_data")
+index = 42
+source_node_id = 85
+tile_type = 1
+display_name = "土星北路"
+description = "StarQ source node 85, type 16, district 12."
+color = Color(0.47, 0.34, 0.68, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_043"]
+script = ExtResource("2_tile_data")
+index = 43
+source_node_id = 87
+tile_type = 1
+display_name = "天王星街"
+description = "StarQ source node 87, type 16, district 13."
+color = Color(0.28, 0.64, 0.67, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_044"]
+script = ExtResource("2_tile_data")
+index = 44
+source_node_id = 89
+tile_type = 1
+display_name = "天王星街"
+description = "StarQ source node 89, type 16, district 13."
+color = Color(0.28, 0.64, 0.67, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_045"]
+script = ExtResource("2_tile_data")
+index = 45
+source_node_id = 91
+tile_type = 1
+display_name = "天王星街"
+description = "StarQ source node 91, type 16, district 13."
+color = Color(0.28, 0.64, 0.67, 1)
+price = 1800
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_046"]
+script = ExtResource("2_tile_data")
+index = 46
+source_node_id = 93
+tile_type = 1
+display_name = "海王星巷"
+description = "StarQ source node 93, type 16, district 14."
+color = Color(0.71, 0.54, 0.2, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_047"]
+script = ExtResource("2_tile_data")
+index = 47
+source_node_id = 95
+tile_type = 1
+display_name = "海王星巷"
+description = "StarQ source node 95, type 16, district 14."
+color = Color(0.71, 0.54, 0.2, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_048"]
+script = ExtResource("2_tile_data")
+index = 48
+source_node_id = 97
+tile_type = 1
+display_name = "海王星巷"
+description = "StarQ source node 97, type 16, district 14."
+color = Color(0.71, 0.54, 0.2, 1)
+price = 1500
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_049"]
+script = ExtResource("2_tile_data")
+index = 49
+source_node_id = 99
+tile_type = 1
+display_name = "冥王星路"
+description = "StarQ source node 99, type 16, district 15."
+color = Color(0.31, 0.62, 0.34, 1)
+price = 1200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_050"]
+script = ExtResource("2_tile_data")
+index = 50
+source_node_id = 101
+tile_type = 1
+display_name = "冥王星路"
+description = "StarQ source node 101, type 16, district 15."
+color = Color(0.31, 0.62, 0.34, 1)
+price = 1200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_051"]
+script = ExtResource("2_tile_data")
+index = 51
+source_node_id = 103
+tile_type = 1
+display_name = "冥王星路"
+description = "StarQ source node 103, type 16, district 15."
+color = Color(0.31, 0.62, 0.34, 1)
+price = 1200
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_052"]
+script = ExtResource("2_tile_data")
+index = 52
+source_node_id = 105
+tile_type = 1
+display_name = "仙鹤街"
+description = "StarQ source node 105, type 16, district 16."
+color = Color(0.38, 0.42, 0.62, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_053"]
+script = ExtResource("2_tile_data")
+index = 53
+source_node_id = 107
+tile_type = 1
+display_name = "仙鹤街"
+description = "StarQ source node 107, type 16, district 16."
+color = Color(0.38, 0.42, 0.62, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_054"]
+script = ExtResource("2_tile_data")
+index = 54
+source_node_id = 109
+tile_type = 1
+display_name = "仙鹤街"
+description = "StarQ source node 109, type 16, district 16."
+color = Color(0.38, 0.42, 0.62, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_055"]
+script = ExtResource("2_tile_data")
+index = 55
+source_node_id = 111
+tile_type = 1
+display_name = "仙鹤街"
+description = "StarQ source node 111, type 16, district 16."
+color = Color(0.38, 0.42, 0.62, 1)
+price = 1000
+effect_id = &"starq_property"
+
+[sub_resource type="Resource" id="TileData_056"]
+script = ExtResource("2_tile_data")
+index = 56
+source_node_id = 113
+tile_type = 8
+display_name = "电力公司"
+description = "StarQ source node 113, type 13, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_13"
+
+[sub_resource type="Resource" id="TileData_057"]
+script = ExtResource("2_tile_data")
+index = 57
+source_node_id = 114
+tile_type = 8
+display_name = "电力公司"
+description = "StarQ source node 114, type 13, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_13"
+
+[sub_resource type="Resource" id="TileData_058"]
+script = ExtResource("2_tile_data")
+index = 58
+source_node_id = 116
+tile_type = 8
+display_name = "供水公司"
+description = "StarQ source node 116, type 14, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_14"
+
+[sub_resource type="Resource" id="TileData_059"]
+script = ExtResource("2_tile_data")
+index = 59
+source_node_id = 117
+tile_type = 8
+display_name = "供水公司"
+description = "StarQ source node 117, type 14, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_14"
+
+[sub_resource type="Resource" id="TileData_060"]
+script = ExtResource("2_tile_data")
+index = 60
+source_node_id = 119
+tile_type = 8
+display_name = "明日电视"
+description = "StarQ source node 119, type 15, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_15"
+
+[sub_resource type="Resource" id="TileData_061"]
+script = ExtResource("2_tile_data")
+index = 61
+source_node_id = 120
+tile_type = 8
+display_name = "明日电视"
+description = "StarQ source node 120, type 15, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_15"
+
+[sub_resource type="Resource" id="TileData_062"]
+script = ExtResource("2_tile_data")
+index = 62
+source_node_id = 122
+tile_type = 8
+display_name = "先锋物流"
+description = "StarQ source node 122, type 1, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_1"
+
+[sub_resource type="Resource" id="TileData_063"]
+script = ExtResource("2_tile_data")
+index = 63
+source_node_id = 123
+tile_type = 8
+display_name = "先锋物流"
+description = "StarQ source node 123, type 1, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_1"
+
+[sub_resource type="Resource" id="TileData_064"]
+script = ExtResource("2_tile_data")
+index = 64
+source_node_id = 125
+tile_type = 8
+display_name = "中华饭店"
+description = "StarQ source node 125, type 2, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_2"
+
+[sub_resource type="Resource" id="TileData_065"]
+script = ExtResource("2_tile_data")
+index = 65
+source_node_id = 126
+tile_type = 8
+display_name = "中华饭店"
+description = "StarQ source node 126, type 2, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_2"
+
+[sub_resource type="Resource" id="TileData_066"]
+script = ExtResource("2_tile_data")
+index = 66
+source_node_id = 128
+tile_type = 8
+display_name = "金壁影视"
+description = "StarQ source node 128, type 5, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_5"
+
+[sub_resource type="Resource" id="TileData_067"]
+script = ExtResource("2_tile_data")
+index = 67
+source_node_id = 129
+tile_type = 8
+display_name = "金璧影视"
+description = "StarQ source node 129, type 5, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_5"
+
+[sub_resource type="Resource" id="TileData_068"]
+script = ExtResource("2_tile_data")
+index = 68
+source_node_id = 131
+tile_type = 8
+display_name = "本草药业"
+description = "StarQ source node 131, type 6, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_6"
+
+[sub_resource type="Resource" id="TileData_069"]
+script = ExtResource("2_tile_data")
+index = 69
+source_node_id = 132
+tile_type = 8
+display_name = "本草药业"
+description = "StarQ source node 132, type 6, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_6"
+
+[sub_resource type="Resource" id="TileData_070"]
+script = ExtResource("2_tile_data")
+index = 70
+source_node_id = 134
+tile_type = 8
+display_name = "魔法门"
+description = "StarQ source node 134, type 17, district 1."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_17"
+
+[sub_resource type="Resource" id="TileData_071"]
+script = ExtResource("2_tile_data")
+index = 71
+source_node_id = 135
+tile_type = 8
+display_name = "魔法门"
+description = "StarQ source node 135, type 17, district 2."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_17"
+
+[sub_resource type="Resource" id="TileData_072"]
+script = ExtResource("2_tile_data")
+index = 72
+source_node_id = 136
+tile_type = 8
+display_name = "魔法门"
+description = "StarQ source node 136, type 17, district 3."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_17"
+
+[sub_resource type="Resource" id="TileData_073"]
+script = ExtResource("2_tile_data")
+index = 73
+source_node_id = 137
+tile_type = 8
+display_name = "魔法门"
+description = "StarQ source node 137, type 17, district 4."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_17"
+
+[sub_resource type="Resource" id="TileData_074"]
+script = ExtResource("2_tile_data")
+index = 74
+source_node_id = 139
+tile_type = 8
+display_name = "银　行"
+description = "StarQ source node 139, type 18, district 1."
+color = Color(0.18, 0.57, 0.66, 1)
+effect_id = &"starq_type_18"
+
+[sub_resource type="Resource" id="TileData_075"]
+script = ExtResource("2_tile_data")
+index = 75
+source_node_id = 140
+tile_type = 8
+display_name = "银　行"
+description = "StarQ source node 140, type 18, district 2."
+color = Color(0.18, 0.57, 0.66, 1)
+effect_id = &"starq_type_18"
+
+[sub_resource type="Resource" id="TileData_076"]
+script = ExtResource("2_tile_data")
+index = 76
+source_node_id = 141
+tile_type = 8
+display_name = "银　行"
+description = "StarQ source node 141, type 18, district 3."
+color = Color(0.18, 0.57, 0.66, 1)
+effect_id = &"starq_type_18"
+
+[sub_resource type="Resource" id="TileData_077"]
+script = ExtResource("2_tile_data")
+index = 77
+source_node_id = 142
+tile_type = 8
+display_name = "银　行"
+description = "StarQ source node 142, type 18, district 4."
+color = Color(0.18, 0.57, 0.66, 1)
+effect_id = &"starq_type_18"
+
+[sub_resource type="Resource" id="TileData_078"]
+script = ExtResource("2_tile_data")
+index = 78
+source_node_id = 144
+tile_type = 2
+display_name = "股　市"
+description = "StarQ source node 144, type 19, district 1."
+color = Color(0.21, 0.43, 0.75, 1)
+effect_id = &"starq_stock_market"
+
+[sub_resource type="Resource" id="TileData_079"]
+script = ExtResource("2_tile_data")
+index = 79
+source_node_id = 145
+tile_type = 2
+display_name = "股　市"
+description = "StarQ source node 145, type 19, district 2."
+color = Color(0.21, 0.43, 0.75, 1)
+effect_id = &"starq_stock_market"
+
+[sub_resource type="Resource" id="TileData_080"]
+script = ExtResource("2_tile_data")
+index = 80
+source_node_id = 146
+tile_type = 2
+display_name = "股　市"
+description = "StarQ source node 146, type 19, district 3."
+color = Color(0.21, 0.43, 0.75, 1)
+effect_id = &"starq_stock_market"
+
+[sub_resource type="Resource" id="TileData_081"]
+script = ExtResource("2_tile_data")
+index = 81
+source_node_id = 147
+tile_type = 2
+display_name = "股　市"
+description = "StarQ source node 147, type 19, district 4."
+color = Color(0.21, 0.43, 0.75, 1)
+effect_id = &"starq_stock_market"
+
+[sub_resource type="Resource" id="TileData_082"]
+script = ExtResource("2_tile_data")
+index = 82
+source_node_id = 149
+tile_type = 8
+display_name = "卡片商店"
+description = "StarQ source node 149, type 20, district 1."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_20"
+
+[sub_resource type="Resource" id="TileData_083"]
+script = ExtResource("2_tile_data")
+index = 83
+source_node_id = 150
+tile_type = 8
+display_name = "卡片商店"
+description = "StarQ source node 150, type 20, district 2."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_20"
+
+[sub_resource type="Resource" id="TileData_084"]
+script = ExtResource("2_tile_data")
+index = 84
+source_node_id = 151
+tile_type = 8
+display_name = "卡片商店"
+description = "StarQ source node 151, type 20, district 3."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_20"
+
+[sub_resource type="Resource" id="TileData_085"]
+script = ExtResource("2_tile_data")
+index = 85
+source_node_id = 152
+tile_type = 8
+display_name = "卡片商店"
+description = "StarQ source node 152, type 20, district 4."
+color = Color(0.42, 0.32, 0.73, 1)
+effect_id = &"starq_type_20"
+
+[sub_resource type="Resource" id="TileData_086"]
+script = ExtResource("2_tile_data")
+index = 86
+source_node_id = 154
+tile_type = 8
+display_name = "彩票公司"
+description = "StarQ source node 154, type 21, district 1."
+color = Color(0.76, 0.54, 0.16, 1)
+effect_id = &"starq_type_21"
+
+[sub_resource type="Resource" id="TileData_087"]
+script = ExtResource("2_tile_data")
+index = 87
+source_node_id = 155
+tile_type = 8
+display_name = "彩票公司"
+description = "StarQ source node 155, type 21, district 2."
+color = Color(0.76, 0.54, 0.16, 1)
+effect_id = &"starq_type_21"
+
+[sub_resource type="Resource" id="TileData_088"]
+script = ExtResource("2_tile_data")
+index = 88
+source_node_id = 157
+tile_type = 8
+display_name = "法　院"
+description = "StarQ source node 157, type 22, district 0."
+color = Color(0.75, 0.31, 0.3, 1)
+effect_id = &"starq_type_22"
+
+[sub_resource type="Resource" id="TileData_089"]
+script = ExtResource("2_tile_data")
+index = 89
+source_node_id = 159
+tile_type = 8
+display_name = "失物招领"
+description = "StarQ source node 159, type 23, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_23"
+
+[sub_resource type="Resource" id="TileData_090"]
+script = ExtResource("2_tile_data")
+index = 90
+source_node_id = 161
+tile_type = 8
+display_name = "回归门"
+description = "StarQ source node 161, type 31, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_31"
+
+[sub_resource type="Resource" id="TileData_091"]
+script = ExtResource("2_tile_data")
+index = 91
+source_node_id = 163
+tile_type = 8
+display_name = "重生门"
+description = "StarQ source node 163, type 32, district 0."
+color = Color(0.32, 0.36, 0.41, 1)
+effect_id = &"starq_type_32"
+
+[sub_resource type="Resource" id="TileData_092"]
+script = ExtResource("2_tile_data")
+index = 92
+source_node_id = 165
+tile_type = 3
+display_name = "卡　片"
+description = "StarQ source node 165, type 24, district 0."
+color = Color(0.24, 0.46, 0.8, 1)
+effect_id = &"starq_card"
+
+[sub_resource type="Resource" id="TileData_093"]
+script = ExtResource("2_tile_data")
+index = 93
+source_node_id = 166
+tile_type = 3
+display_name = "卡　片"
+description = "StarQ source node 166, type 24, district 0."
+color = Color(0.24, 0.46, 0.8, 1)
+effect_id = &"starq_card"
+
+[sub_resource type="Resource" id="TileData_094"]
+script = ExtResource("2_tile_data")
+index = 94
+source_node_id = 167
+tile_type = 3
+display_name = "卡　片"
+description = "StarQ source node 167, type 24, district 0."
+color = Color(0.24, 0.46, 0.8, 1)
+effect_id = &"starq_card"
+
+[sub_resource type="Resource" id="TileData_095"]
+script = ExtResource("2_tile_data")
+index = 95
+source_node_id = 168
+tile_type = 3
+display_name = "卡　片"
+description = "StarQ source node 168, type 24, district 0."
+color = Color(0.24, 0.46, 0.8, 1)
+effect_id = &"starq_card"
+
+[sub_resource type="Resource" id="TileData_096"]
+script = ExtResource("2_tile_data")
+index = 96
+source_node_id = 169
+tile_type = 3
+display_name = "卡　片"
+description = "StarQ source node 169, type 24, district 0."
+color = Color(0.24, 0.46, 0.8, 1)
+effect_id = &"starq_card"
+
+[sub_resource type="Resource" id="TileData_097"]
+script = ExtResource("2_tile_data")
+index = 97
+source_node_id = 170
+tile_type = 3
+display_name = "卡　片"
+description = "StarQ source node 170, type 24, district 0."
+color = Color(0.24, 0.46, 0.8, 1)
+effect_id = &"starq_card"
+
+[sub_resource type="Resource" id="TileData_098"]
+script = ExtResource("2_tile_data")
+index = 98
+source_node_id = 171
+tile_type = 4
+display_name = "运气事件"
+description = "StarQ source node 171, type 25, district 0."
+color = Color(0.84, 0.48, 0.18, 1)
+effect_id = &"starq_chance"
+
+[sub_resource type="Resource" id="TileData_099"]
+script = ExtResource("2_tile_data")
+index = 99
+source_node_id = 172
+tile_type = 4
+display_name = "运气事件"
+description = "StarQ source node 172, type 25, district 0."
+color = Color(0.84, 0.48, 0.18, 1)
+effect_id = &"starq_chance"
+
+[sub_resource type="Resource" id="TileData_100"]
+script = ExtResource("2_tile_data")
+index = 100
+source_node_id = 173
+tile_type = 4
+display_name = "运气事件"
+description = "StarQ source node 173, type 25, district 0."
+color = Color(0.84, 0.48, 0.18, 1)
+effect_id = &"starq_chance"
+
+[sub_resource type="Resource" id="TileData_101"]
+script = ExtResource("2_tile_data")
+index = 101
+source_node_id = 174
+tile_type = 4
+display_name = "运气事件"
+description = "StarQ source node 174, type 25, district 0."
+color = Color(0.84, 0.48, 0.18, 1)
+effect_id = &"starq_chance"
+
+[sub_resource type="Resource" id="TileData_102"]
+script = ExtResource("2_tile_data")
+index = 102
+source_node_id = 175
+tile_type = 4
+display_name = "运气事件"
+description = "StarQ source node 175, type 25, district 0."
+color = Color(0.84, 0.48, 0.18, 1)
+effect_id = &"starq_chance"
+
+[sub_resource type="Resource" id="TileData_103"]
+script = ExtResource("2_tile_data")
+index = 103
+source_node_id = 176
+tile_type = 4
+display_name = "运气事件"
+description = "StarQ source node 176, type 25, district 0."
+color = Color(0.84, 0.48, 0.18, 1)
+effect_id = &"starq_chance"
+
+[sub_resource type="Resource" id="TileData_104"]
+script = ExtResource("2_tile_data")
+index = 104
+source_node_id = 177
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 177, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_105"]
+script = ExtResource("2_tile_data")
+index = 105
+source_node_id = 178
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 178, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_106"]
+script = ExtResource("2_tile_data")
+index = 106
+source_node_id = 179
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 179, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_107"]
+script = ExtResource("2_tile_data")
+index = 107
+source_node_id = 180
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 180, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_108"]
+script = ExtResource("2_tile_data")
+index = 108
+source_node_id = 181
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 181, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_109"]
+script = ExtResource("2_tile_data")
+index = 109
+source_node_id = 182
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 182, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_110"]
+script = ExtResource("2_tile_data")
+index = 110
+source_node_id = 183
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 183, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_111"]
+script = ExtResource("2_tile_data")
+index = 111
+source_node_id = 184
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 184, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_112"]
+script = ExtResource("2_tile_data")
+index = 112
+source_node_id = 185
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 185, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_113"]
+script = ExtResource("2_tile_data")
+index = 113
+source_node_id = 186
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 186, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_114"]
+script = ExtResource("2_tile_data")
+index = 114
+source_node_id = 187
+tile_type = 6
+display_name = "奖券10点"
+description = "StarQ source node 187, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 10
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_115"]
+script = ExtResource("2_tile_data")
+index = 115
+source_node_id = 188
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 188, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_116"]
+script = ExtResource("2_tile_data")
+index = 116
+source_node_id = 189
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 189, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_117"]
+script = ExtResource("2_tile_data")
+index = 117
+source_node_id = 190
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 190, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_118"]
+script = ExtResource("2_tile_data")
+index = 118
+source_node_id = 191
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 191, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_119"]
+script = ExtResource("2_tile_data")
+index = 119
+source_node_id = 192
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 192, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_120"]
+script = ExtResource("2_tile_data")
+index = 120
+source_node_id = 193
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 193, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_121"]
+script = ExtResource("2_tile_data")
+index = 121
+source_node_id = 194
+tile_type = 6
+display_name = "奖券30点"
+description = "StarQ source node 194, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 30
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_122"]
+script = ExtResource("2_tile_data")
+index = 122
+source_node_id = 195
+tile_type = 6
+display_name = "奖券50点"
+description = "StarQ source node 195, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 50
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_123"]
+script = ExtResource("2_tile_data")
+index = 123
+source_node_id = 196
+tile_type = 6
+display_name = "奖券50点"
+description = "StarQ source node 196, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 50
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_124"]
+script = ExtResource("2_tile_data")
+index = 124
+source_node_id = 197
+tile_type = 6
+display_name = "奖券50点"
+description = "StarQ source node 197, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 50
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_125"]
+script = ExtResource("2_tile_data")
+index = 125
+source_node_id = 198
+tile_type = 6
+display_name = "奖券50点"
+description = "StarQ source node 198, type 26, district 0."
+color = Color(0.72, 0.61, 0.18, 1)
+money_delta = 50
+effect_id = &"starq_ticket"
+
+[sub_resource type="Resource" id="TileData_126"]
+script = ExtResource("2_tile_data")
+index = 126
+source_node_id = 199
+tile_type = 5
+display_name = "彩票投注"
+description = "StarQ source node 199, type 27, district 0."
+color = Color(0.76, 0.54, 0.16, 1)
+effect_id = &"starq_lottery_bet"
+
+[sub_resource type="Resource" id="TileData_127"]
+script = ExtResource("2_tile_data")
+index = 127
+source_node_id = 200
+tile_type = 5
+display_name = "彩票投注"
+description = "StarQ source node 200, type 27, district 0."
+color = Color(0.76, 0.54, 0.16, 1)
+effect_id = &"starq_lottery_bet"
+
+[sub_resource type="Resource" id="TileData_128"]
+script = ExtResource("2_tile_data")
+index = 128
+source_node_id = 201
+tile_type = 5
+display_name = "彩票投注"
+description = "StarQ source node 201, type 27, district 0."
+color = Color(0.76, 0.54, 0.16, 1)
+effect_id = &"starq_lottery_bet"
+
+[sub_resource type="Resource" id="TileData_129"]
+script = ExtResource("2_tile_data")
+index = 129
+source_node_id = 202
+tile_type = 5
+display_name = "彩票投注"
+description = "StarQ source node 202, type 27, district 0."
+color = Color(0.76, 0.54, 0.16, 1)
+effect_id = &"starq_lottery_bet"
+
+[sub_resource type="Resource" id="TileData_130"]
+script = ExtResource("2_tile_data")
+index = 130
+source_node_id = 203
+tile_type = 8
+display_name = "游 乐 场"
+description = "StarQ source node 203, type 28, district 0."
+color = Color(0.8, 0.32, 0.54, 1)
+effect_id = &"starq_type_28"
+
+[sub_resource type="Resource" id="TileData_131"]
+script = ExtResource("2_tile_data")
+index = 131
+source_node_id = 204
+tile_type = 8
+display_name = "游 乐 场"
+description = "StarQ source node 204, type 28, district 0."
+color = Color(0.8, 0.32, 0.54, 1)
+effect_id = &"starq_type_28"
+
+[sub_resource type="Resource" id="TileData_132"]
+script = ExtResource("2_tile_data")
+index = 132
+source_node_id = 205
+display_name = "街道转角"
+description = "StarQ source node 205, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_133"]
+script = ExtResource("2_tile_data")
+index = 133
+source_node_id = 206
+display_name = "街道转角"
+description = "StarQ source node 206, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_134"]
+script = ExtResource("2_tile_data")
+index = 134
+source_node_id = 207
+display_name = "街道转角"
+description = "StarQ source node 207, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_135"]
+script = ExtResource("2_tile_data")
+index = 135
+source_node_id = 208
+display_name = "街道转角"
+description = "StarQ source node 208, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_136"]
+script = ExtResource("2_tile_data")
+index = 136
+source_node_id = 209
+display_name = "街道转角"
+description = "StarQ source node 209, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_137"]
+script = ExtResource("2_tile_data")
+index = 137
+source_node_id = 210
+display_name = "街道转角"
+description = "StarQ source node 210, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_138"]
+script = ExtResource("2_tile_data")
+index = 138
+source_node_id = 211
+display_name = "街道转角"
+description = "StarQ source node 211, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_139"]
+script = ExtResource("2_tile_data")
+index = 139
+source_node_id = 212
+display_name = "街道转角"
+description = "StarQ source node 212, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_140"]
+script = ExtResource("2_tile_data")
+index = 140
+source_node_id = 213
+display_name = "街道转角"
+description = "StarQ source node 213, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_141"]
+script = ExtResource("2_tile_data")
+index = 141
+source_node_id = 214
+display_name = "街道转角"
+description = "StarQ source node 214, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_142"]
+script = ExtResource("2_tile_data")
+index = 142
+source_node_id = 215
+display_name = "街道转角"
+description = "StarQ source node 215, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_143"]
+script = ExtResource("2_tile_data")
+index = 143
+source_node_id = 216
+display_name = "街道转角"
+description = "StarQ source node 216, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_144"]
+script = ExtResource("2_tile_data")
+index = 144
+source_node_id = 217
+display_name = "街道转角"
+description = "StarQ source node 217, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_145"]
+script = ExtResource("2_tile_data")
+index = 145
+source_node_id = 218
+display_name = "街道转角"
+description = "StarQ source node 218, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_146"]
+script = ExtResource("2_tile_data")
+index = 146
+source_node_id = 219
+display_name = "街道转角"
+description = "StarQ source node 219, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_147"]
+script = ExtResource("2_tile_data")
+index = 147
+source_node_id = 220
+display_name = "街道转角"
+description = "StarQ source node 220, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_148"]
+script = ExtResource("2_tile_data")
+index = 148
+source_node_id = 221
+display_name = "三岔路口"
+description = "StarQ source node 221, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_149"]
+script = ExtResource("2_tile_data")
+index = 149
+source_node_id = 222
+display_name = "三岔路口"
+description = "StarQ source node 222, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_150"]
+script = ExtResource("2_tile_data")
+index = 150
+source_node_id = 223
+display_name = "三岔路口"
+description = "StarQ source node 223, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_151"]
+script = ExtResource("2_tile_data")
+index = 151
+source_node_id = 224
+display_name = "三岔路口"
+description = "StarQ source node 224, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_152"]
+script = ExtResource("2_tile_data")
+index = 152
+source_node_id = 225
+display_name = "三岔路口"
+description = "StarQ source node 225, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_153"]
+script = ExtResource("2_tile_data")
+index = 153
+source_node_id = 226
+display_name = "三岔路口"
+description = "StarQ source node 226, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_154"]
+script = ExtResource("2_tile_data")
+index = 154
+source_node_id = 227
+display_name = "三岔路口"
+description = "StarQ source node 227, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_155"]
+script = ExtResource("2_tile_data")
+index = 155
+source_node_id = 228
+display_name = "三岔路口"
+description = "StarQ source node 228, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_156"]
+script = ExtResource("2_tile_data")
+index = 156
+source_node_id = 229
+display_name = "十字路口"
+description = "StarQ source node 229, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_157"]
+script = ExtResource("2_tile_data")
+index = 157
+source_node_id = 230
+display_name = "十字路口"
+description = "StarQ source node 230, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_158"]
+script = ExtResource("2_tile_data")
+index = 158
+source_node_id = 231
+display_name = "十字路口"
+description = "StarQ source node 231, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[sub_resource type="Resource" id="TileData_159"]
+script = ExtResource("2_tile_data")
+index = 159
+source_node_id = 232
+display_name = "十字路口"
+description = "StarQ source node 232, type 29, district 0."
+color = Color(0.3, 0.33, 0.38, 1)
+effect_id = &"starq_road"
+
+[resource]
+script = ExtResource("1_board_data")
+tiles = Array[Resource]([SubResource("TileData_000"), SubResource("TileData_001"), SubResource("TileData_002"), SubResource("TileData_003"), SubResource("TileData_004"), SubResource("TileData_005"), SubResource("TileData_006"), SubResource("TileData_007"), SubResource("TileData_008"), SubResource("TileData_009"), SubResource("TileData_010"), SubResource("TileData_011"), SubResource("TileData_012"), SubResource("TileData_013"), SubResource("TileData_014"), SubResource("TileData_015"), SubResource("TileData_016"), SubResource("TileData_017"), SubResource("TileData_018"), SubResource("TileData_019"), SubResource("TileData_020"), SubResource("TileData_021"), SubResource("TileData_022"), SubResource("TileData_023"), SubResource("TileData_024"), SubResource("TileData_025"), SubResource("TileData_026"), SubResource("TileData_027"), SubResource("TileData_028"), SubResource("TileData_029"), SubResource("TileData_030"), SubResource("TileData_031"), SubResource("TileData_032"), SubResource("TileData_033"), SubResource("TileData_034"), SubResource("TileData_035"), SubResource("TileData_036"), SubResource("TileData_037"), SubResource("TileData_038"), SubResource("TileData_039"), SubResource("TileData_040"), SubResource("TileData_041"), SubResource("TileData_042"), SubResource("TileData_043"), SubResource("TileData_044"), SubResource("TileData_045"), SubResource("TileData_046"), SubResource("TileData_047"), SubResource("TileData_048"), SubResource("TileData_049"), SubResource("TileData_050"), SubResource("TileData_051"), SubResource("TileData_052"), SubResource("TileData_053"), SubResource("TileData_054"), SubResource("TileData_055"), SubResource("TileData_056"), SubResource("TileData_057"), SubResource("TileData_058"), SubResource("TileData_059"), SubResource("TileData_060"), SubResource("TileData_061"), SubResource("TileData_062"), SubResource("TileData_063"), SubResource("TileData_064"), SubResource("TileData_065"), SubResource("TileData_066"), SubResource("TileData_067"), SubResource("TileData_068"), SubResource("TileData_069"), SubResource("TileData_070"), SubResource("TileData_071"), SubResource("TileData_072"), SubResource("TileData_073"), SubResource("TileData_074"), SubResource("TileData_075"), SubResource("TileData_076"), SubResource("TileData_077"), SubResource("TileData_078"), SubResource("TileData_079"), SubResource("TileData_080"), SubResource("TileData_081"), SubResource("TileData_082"), SubResource("TileData_083"), SubResource("TileData_084"), SubResource("TileData_085"), SubResource("TileData_086"), SubResource("TileData_087"), SubResource("TileData_088"), SubResource("TileData_089"), SubResource("TileData_090"), SubResource("TileData_091"), SubResource("TileData_092"), SubResource("TileData_093"), SubResource("TileData_094"), SubResource("TileData_095"), SubResource("TileData_096"), SubResource("TileData_097"), SubResource("TileData_098"), SubResource("TileData_099"), SubResource("TileData_100"), SubResource("TileData_101"), SubResource("TileData_102"), SubResource("TileData_103"), SubResource("TileData_104"), SubResource("TileData_105"), SubResource("TileData_106"), SubResource("TileData_107"), SubResource("TileData_108"), SubResource("TileData_109"), SubResource("TileData_110"), SubResource("TileData_111"), SubResource("TileData_112"), SubResource("TileData_113"), SubResource("TileData_114"), SubResource("TileData_115"), SubResource("TileData_116"), SubResource("TileData_117"), SubResource("TileData_118"), SubResource("TileData_119"), SubResource("TileData_120"), SubResource("TileData_121"), SubResource("TileData_122"), SubResource("TileData_123"), SubResource("TileData_124"), SubResource("TileData_125"), SubResource("TileData_126"), SubResource("TileData_127"), SubResource("TileData_128"), SubResource("TileData_129"), SubResource("TileData_130"), SubResource("TileData_131"), SubResource("TileData_132"), SubResource("TileData_133"), SubResource("TileData_134"), SubResource("TileData_135"), SubResource("TileData_136"), SubResource("TileData_137"), SubResource("TileData_138"), SubResource("TileData_139"), SubResource("TileData_140"), SubResource("TileData_141"), SubResource("TileData_142"), SubResource("TileData_143"), SubResource("TileData_144"), SubResource("TileData_145"), SubResource("TileData_146"), SubResource("TileData_147"), SubResource("TileData_148"), SubResource("TileData_149"), SubResource("TileData_150"), SubResource("TileData_151"), SubResource("TileData_152"), SubResource("TileData_153"), SubResource("TileData_154"), SubResource("TileData_155"), SubResource("TileData_156"), SubResource("TileData_157"), SubResource("TileData_158"), SubResource("TileData_159")])
+placements = Array[Resource]([SubResource("Placement_000"), SubResource("Placement_001"), SubResource("Placement_002"), SubResource("Placement_003"), SubResource("Placement_004"), SubResource("Placement_005"), SubResource("Placement_006"), SubResource("Placement_007"), SubResource("Placement_008"), SubResource("Placement_009"), SubResource("Placement_010"), SubResource("Placement_011"), SubResource("Placement_012"), SubResource("Placement_013"), SubResource("Placement_014"), SubResource("Placement_015"), SubResource("Placement_016"), SubResource("Placement_017"), SubResource("Placement_018"), SubResource("Placement_019"), SubResource("Placement_020"), SubResource("Placement_021"), SubResource("Placement_022"), SubResource("Placement_023"), SubResource("Placement_024"), SubResource("Placement_025"), SubResource("Placement_026"), SubResource("Placement_027"), SubResource("Placement_028"), SubResource("Placement_029"), SubResource("Placement_030"), SubResource("Placement_031"), SubResource("Placement_032"), SubResource("Placement_033"), SubResource("Placement_034"), SubResource("Placement_035"), SubResource("Placement_036"), SubResource("Placement_037"), SubResource("Placement_038"), SubResource("Placement_039"), SubResource("Placement_040"), SubResource("Placement_041"), SubResource("Placement_042"), SubResource("Placement_043"), SubResource("Placement_044"), SubResource("Placement_045"), SubResource("Placement_046"), SubResource("Placement_047"), SubResource("Placement_048"), SubResource("Placement_049"), SubResource("Placement_050"), SubResource("Placement_051"), SubResource("Placement_052"), SubResource("Placement_053"), SubResource("Placement_054"), SubResource("Placement_055"), SubResource("Placement_056"), SubResource("Placement_057"), SubResource("Placement_058"), SubResource("Placement_059"), SubResource("Placement_060"), SubResource("Placement_061"), SubResource("Placement_062"), SubResource("Placement_063"), SubResource("Placement_064"), SubResource("Placement_065"), SubResource("Placement_066"), SubResource("Placement_067"), SubResource("Placement_068"), SubResource("Placement_069"), SubResource("Placement_070"), SubResource("Placement_071"), SubResource("Placement_072"), SubResource("Placement_073"), SubResource("Placement_074"), SubResource("Placement_075"), SubResource("Placement_076"), SubResource("Placement_077"), SubResource("Placement_078"), SubResource("Placement_079"), SubResource("Placement_080"), SubResource("Placement_081"), SubResource("Placement_082"), SubResource("Placement_083"), SubResource("Placement_084"), SubResource("Placement_085"), SubResource("Placement_086"), SubResource("Placement_087"), SubResource("Placement_088"), SubResource("Placement_089"), SubResource("Placement_090"), SubResource("Placement_091"), SubResource("Placement_092"), SubResource("Placement_093"), SubResource("Placement_094"), SubResource("Placement_095"), SubResource("Placement_096"), SubResource("Placement_097"), SubResource("Placement_098"), SubResource("Placement_099"), SubResource("Placement_100"), SubResource("Placement_101"), SubResource("Placement_102"), SubResource("Placement_103"), SubResource("Placement_104"), SubResource("Placement_105"), SubResource("Placement_106"), SubResource("Placement_107"), SubResource("Placement_108"), SubResource("Placement_109"), SubResource("Placement_110"), SubResource("Placement_111"), SubResource("Placement_112"), SubResource("Placement_113"), SubResource("Placement_114"), SubResource("Placement_115"), SubResource("Placement_116"), SubResource("Placement_117"), SubResource("Placement_118"), SubResource("Placement_119"), SubResource("Placement_120"), SubResource("Placement_121"), SubResource("Placement_122"), SubResource("Placement_123"), SubResource("Placement_124"), SubResource("Placement_125"), SubResource("Placement_126"), SubResource("Placement_127"), SubResource("Placement_128"), SubResource("Placement_129"), SubResource("Placement_130"), SubResource("Placement_131"), SubResource("Placement_132"), SubResource("Placement_133"), SubResource("Placement_134"), SubResource("Placement_135"), SubResource("Placement_136"), SubResource("Placement_137"), SubResource("Placement_138"), SubResource("Placement_139"), SubResource("Placement_140"), SubResource("Placement_141"), SubResource("Placement_142"), SubResource("Placement_143"), SubResource("Placement_144"), SubResource("Placement_145"), SubResource("Placement_146"), SubResource("Placement_147"), SubResource("Placement_148"), SubResource("Placement_149"), SubResource("Placement_150"), SubResource("Placement_151"), SubResource("Placement_152"), SubResource("Placement_153"), SubResource("Placement_154"), SubResource("Placement_155"), SubResource("Placement_156"), SubResource("Placement_157"), SubResource("Placement_158"), SubResource("Placement_159")])
+property_decorations = Array[Resource]([SubResource("PropertyDecoration_000"), SubResource("PropertyDecoration_001"), SubResource("PropertyDecoration_002"), SubResource("PropertyDecoration_003"), SubResource("PropertyDecoration_004"), SubResource("PropertyDecoration_005"), SubResource("PropertyDecoration_006"), SubResource("PropertyDecoration_007"), SubResource("PropertyDecoration_008"), SubResource("PropertyDecoration_009"), SubResource("PropertyDecoration_010"), SubResource("PropertyDecoration_011"), SubResource("PropertyDecoration_012"), SubResource("PropertyDecoration_013"), SubResource("PropertyDecoration_014"), SubResource("PropertyDecoration_015"), SubResource("PropertyDecoration_016"), SubResource("PropertyDecoration_017"), SubResource("PropertyDecoration_018"), SubResource("PropertyDecoration_019"), SubResource("PropertyDecoration_020"), SubResource("PropertyDecoration_021"), SubResource("PropertyDecoration_022"), SubResource("PropertyDecoration_023"), SubResource("PropertyDecoration_024"), SubResource("PropertyDecoration_025"), SubResource("PropertyDecoration_026"), SubResource("PropertyDecoration_027"), SubResource("PropertyDecoration_028"), SubResource("PropertyDecoration_029"), SubResource("PropertyDecoration_030"), SubResource("PropertyDecoration_031"), SubResource("PropertyDecoration_032"), SubResource("PropertyDecoration_033"), SubResource("PropertyDecoration_034"), SubResource("PropertyDecoration_035"), SubResource("PropertyDecoration_036"), SubResource("PropertyDecoration_037"), SubResource("PropertyDecoration_038"), SubResource("PropertyDecoration_039"), SubResource("PropertyDecoration_040"), SubResource("PropertyDecoration_041"), SubResource("PropertyDecoration_042"), SubResource("PropertyDecoration_043"), SubResource("PropertyDecoration_044"), SubResource("PropertyDecoration_045"), SubResource("PropertyDecoration_046"), SubResource("PropertyDecoration_047"), SubResource("PropertyDecoration_048"), SubResource("PropertyDecoration_049"), SubResource("PropertyDecoration_050"), SubResource("PropertyDecoration_051"), SubResource("PropertyDecoration_052"), SubResource("PropertyDecoration_053"), SubResource("PropertyDecoration_054"), SubResource("PropertyDecoration_055")])
+map_grid = SubResource("MapGrid_001")
+player_spawns = Array[Resource]([SubResource("PlayerSpawn_000"), SubResource("PlayerSpawn_001"), SubResource("PlayerSpawn_002"), SubResource("PlayerSpawn_003")])

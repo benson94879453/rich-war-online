@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/Main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/Board.tscn" id="2_board"]
+[ext_resource type="PackedScene" path="res://scenes/PlayerPiece.tscn" id="3_piece"]
+[ext_resource type="PackedScene" path="res://scenes/UI.tscn" id="4_ui"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_main")
+
+[node name="Board" parent="." instance=ExtResource("2_board")]
+position = Vector2(28, 18)
+
+[node name="Pieces" type="Node2D" parent="."]
+
+[node name="Player1" parent="Pieces" instance=ExtResource("3_piece")]
+player_id = 0
+piece_color = Color(0.96, 0.23, 0.2, 1)
+
+[node name="Player2" parent="Pieces" instance=ExtResource("3_piece")]
+player_id = 1
+piece_color = Color(0.18, 0.45, 0.95, 1)
+
+[node name="UI" parent="." instance=ExtResource("4_ui")]
