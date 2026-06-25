@@ -31,6 +31,7 @@ func _ready() -> void:
 	_connect_ui_actions()
 	EventBus.game_event_emitted.connect(_on_game_event)
 	NetworkManager.connection_status_changed.connect(_on_network_status_changed)
+	NetworkManager.intent_accepted.connect(_on_network_intent_accepted)
 	NetworkManager.intent_rejected.connect(_on_network_intent_rejected)
 	NetworkManager.local_player_changed.connect(_on_network_local_player_changed)
 	NetworkManager.state_snapshot_received.connect(_on_network_state_snapshot_received)
@@ -480,7 +481,13 @@ func _on_network_status_changed(message: String) -> void:
 		_clear_pending_client_intent()
 
 
-func _on_network_intent_rejected(intent_type: String, reason: String) -> void:
+func _on_network_intent_accepted(_intent_type: String, _request_id: int) -> void:
+	_clear_pending_client_intent()
+	_update_roll_availability()
+	_refresh_pending_action_controls()
+
+
+func _on_network_intent_rejected(intent_type: String, reason: String, _request_id: int) -> void:
 	_clear_pending_client_intent()
 	if _is_stale_property_rejection(intent_type, reason):
 		_update_roll_availability()
@@ -514,7 +521,7 @@ func _on_network_state_snapshot_received(snapshot: Dictionary) -> void:
 		_is_animating_map_movement = false
 
 	GameManager.restore_state_snapshot(snapshot, board_data)
-	_refresh_from_state_snapshot()
+	_refresh_from_state_snapshot(snapshot, is_first_snapshot and NetworkManager.is_client())
 	if is_first_snapshot and NetworkManager.is_client():
 		var revision := NetworkManager.get_snapshot_revision(snapshot)
 		if revision >= 0:
@@ -523,7 +530,7 @@ func _on_network_state_snapshot_received(snapshot: Dictionary) -> void:
 			_add_event_log_line("Synced snapshot from host")
 
 
-func _refresh_from_state_snapshot() -> void:
+func _refresh_from_state_snapshot(snapshot: Dictionary = {}, apply_snapshot_log: bool = false) -> void:
 	if GameManager.state == null:
 		return
 
@@ -537,10 +544,40 @@ func _refresh_from_state_snapshot() -> void:
 	_sync_property_owner_visuals()
 	if not _is_animating_map_movement and _map_animation_queue.is_empty():
 		_sync_piece_positions()
+	_apply_snapshot_ui_summary(snapshot, apply_snapshot_log)
 
 	_roll_is_ready = _can_local_roll()
 	_refresh_pending_action_controls()
 	_update_roll_availability()
+
+
+func _apply_snapshot_ui_summary(snapshot: Dictionary, apply_snapshot_log: bool) -> void:
+	var raw_summary: Variant = snapshot.get(GameManager.SNAPSHOT_UI_SUMMARY_KEY, {})
+	if not (raw_summary is Dictionary):
+		return
+
+	var summary: Dictionary = raw_summary
+	var raw_dice: Variant = summary.get(GameManager.UI_SUMMARY_LAST_DICE_KEY, {})
+	if raw_dice is Dictionary:
+		var dice_data: Dictionary = raw_dice
+		if not dice_data.is_empty():
+			_update_dice_label(int(dice_data.get("dice_value", 0)))
+
+	var raw_landing: Variant = summary.get(GameManager.UI_SUMMARY_LAST_LANDING_KEY, {})
+	if raw_landing is Dictionary:
+		var landing_data: Dictionary = raw_landing
+		if not landing_data.is_empty():
+			var player_id: int = int(landing_data.get("player_id", -1))
+			var tile_name: String = str(landing_data.get("tile_name", "Unknown"))
+			_update_tile_label(player_id, tile_name)
+
+	_update_event_label(str(summary.get(GameManager.UI_SUMMARY_EVENT_MESSAGE_KEY, "")))
+	if apply_snapshot_log:
+		_event_log.clear()
+		var raw_log_lines: Variant = summary.get(GameManager.UI_SUMMARY_LOG_LINES_KEY, [])
+		if raw_log_lines is Array:
+			for raw_line in raw_log_lines:
+				_add_event_log_line(str(raw_line))
 
 
 func _refresh_pending_action_controls() -> void:

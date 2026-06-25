@@ -1,6 +1,15 @@
 extends Node
 
 
+const SNAPSHOT_TURN_PHASE_KEY := "turn_phase"
+const SNAPSHOT_UI_SUMMARY_KEY := "ui_summary"
+const UI_SUMMARY_LAST_DICE_KEY := "last_dice_roll"
+const UI_SUMMARY_LAST_LANDING_KEY := "last_landing"
+const UI_SUMMARY_EVENT_MESSAGE_KEY := "event_message"
+const UI_SUMMARY_LOG_LINES_KEY := "log_lines"
+const UI_SUMMARY_LOG_LINE_LIMIT := 20
+
+
 var state: GameState
 var board_data: BoardData
 var board_navigator: BoardNavigator = BoardNavigator.new()
@@ -8,6 +17,10 @@ var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
 var tile_effect_resolver: TileEffectResolver = TileEffectResolver.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _last_dice_roll: Dictionary = {}
+var _last_landing: Dictionary = {}
+var _last_event_message: String = ""
+var _snapshot_log_lines: Array[String] = []
 
 
 func _ready() -> void:
@@ -15,6 +28,7 @@ func _ready() -> void:
 
 
 func start_local_game(players: Array[PlayerState], data: BoardData) -> void:
+	_reset_snapshot_ui_summary()
 	state = GameState.new()
 	state.initialize(players)
 	board_data = data
@@ -177,7 +191,10 @@ func get_state_snapshot() -> Dictionary:
 	if state == null:
 		return {}
 
-	return state.to_dict()
+	var snapshot := state.to_dict()
+	snapshot[SNAPSHOT_TURN_PHASE_KEY] = turn_system.get_phase()
+	snapshot[SNAPSHOT_UI_SUMMARY_KEY] = _get_snapshot_ui_summary()
+	return snapshot
 
 
 func restore_state_snapshot(snapshot: Dictionary, data: BoardData) -> void:
@@ -187,6 +204,15 @@ func restore_state_snapshot(snapshot: Dictionary, data: BoardData) -> void:
 	var map_grid: BoardMapGridData = data.get_map_grid()
 	if map_grid != null:
 		grid_movement_system.set_map_grid(map_grid)
+	_restore_turn_phase_from_snapshot(snapshot)
+	_restore_snapshot_ui_summary(snapshot)
+
+
+func _restore_turn_phase_from_snapshot(snapshot: Dictionary) -> void:
+	if snapshot.has(SNAPSHOT_TURN_PHASE_KEY):
+		turn_system.restore_phase(int(snapshot.get(SNAPSHOT_TURN_PHASE_KEY, TurnSystem.Phase.ROLL)))
+		return
+
 	turn_system.reset()
 	if state.has_pending_property_purchase():
 		turn_system.begin_property_decision()
@@ -441,7 +467,151 @@ func _emit_current_turn_started() -> void:
 	})
 
 
+func _reset_snapshot_ui_summary() -> void:
+	_last_dice_roll.clear()
+	_last_landing.clear()
+	_last_event_message = ""
+	_snapshot_log_lines.clear()
+
+
+func _get_snapshot_ui_summary() -> Dictionary:
+	return {
+		UI_SUMMARY_LAST_DICE_KEY: _last_dice_roll.duplicate(true),
+		UI_SUMMARY_LAST_LANDING_KEY: _last_landing.duplicate(true),
+		UI_SUMMARY_EVENT_MESSAGE_KEY: _last_event_message,
+		UI_SUMMARY_LOG_LINES_KEY: _snapshot_log_lines.duplicate(),
+	}
+
+
+func _restore_snapshot_ui_summary(snapshot: Dictionary) -> void:
+	_reset_snapshot_ui_summary()
+	var raw_summary: Variant = snapshot.get(SNAPSHOT_UI_SUMMARY_KEY, {})
+	if not (raw_summary is Dictionary):
+		return
+
+	var summary: Dictionary = raw_summary
+	var raw_dice: Variant = summary.get(UI_SUMMARY_LAST_DICE_KEY, {})
+	if raw_dice is Dictionary:
+		var dice_summary: Dictionary = raw_dice
+		_last_dice_roll = dice_summary.duplicate(true)
+
+	var raw_landing: Variant = summary.get(UI_SUMMARY_LAST_LANDING_KEY, {})
+	if raw_landing is Dictionary:
+		var landing_summary: Dictionary = raw_landing
+		_last_landing = landing_summary.duplicate(true)
+
+	_last_event_message = str(summary.get(UI_SUMMARY_EVENT_MESSAGE_KEY, ""))
+	var raw_log_lines: Variant = summary.get(UI_SUMMARY_LOG_LINES_KEY, [])
+	if raw_log_lines is Array:
+		for raw_line in raw_log_lines:
+			_append_snapshot_log_line(str(raw_line))
+
+
+func _record_snapshot_ui_summary(event_type: String, payload: Dictionary) -> void:
+	match event_type:
+		GameEvent.ROUND_STARTED:
+			_record_round_started_summary(payload)
+		GameEvent.DICE_ROLLED:
+			_last_dice_roll = payload.duplicate(true)
+		GameEvent.PLAYER_LANDED:
+			_last_landing = payload.duplicate(true)
+			_last_event_message = ""
+			_append_snapshot_log_line(_get_player_landed_summary(payload))
+		GameEvent.MAP_PLAYER_LANDED:
+			_last_landing = payload.duplicate(true)
+			_last_event_message = ""
+			_append_snapshot_log_line(_get_map_player_landed_summary(payload))
+		GameEvent.TILE_EFFECT_RESOLVED:
+			_set_snapshot_event_message(_get_tile_effect_summary(payload))
+		GameEvent.RENT_PAID:
+			_set_snapshot_event_message(_get_rent_paid_summary(payload))
+		GameEvent.PROPERTY_PURCHASE_OFFERED:
+			_set_snapshot_event_message(_get_property_purchase_offered_summary(payload))
+		GameEvent.PROPERTY_PURCHASED:
+			_set_snapshot_event_message(_get_property_purchased_summary(payload))
+		GameEvent.PROPERTY_PURCHASE_SKIPPED:
+			_set_snapshot_event_message(_get_property_purchase_skipped_summary(payload))
+
+
+func _record_round_started_summary(payload: Dictionary) -> void:
+	var round: int = int(payload.get("round", 1))
+	if round > 1:
+		_append_snapshot_log_line("Round %d begins" % round)
+
+
+func _get_player_landed_summary(payload: Dictionary) -> String:
+	var player_id: int = int(payload.get("player_id", -1))
+	var dice_value: int = int(payload.get("dice_value", 0))
+	var tile_index: int = int(payload.get("tile_index", -1))
+	var tile_name: String = str(payload.get("tile_name", "Unknown"))
+	return "P%d rolled %d -> tile %02d %s" % [player_id + 1, dice_value, tile_index, tile_name]
+
+
+func _get_map_player_landed_summary(payload: Dictionary) -> String:
+	var player_id: int = int(payload.get("player_id", -1))
+	var dice_value: int = int(payload.get("dice_value", 0))
+	var node_id: int = int(payload.get("node_id", -1))
+	var tile_name: String = str(payload.get("tile_name", "Unknown"))
+	return "P%d rolled %d -> node %d %s" % [player_id + 1, dice_value, node_id, tile_name]
+
+
+func _get_tile_effect_summary(payload: Dictionary) -> String:
+	var player_id: int = int(payload.get("player_id", -1))
+	var tile_name: String = str(payload.get("tile_name", "tile"))
+	var money_delta: int = int(payload.get("money_delta", 0))
+	var delta_text: String = "+$%d" % money_delta if money_delta >= 0 else "-$%d" % abs(money_delta)
+	var verb: String = "received" if money_delta >= 0 else "lost"
+	return "P%d %s %s on %s" % [player_id + 1, verb, delta_text, tile_name]
+
+
+func _get_rent_paid_summary(payload: Dictionary) -> String:
+	var payer_id: int = int(payload.get("payer_id", -1))
+	var owner_id: int = int(payload.get("owner_id", -1))
+	var amount: int = int(payload.get("amount", 0))
+	var tile_name: String = str(payload.get("tile_name", "property"))
+	return "P%d paid P%d $%d rent for %s" % [payer_id + 1, owner_id + 1, amount, tile_name]
+
+
+func _get_property_purchase_offered_summary(payload: Dictionary) -> String:
+	var player_id: int = int(payload.get("player_id", -1))
+	var tile_name: String = str(payload.get("tile_name", "property"))
+	var price: int = int(payload.get("price", 0))
+	return "P%d can buy %s for $%d" % [player_id + 1, tile_name, price]
+
+
+func _get_property_purchased_summary(payload: Dictionary) -> String:
+	var player_id: int = int(payload.get("player_id", -1))
+	var tile_name: String = str(payload.get("tile_name", "property"))
+	var price: int = int(payload.get("price", 0))
+	return "P%d bought %s for $%d" % [player_id + 1, tile_name, price]
+
+
+func _get_property_purchase_skipped_summary(payload: Dictionary) -> String:
+	var player_id: int = int(payload.get("player_id", -1))
+	var tile_name: String = str(payload.get("tile_name", "property"))
+	var reason: String = str(payload.get("reason", "skipped"))
+	if reason == "insufficient_funds":
+		return "P%d cannot afford %s" % [player_id + 1, tile_name]
+
+	return "P%d skipped %s" % [player_id + 1, tile_name]
+
+
+func _set_snapshot_event_message(message: String) -> void:
+	_last_event_message = message
+	_append_snapshot_log_line(message)
+
+
+func _append_snapshot_log_line(message: String) -> void:
+	if message.is_empty():
+		return
+
+	_snapshot_log_lines.append(message)
+	while _snapshot_log_lines.size() > UI_SUMMARY_LOG_LINE_LIMIT:
+		_snapshot_log_lines.remove_at(0)
+
+
 func _emit(event_type: String, payload: Dictionary) -> void:
+	_record_snapshot_ui_summary(event_type, payload)
 	EventBus.emit_game_event(GameEvent.new(event_type, payload))
 
 

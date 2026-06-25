@@ -16,6 +16,18 @@ func reset() -> void:
 	phase = Phase.ROLL
 
 
+func get_phase() -> int:
+	return phase
+
+
+func restore_phase(value: int) -> void:
+	if value < Phase.ROLL or value > Phase.ROUTE_DECISION:
+		reset()
+		return
+
+	phase = value
+
+
 func can_roll() -> bool:
 	return phase == Phase.ROLL
 

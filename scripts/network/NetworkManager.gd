@@ -2,7 +2,8 @@ extends Node
 
 
 signal connection_status_changed(message: String)
-signal intent_rejected(intent_type: String, reason: String)
+signal intent_accepted(intent_type: String, request_id: int)
+signal intent_rejected(intent_type: String, reason: String, request_id: int)
 signal local_player_changed(player_id: int)
 signal state_snapshot_received(snapshot: Dictionary)
 
@@ -28,6 +29,7 @@ var local_player_id: int = -1
 var host_can_control_open_seats: bool = true
 var _player_id_by_peer_id: Dictionary = {}
 var _peer_id_by_player_id: Dictionary = {}
+var _next_request_id: int = 1
 var _state_revision: int = 0
 var _last_received_state_revision: int = -1
 var _status_message: String = "Offline"
@@ -53,6 +55,7 @@ func start_host(port: int = DEFAULT_PORT) -> bool:
 
 	multiplayer.multiplayer_peer = peer
 	mode = NetworkMode.HOST
+	_next_request_id = 1
 	_state_revision = 0
 	_last_received_state_revision = -1
 	_assign_peer_to_player(multiplayer.get_unique_id(), 0)
@@ -75,6 +78,7 @@ func join_host(url: String = DEFAULT_URL) -> bool:
 	multiplayer.multiplayer_peer = peer
 	mode = NetworkMode.CLIENT
 	local_player_id = -1
+	_next_request_id = 1
 	_last_received_state_revision = -1
 	local_player_changed.emit(local_player_id)
 	_emit_status("Connecting to %s" % resolved_url)
@@ -87,6 +91,7 @@ func stop_network() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	mode = NetworkMode.OFFLINE
 	local_player_id = -1
+	_next_request_id = 1
 	_state_revision = 0
 	_last_received_state_revision = -1
 	_player_id_by_peer_id.clear()
@@ -112,17 +117,18 @@ func submit_skip_property() -> bool:
 
 
 func submit_intent(intent_type: String, payload: Dictionary = {}) -> bool:
+	var request_id := _take_next_request_id()
 	if mode == NetworkMode.OFFLINE:
-		return _execute_intent(1, intent_type, payload)
+		return _execute_intent(1, request_id, intent_type, payload)
 
 	if mode == NetworkMode.HOST:
-		return _execute_intent(multiplayer.get_unique_id(), intent_type, payload)
+		return _execute_intent(multiplayer.get_unique_id(), request_id, intent_type, payload)
 
 	if mode == NetworkMode.CLIENT:
 		if multiplayer.multiplayer_peer == null:
 			_emit_status("Not connected")
 			return false
-		_submit_intent.rpc_id(1, intent_type, payload)
+		_submit_intent.rpc_id(1, request_id, intent_type, payload)
 		return true
 
 	return false
@@ -171,12 +177,12 @@ func get_snapshot_revision(snapshot: Dictionary) -> int:
 
 
 @rpc("any_peer", "call_remote", "reliable")
-func _submit_intent(intent_type: String, payload: Dictionary = {}) -> void:
+func _submit_intent(request_id: int, intent_type: String, payload: Dictionary = {}) -> void:
 	if not is_host():
 		return
 
 	var sender_peer_id := multiplayer.get_remote_sender_id()
-	_execute_intent(sender_peer_id, intent_type, payload)
+	_execute_intent(sender_peer_id, request_id, intent_type, payload)
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -203,9 +209,8 @@ func _receive_game_event(event_data: Dictionary) -> void:
 
 
 @rpc("authority", "call_remote", "reliable")
-func _receive_intent_rejected(intent_type: String, reason: String) -> void:
-	intent_rejected.emit(intent_type, reason)
-	_emit_status("Rejected %s: %s" % [intent_type, reason])
+func _receive_intent_accepted(intent_type: String, request_id: int) -> void:
+	intent_accepted.emit(intent_type, request_id)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -219,10 +224,16 @@ func _receive_state_snapshot(snapshot: Dictionary) -> void:
 	state_snapshot_received.emit(snapshot)
 
 
-func _execute_intent(sender_peer_id: int, intent_type: String, payload: Dictionary = {}) -> bool:
+@rpc("authority", "call_remote", "reliable")
+func _receive_intent_rejected_with_request(intent_type: String, reason: String, request_id: int) -> void:
+	intent_rejected.emit(intent_type, reason, request_id)
+	_emit_status("Rejected %s: %s" % [intent_type, reason])
+
+
+func _execute_intent(sender_peer_id: int, request_id: int, intent_type: String, payload: Dictionary = {}) -> bool:
 	var rejection_reason := _get_intent_rejection_reason(sender_peer_id, intent_type)
 	if not rejection_reason.is_empty():
-		_reject_intent(sender_peer_id, intent_type, rejection_reason)
+		_reject_intent(sender_peer_id, intent_type, rejection_reason, request_id)
 		return false
 
 	var accepted := false
@@ -239,9 +250,10 @@ func _execute_intent(sender_peer_id: int, intent_type: String, payload: Dictiona
 			accepted = false
 
 	if not accepted:
-		_reject_intent(sender_peer_id, intent_type, "game rejected intent")
+		_reject_intent(sender_peer_id, intent_type, "game rejected intent", request_id)
 		return false
 
+	_accept_intent(sender_peer_id, intent_type, request_id)
 	if accepted and is_host():
 		_state_revision += 1
 		_broadcast_state_snapshot()
@@ -356,14 +368,27 @@ func _is_known_intent(intent_type: String) -> bool:
 	return false
 
 
-func _reject_intent(peer_id: int, intent_type: String, reason: String) -> void:
+func _accept_intent(peer_id: int, intent_type: String, request_id: int) -> void:
 	if mode == NetworkMode.HOST and peer_id != multiplayer.get_unique_id():
-		_receive_intent_rejected.rpc_id(peer_id, intent_type, reason)
+		_receive_intent_accepted.rpc_id(peer_id, intent_type, request_id)
 	else:
-		intent_rejected.emit(intent_type, reason)
+		intent_accepted.emit(intent_type, request_id)
+
+
+func _reject_intent(peer_id: int, intent_type: String, reason: String, request_id: int) -> void:
+	if mode == NetworkMode.HOST and peer_id != multiplayer.get_unique_id():
+		_receive_intent_rejected_with_request.rpc_id(peer_id, intent_type, reason, request_id)
+	else:
+		intent_rejected.emit(intent_type, reason, request_id)
 
 	if mode == NetworkMode.HOST:
 		_emit_status("Rejected %s from peer %d: %s" % [intent_type, peer_id, reason])
+
+
+func _take_next_request_id() -> int:
+	var request_id := _next_request_id
+	_next_request_id += 1
+	return request_id
 
 
 func _assign_peer_to_player(peer_id: int, player_id: int) -> void:
