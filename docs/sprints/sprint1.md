@@ -32,7 +32,8 @@ Establish the prototype map pipeline baseline so current map data becomes a mana
 | PB-014 / PB-015 | [#10](https://github.com/benson94879453/rich-war-online/issues/10) | Done | Document and refine map pipeline schema | `docs/MAP_PIPELINE.md` describes source, internal concepts, current resources, schema vocabulary, and known gaps. |
 | PB-016 | [#11](https://github.com/benson94879453/rich-war-online/issues/11) | Done | Inventory active board resource | Current `starq_board.tres` assumptions and known gaps are documented. |
 | PB-017 | [#12](https://github.com/benson94879453/rich-war-online/issues/12) | Done | Add map validation checklist | Manual checklist covers spawns, directions, junctions, tile mappings, and blocked movement risks. |
-| PB-018 | [#13](https://github.com/benson94879453/rich-war-online/issues/13) | Todo | Plan map validation smoke script | Decide whether to add a Godot script that runs existing `BoardData` validation helpers. |
+| PB-018 | [#13](https://github.com/benson94879453/rich-war-online/issues/13) | Done | Plan map validation smoke script | Script inputs, checks, pass/fail behavior, and implementation follow-up are defined. |
+| PB-020 | [#16](https://github.com/benson94879453/rich-war-online/issues/16) | Todo | Implement map validation smoke script | Add the planned headless Godot map validation script without broad test framework adoption. |
 
 ## Related Cleanup
 

@@ -70,6 +70,7 @@ res://
     MAP_PIPELINE.md
     ACTIVE_BOARD_RESOURCE.md
     MAP_VALIDATION_CHECKLIST.md
+    MAP_VALIDATION_SMOKE_PLAN.md
     MVP_SCOPE.md
     PRODUCT_BACKLOG.md
     CHANGE_CONTROL.md
@@ -128,6 +129,8 @@ godot --headless --path . --script res://tools/smoke_game_state_snapshot.gd
 ```
 
 If `godot` is not on PATH, run the same script from a configured Godot 4.6.x executable.
+
+The planned map validation smoke script is specified in `docs/MAP_VALIDATION_SMOKE_PLAN.md`; implementation is tracked by issue #16.
 
 ## Manual Test Entry Point
 

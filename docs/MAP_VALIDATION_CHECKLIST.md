@@ -8,6 +8,8 @@ Use this checklist before treating a board resource as baseline-ready after map 
 
 This checklist is manual for now. A future smoke script can automate the helper-backed checks listed here.
 
+The planned helper-backed smoke script is defined in `docs/MAP_VALIDATION_SMOKE_PLAN.md`.
+
 ## Target
 
 Current active scene:
