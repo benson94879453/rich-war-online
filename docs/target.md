@@ -1,4 +1,7 @@
 # Rich War Online｜MVP 開工規格書 v1.1.1
+
+> Historical design reference: this file preserves the broader product plan. The active prototype baseline is `res://scenes/StarQGame.tscn`; use `docs/MVP_SCOPE.md` and `docs/MANUAL_TEST_CHECKLIST.md` for current sprint acceptance.
+
 引擎：Godot 4.6.x stable（開發鎖定版本）
 平台：Web / Windows / macOS
 玩家數：2–4 人

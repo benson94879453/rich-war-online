@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Sprint and backlog notes
+    url: https://github.com/benson94879453/rich-war-online/tree/main/docs
+    about: Use the docs folder for current sprint scope, backlog, and manual QA checklists.

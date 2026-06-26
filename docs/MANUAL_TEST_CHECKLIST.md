@@ -4,10 +4,13 @@ Baseline date: 2026-06-26
 
 Use this checklist before treating the current prototype as baseline-ready after gameplay, networking, or snapshot changes.
 
+Use `docs/MAP_VALIDATION_CHECKLIST.md` before treating map resource, spawn, route, tile placement, or property marker changes as baseline-ready.
+
 ## Test Environment
 
 - Godot version is 4.6.x stable.
 - Main scene is `res://scenes/StarQGame.tscn`.
+- Do not use `res://scenes/Main.tscn` or `res://scenes/StarQMap.tscn` for baseline validation.
 - Use two desktop/editor game windows unless a test states otherwise.
 - Window A is Host.
 - Window B is Client.
@@ -24,6 +27,30 @@ Use this checklist before treating the current prototype as baseline-ready after
 - Confirm the active player changes after each completed turn.
 - Confirm money values remain visible.
 - Confirm no immediate script errors are shown.
+
+## 1.5 4-Player Local Core Loop
+
+Use this section for `v0.1-local-core-loop` acceptance.
+
+- Start `res://scenes/StarQGame.tscn` in one local game window.
+- Confirm P1, P2, P3, and P4 pieces are visible.
+- Confirm the money label includes P1, P2, P3, and P4.
+- Confirm the first active turn is P1.
+- Play 20 completed turns.
+- Confirm turn order repeats P1, P2, P3, P4.
+- Confirm dice text updates after every roll.
+- Confirm each active player's piece moves to the displayed landing node.
+- Trigger at least one route choice if the board path allows it.
+- Confirm Roll is disabled while route choice is pending.
+- Choose a route.
+- Confirm movement continues and route buttons disappear.
+- Buy at least one affordable property if offered.
+- Skip at least one property if offered.
+- Trigger rent if the dice path allows it.
+- Confirm Buy / Skip controls disappear after each property decision.
+- Confirm money text updates after purchases, rent, and tile money effects.
+- Confirm no script errors are shown during the run.
+- Record the result using the evidence format in `docs/releases/v0.1-local-core-loop.md`.
 
 ## 2. Host / Client Setup
 
@@ -115,6 +142,8 @@ Use this checklist before treating the current prototype as baseline-ready after
 
 ## 9. Reconnect Smoke Test
 
+Use this section as a smoke test for the current prototype limitation. Same-seat reconnect is not required for `v0.1-local-core-loop`.
+
 - Connect Client to Host.
 - Advance at least one Client-owned turn.
 - Disconnect or close Client while game is in progress.
@@ -128,6 +157,23 @@ Known current limitation:
 
 - Same-seat reseating is not finalized yet.
 
+## 9.5 P0.3 Same-Seat Reconnect Acceptance
+
+Use this section for the next networking baseline defined in `docs/reconnect_baseline.md`.
+
+- Start Host in window A.
+- Join from Client in window B.
+- Record the Client player seat.
+- Advance until the Client has completed at least one owned turn.
+- Disconnect or close window B.
+- Keep Host running.
+- Reopen window B and join the same Host.
+- Confirm Client returns to the same player seat.
+- Confirm Host did not assign the reserved seat to another peer.
+- Confirm Client receives a fresh snapshot.
+- Confirm current round, active player, money, piece positions, property ownership, pending action, dice, landed tile, event text, and recent log lines match Host.
+- Confirm the reconnecting Client can act when that same player seat becomes active.
+
 ## 10. Long Turn Stability
 
 - Play at least 10 turns across two windows.
@@ -140,10 +186,10 @@ Known current limitation:
 
 ## Baseline Pass Criteria
 
+- One local window can complete the 4-player `v0.1-local-core-loop` check.
 - Two windows can connect through Host / Client flow.
 - 10 turns can be played without state divergence.
 - Roll, movement, route choice, Buy, and Skip stay Host-authoritative.
 - Pending action buttons appear only for the controlling player.
 - Client joining mid-game matches Host state for turn, dice, landed tile, event text, money, positions, and property owners.
 - Known reconnect limitation is observed and recorded rather than treated as a surprise failure.
-

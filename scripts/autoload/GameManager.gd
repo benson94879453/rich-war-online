@@ -413,13 +413,13 @@ func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
 	if owner_id == -1 or owner_id == payer.player_id:
 		return
 
-	var owner: PlayerState = state.get_player(owner_id)
+	var property_owner: PlayerState = state.get_player(owner_id)
 	var rent_amount: int = tile_data.get_base_rent()
-	if owner == null or rent_amount <= 0:
+	if property_owner == null or rent_amount <= 0:
 		return
 
 	payer.add_money(-rent_amount)
-	owner.add_money(rent_amount)
+	property_owner.add_money(rent_amount)
 	_emit(GameEvent.RENT_PAID, {
 		"payer_id": payer.player_id,
 		"owner_id": owner_id,
@@ -427,7 +427,7 @@ func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
 		"tile_name": tile_data.display_name,
 		"amount": rent_amount,
 		"payer_money": payer.money,
-		"owner_money": owner.money,
+		"owner_money": property_owner.money,
 	})
 
 
@@ -534,9 +534,9 @@ func _record_snapshot_ui_summary(event_type: String, payload: Dictionary) -> voi
 
 
 func _record_round_started_summary(payload: Dictionary) -> void:
-	var round: int = int(payload.get("round", 1))
-	if round > 1:
-		_append_snapshot_log_line("Round %d begins" % round)
+	var round_number: int = int(payload.get("round", 1))
+	if round_number > 1:
+		_append_snapshot_log_line("Round %d begins" % round_number)
 
 
 func _get_player_landed_summary(payload: Dictionary) -> String:

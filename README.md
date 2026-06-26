@@ -15,6 +15,17 @@ This repository is currently a prototype baseline, not a finished MVP.
 - Web networking path: `WebSocketMultiplayerPeer`
 - Desktop networking path: planned `ENetMultiplayerPeer`
 
+## Active Scene Boundary
+
+Use `res://scenes/StarQGame.tscn` for all baseline validation, sprint review, and manual QA.
+
+Legacy/demo scenes remain in the repository for reference, but they are outside the active baseline:
+
+- `res://scenes/Main.tscn`: older local two-player board prototype using `scripts/core/Main.gd`.
+- `res://scenes/StarQMap.tscn`: map movement demo using `scripts/core/StarQMapDemo.gd`.
+
+Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale Godot temporary files such as `scenes/Main.tscn2093169919.tmp` and `resources/tiles/default_board.tres2095199292.tmp` should be handled in a separate cleanup task, not mixed into gameplay or baseline documentation work.
+
 ## Implemented
 
 - Local 1-4 player turn flow.
@@ -47,7 +58,7 @@ This repository is currently a prototype baseline, not a finished MVP.
 - Network testing is manual and focused on two local game windows.
 - The Host can optionally control open seats for prototype testing.
 - UI is functional debug UI, not final game UX.
-- Some legacy demo scenes remain in the project but the active entry point is `StarQGame.tscn`.
+- Some legacy demo scenes remain in the project, but the active entry point is `StarQGame.tscn`.
 
 ## Project Layout
 
@@ -55,17 +66,27 @@ This repository is currently a prototype baseline, not a finished MVP.
 res://
   docs/
     target.md
+    ROADMAP.md
+    MAP_PIPELINE.md
+    ACTIVE_BOARD_RESOURCE.md
+    MAP_VALIDATION_CHECKLIST.md
     MVP_SCOPE.md
+    PRODUCT_BACKLOG.md
     CHANGE_CONTROL.md
     MANUAL_TEST_CHECKLIST.md
+    reconnect_baseline.md
     network_test_checklist.md
     qa_notes.md
+    releases/v0.1-local-core-loop.md
+    sprints/sprint0.md
   scenes/
     StarQGame.tscn
     Board.tscn
     PlayerPiece.tscn
     UI.tscn
     GridRouteChoicePanel.tscn
+    Main.tscn                  # legacy prototype, not baseline QA
+    StarQMap.tscn              # map demo, not baseline QA
   scripts/
     autoload/
       GameManager.gd
@@ -86,18 +107,32 @@ res://
   resources/
     maps/
     tiles/
+  tools/
+    smoke_game_state_snapshot.gd
 ```
 
 ## Development Flow
 
 1. Keep `docs/MVP_SCOPE.md` as the current product baseline.
-2. Record meaningful scope changes in `docs/CHANGE_CONTROL.md`.
-3. Validate prototype builds with `docs/MANUAL_TEST_CHECKLIST.md`.
-4. Keep changes small enough to match one Scrum story or bug fix.
+2. Use `docs/PRODUCT_BACKLOG.md` to order sprint work.
+3. Record meaningful scope changes in `docs/CHANGE_CONTROL.md`.
+4. Validate prototype builds with `docs/MANUAL_TEST_CHECKLIST.md`.
+5. Keep changes small enough to match one Scrum story or bug fix.
+
+## Smoke Checks
+
+Run the GameState snapshot smoke check with a Godot command-line runner:
+
+```bash
+godot --headless --path . --script res://tools/smoke_game_state_snapshot.gd
+```
+
+If `godot` is not on PATH, run the same script from a configured Godot 4.6.x executable.
 
 ## Manual Test Entry Point
 
 Use `docs/MANUAL_TEST_CHECKLIST.md` for baseline validation.
+Use `docs/MAP_VALIDATION_CHECKLIST.md` when map resource, spawn, route, tile placement, or property marker data changes.
 
 For the current multiplayer path:
 
@@ -105,4 +140,3 @@ For the current multiplayer path:
 2. In window A, click `Host`.
 3. In window B, use `ws://127.0.0.1:8910` and click `Join`.
 4. Exercise Roll, route choice, Buy, Skip, mid-game join, and reconnect smoke tests.
-
