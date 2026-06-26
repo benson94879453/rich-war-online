@@ -148,6 +148,7 @@ The project prioritizes Web playability, and ENet is not a Web fallback.
 - Added roadmap and map pipeline planning for the next sprint.
 - Added an active board resource inventory for `starq_board.tres`.
 - Added a manual map validation checklist for spawns, route choices, tile mappings, property markers, and failure records.
+- Added a plan for the smallest useful headless map validation smoke script and split implementation into a follow-up issue.
 
 ### 2026-06-26: Prototype Baseline Established
 

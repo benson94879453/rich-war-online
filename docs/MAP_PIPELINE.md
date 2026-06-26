@@ -26,6 +26,10 @@ Current map validation checklist:
 
 > `docs/MAP_VALIDATION_CHECKLIST.md`
 
+Current map validation smoke plan:
+
+> `docs/MAP_VALIDATION_SMOKE_PLAN.md`
+
 Legacy/demo scenes are not map pipeline acceptance targets:
 
 - `res://scenes/Main.tscn`
@@ -282,7 +286,7 @@ Minimum validation for a prototype map baseline:
 - Property decoration references point to existing property tiles.
 - No normal movement path should enter an unrecoverable blocked state.
 
-Run `docs/MAP_VALIDATION_CHECKLIST.md` for the manual evidence format and detailed per-area checklist before treating a map resource as baseline-ready.
+Run `docs/MAP_VALIDATION_CHECKLIST.md` for the manual evidence format and detailed per-area checklist before treating a map resource as baseline-ready. Use `docs/MAP_VALIDATION_SMOKE_PLAN.md` when implementing or reviewing the headless map validation smoke script.
 
 ## Out Of Scope
 
