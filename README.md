@@ -141,6 +141,12 @@ godot --headless --path . --script res://tools/smoke_map_validation.gd
 
 The map validation script follows `docs/MAP_VALIDATION_SMOKE_PLAN.md`.
 
+Run the reconnect token lifecycle smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_token_lifecycle.gd
+```
+
 ## Manual Test Entry Point
 
 Use `docs/MANUAL_TEST_CHECKLIST.md` for baseline validation.
