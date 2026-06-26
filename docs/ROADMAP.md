@@ -91,6 +91,6 @@ Initial authoring can be JSON, CSV, or Godot Resources. A visual editor is not r
 
 ## Current Planning Decision
 
-The next planning sprint should establish the map pipeline baseline without expanding gameplay scope.
+Sprint1 established the prototype map pipeline baseline without expanding gameplay scope.
 
-Reconnect remains the next networking implementation focus after the project has a clean map pipeline and validation language.
+Sprint2 should target `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token, Host seat reservation, fresh snapshot sync after reconnect, and manual two-window reconnect acceptance.

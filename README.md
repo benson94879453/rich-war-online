@@ -80,6 +80,8 @@ res://
     qa_notes.md
     releases/v0.1-local-core-loop.md
     sprints/sprint0.md
+    sprints/sprint1.md
+    sprints/sprint2.md
   scenes/
     StarQGame.tscn
     Board.tscn

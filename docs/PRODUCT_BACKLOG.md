@@ -60,6 +60,11 @@ Prove a stable multiplayer board-game core loop that can later support intervent
 | PB-018 | [#13](https://github.com/benson94879453/rich-war-online/issues/13) | P2 | Test | Done | sprint1 | Plan map validation smoke script | Script inputs, checks, pass/fail behavior, and implementation follow-up are defined. |
 | PB-019 | [#14](https://github.com/benson94879453/rich-war-online/issues/14) | P3 | Cleanup | Done | later | Decide stale Godot temporary file cleanup | Stale `.tmp` files were confirmed, removed, and similar Godot temp artifacts are ignored. |
 | PB-020 | [#16](https://github.com/benson94879453/rich-war-online/issues/16) | P2 | Test | Done | sprint1 | Implement map validation smoke script | Headless Godot script runs the planned active-map validation checks and exits non-zero on failure. |
+| PB-021 | [#20](https://github.com/benson94879453/rich-war-online/issues/20) | P1 | Story | Planned | sprint2 | Add reconnect identity token lifecycle | Client creates and reuses a prototype reconnect token for the active session and can send it during join/reconnect. |
+| PB-022 | [#21](https://github.com/benson94879453/rich-war-online/issues/21) | P1 | Story | Planned | sprint2 | Add Host seat reservation model | Host reserves disconnected player seats and excludes reserved seats from normal open-seat assignment. |
+| PB-023 | [#22](https://github.com/benson94879453/rich-war-online/issues/22) | P1 | Story | Planned | sprint2 | Reassign matching reconnect token to reserved seat | A reconnecting Client with a known token returns to the same player seat and receives a fresh Host snapshot. |
+| PB-024 | [#23](https://github.com/benson94879453/rich-war-online/issues/23) | P1 | QA/UX | Planned | sprint2 | Refresh snapshot and debug status after reconnect | Reconnect status is visible enough for manual QA, and restored UI state matches Host after snapshot sync. |
+| PB-025 | [#24](https://github.com/benson94879453/rich-war-online/issues/24) | P1 | QA | Planned | sprint2 | Run same-seat reconnect acceptance pass | Two-window manual QA records same-seat reconnect, reserved-seat protection, fresh snapshot, and continued playability. |
 
 ## Ready Criteria
 
