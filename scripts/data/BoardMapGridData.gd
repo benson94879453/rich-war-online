@@ -29,7 +29,7 @@ func get_grid_position_for_node_id(node_id: int) -> Vector2i:
 	if flat_index == -1 or width <= 0:
 		return Vector2i(-1, -1)
 
-	return Vector2i(flat_index % width, flat_index / width)
+	return Vector2i(flat_index % width, floori(float(flat_index) / float(width)))
 
 
 func is_walkable(grid_position: Vector2i) -> bool:

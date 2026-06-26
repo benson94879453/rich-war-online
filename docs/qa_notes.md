@@ -2,6 +2,8 @@
 
 本文件用於記錄開發過程中詢問過的問題與答案簡述，以便隨時查閱。
 
+> Note: entries below include historical prototype context. The current active baseline scene is `res://scenes/StarQGame.tscn`; do not use older `Main.tscn` notes for baseline validation.
+
 ---
 
 ## 1. 專案現況與規格 (2026-06-19)

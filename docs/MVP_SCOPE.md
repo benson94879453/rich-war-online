@@ -36,6 +36,21 @@ The larger product vision includes intervention cards and reaction windows, but 
 - Debug UI for local network testing.
 - Manual QA checklist for baseline validation.
 
+## Active Baseline Entry Point
+
+The current baseline entry point is:
+
+> `res://scenes/StarQGame.tscn`
+
+Use this scene for sprint review, manual QA, and `v0.1-local-core-loop` validation.
+
+The following scenes are retained as legacy/demo references and are not baseline acceptance targets:
+
+- `res://scenes/Main.tscn`: older local two-player prototype.
+- `res://scenes/StarQMap.tscn`: map movement demo scene.
+
+Stale Godot temporary files, including `scenes/Main.tscn2093169919.tmp` and `resources/tiles/default_board.tres2095199292.tmp`, are not part of the active baseline. Removing them should be handled as a separate cleanup task after the current baseline changes are committed.
+
 ## Out Of Scope For Current Prototype
 
 - Production lobby or account system.
@@ -83,7 +98,7 @@ The larger product vision includes intervention cards and reaction windows, but 
 - Reconnect currently relies on new join behavior and does not guarantee returning to the same player seat.
 - Host open-seat control is a prototype convenience and may hide seat ownership problems during manual testing.
 - Manual testing is currently the source of truth; no automated regression suite exists yet.
-- Legacy demo scenes still exist and may not represent the active game path.
+- Legacy demo scenes still exist but are not baseline acceptance targets.
 - Multiplayer behavior should be tested in Web exports later; current baseline focuses on local editor/desktop windows.
 
 ## Next Recommended Sprint
@@ -92,6 +107,10 @@ Sprint goal:
 
 > Complete the P0.3 reconnect baseline by adding stable player identity, seat reservation, and same-seat rejoin behavior.
 
+Decision:
+
+> Same-seat reconnect is required for `P0.3-reconnect-baseline`, but remains out of scope for `v0.1-local-core-loop`.
+
 Candidate stories:
 
 - As a reconnecting Client, I can reclaim my previous player seat.
@@ -99,3 +118,4 @@ Candidate stories:
 - As a tester, I can see connection and seat state clearly in the debug UI.
 - As a developer, I can validate reconnect behavior with the manual checklist.
 
+See `docs/reconnect_baseline.md` for the baseline behavior and manual acceptance criteria.

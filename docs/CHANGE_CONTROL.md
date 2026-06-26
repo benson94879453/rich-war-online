@@ -134,9 +134,23 @@ The project prioritizes Web playability, and ENet is not a Web fallback.
 
 ## Change Log
 
+### 2026-06-26: Sprint0 Scrum Bootstrap
+
+- Added GitHub issue forms for user stories, bugs, and sprint tasks.
+- Added `docs/PRODUCT_BACKLOG.md` as the ordered Scrum backlog.
+- Added `docs/sprints/sprint0.md` and `docs/releases/v0.1-local-core-loop.md`.
+- Promoted the 4-player local core loop into the manual baseline checklist.
+- Fixed route-choice payload handling for serialized direction arrays.
+- Documented `StarQGame.tscn` as the only active baseline scene and marked older demo scenes outside sprint acceptance.
+- Cleaned up GDScript reload warnings found during v0.1 manual QA.
+- Added a lightweight GameState snapshot smoke script.
+- Defined the `P0.3-reconnect-baseline` same-seat reconnect target and manual acceptance path.
+- Added roadmap and map pipeline planning for the next sprint.
+- Added an active board resource inventory for `starq_board.tres`.
+- Added a manual map validation checklist for spawns, route choices, tile mappings, property markers, and failure records.
+
 ### 2026-06-26: Prototype Baseline Established
 
 - Added formal README, MVP scope, change control, and manual test checklist.
 - Recorded current completed features, unfinished areas, and known prototype limits.
 - Set next recommended sprint focus to P0.3 reconnect and same-seat reseating.
-

@@ -1,0 +1,47 @@
+name: User story
+description: Plan a player-facing slice with clear Scrum acceptance criteria.
+title: "[Story] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep stories small enough to finish inside one short sprint.
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint or milestone
+      placeholder: "sprint0, v0.1-local-core-loop"
+    validations:
+      required: true
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      description: Use the format "As a ..., I want ..., so that ...".
+      placeholder: "As a local player, I want the turn to move from P1 through P4, so that a 4-player match can be tested."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable pass/fail criteria.
+      placeholder: |
+        - Given ...
+        - When ...
+        - Then ...
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Manual or automated checks required before closing.
+      placeholder: "Run docs/MANUAL_TEST_CHECKLIST.md section ..."
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Dependencies, risks, screenshots, or design notes.

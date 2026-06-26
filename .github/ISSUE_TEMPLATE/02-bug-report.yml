@@ -1,0 +1,58 @@
+name: Bug report
+description: Track a reproducible defect or blocking gameplay risk.
+title: "[Bug] "
+body:
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - P0 blocker
+        - P1 high
+        - P2 normal
+        - P3 polish
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is broken and why it matters.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Start res://scenes/StarQGame.tscn.
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Paste logs, screenshots, video links, or test notes.
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: Observable criteria for closing the bug.
+      placeholder: |
+        - The issue no longer reproduces.
+        - The related manual checklist step passes.
+    validations:
+      required: true

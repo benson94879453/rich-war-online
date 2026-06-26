@@ -37,5 +37,5 @@ func to_dict() -> Dictionary:
 
 
 static func from_dict(data: Dictionary) -> GameEvent:
-	var payload: Dictionary = data.get("payload", {})
-	return GameEvent.new(str(data.get("type", "")), payload)
+	var event_payload: Dictionary = data.get("payload", {})
+	return GameEvent.new(str(data.get("type", "")), event_payload)

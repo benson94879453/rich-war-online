@@ -189,12 +189,12 @@ func _handle_game_started() -> void:
 
 
 func _handle_round_started(payload: Dictionary) -> void:
-	var round: int = int(payload.get("round", 1))
+	var round_number: int = int(payload.get("round", 1))
 	if _ui != null:
-		_ui.set_round_text("Round %d" % round)
+		_ui.set_round_text("Round %d" % round_number)
 
-	if round > 1:
-		_add_event_log_line("Round %d begins" % round)
+	if round_number > 1:
+		_add_event_log_line("Round %d begins" % round_number)
 
 
 func _handle_turn_started(payload: Dictionary) -> void:
@@ -338,10 +338,7 @@ func _show_pending_route_choice() -> void:
 
 	var player_id: int = int(_pending_route_choice_payload.get("player_id", -1))
 	var remaining_steps: int = int(_pending_route_choice_payload.get("remaining_steps", 0))
-	var directions: PackedInt32Array = PackedInt32Array()
-	var raw_directions: Variant = _pending_route_choice_payload.get("directions", PackedInt32Array())
-	if raw_directions is PackedInt32Array:
-		directions = raw_directions
+	var directions: PackedInt32Array = _to_packed_int32_array(_pending_route_choice_payload.get("directions", PackedInt32Array()))
 	var message: String = "P%d is choosing a route (%d steps left)" % [player_id + 1, remaining_steps]
 	_update_event_label(message)
 	_add_event_log_line(message)
@@ -420,6 +417,18 @@ func _get_grid_positions(raw_positions: Variant) -> Array[Vector2i]:
 				grid_positions.append(Vector2i(int(position_values[0]), int(position_values[1])))
 
 	return grid_positions
+
+
+func _to_packed_int32_array(raw_values: Variant) -> PackedInt32Array:
+	if raw_values is PackedInt32Array:
+		return raw_values
+
+	var values := PackedInt32Array()
+	if raw_values is Array:
+		for raw_value in raw_values:
+			values.append(int(raw_value))
+
+	return values
 
 
 func _update_dice_label(dice_value: int) -> void:
