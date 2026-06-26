@@ -303,7 +303,7 @@ This pipeline baseline does not require:
 - The current playable map is already serialized as a Godot Resource, but the upstream import/conversion process is not documented in code.
 - Automated map validation is limited to helper methods inside `BoardData` and `BoardMapGridData`.
 - There is no standalone map validation command yet.
-- Temporary Godot files still exist and should be removed in a separate cleanup after the baseline commit.
+- Stale Godot temporary files were removed in issue #14 and similar scene/resource write artifacts are ignored.
 - The schema is descriptive and has not been implemented as a JSON importer.
 - The current resource uses numeric tile indices internally; the draft schema prefers stable string ids for future original-map authoring.
 - Final event pools, special buildings, cards, districts, and art references are intentionally deferred.

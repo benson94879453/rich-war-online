@@ -49,7 +49,7 @@ The following scenes are retained as legacy/demo references and are not baseline
 - `res://scenes/Main.tscn`: older local two-player prototype.
 - `res://scenes/StarQMap.tscn`: map movement demo scene.
 
-Stale Godot temporary files, including `scenes/Main.tscn2093169919.tmp` and `resources/tiles/default_board.tres2095199292.tmp`, are not part of the active baseline. Removing them should be handled as a separate cleanup task after the current baseline changes are committed.
+Stale Godot temporary scene/resource write artifacts are not part of the active baseline. The known stale `.tmp` files were removed in issue #14, and similar artifacts are ignored by `.gitignore`.
 
 ## Out Of Scope For Current Prototype
 

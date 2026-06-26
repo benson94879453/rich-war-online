@@ -24,7 +24,7 @@ Legacy/demo scenes remain in the repository for reference, but they are outside 
 - `res://scenes/Main.tscn`: older local two-player board prototype using `scripts/core/Main.gd`.
 - `res://scenes/StarQMap.tscn`: map movement demo using `scripts/core/StarQMapDemo.gd`.
 
-Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale Godot temporary files such as `scenes/Main.tscn2093169919.tmp` and `resources/tiles/default_board.tres2095199292.tmp` should be handled in a separate cleanup task, not mixed into gameplay or baseline documentation work.
+Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale Godot temporary scene/resource write artifacts are ignored by `.gitignore` and should not be mixed into gameplay or baseline documentation work.
 
 ## Implemented
 
