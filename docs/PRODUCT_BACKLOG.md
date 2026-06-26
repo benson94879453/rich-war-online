@@ -59,7 +59,7 @@ Prove a stable multiplayer board-game core loop that can later support intervent
 | PB-017 | [#12](https://github.com/benson94879453/rich-war-online/issues/12) | P1 | QA | Done | sprint1 | Add map validation checklist | Manual checklist covers spawns, directions, junctions, tile mappings, and blocked movement risks. |
 | PB-018 | [#13](https://github.com/benson94879453/rich-war-online/issues/13) | P2 | Test | Done | sprint1 | Plan map validation smoke script | Script inputs, checks, pass/fail behavior, and implementation follow-up are defined. |
 | PB-019 | [#14](https://github.com/benson94879453/rich-war-online/issues/14) | P3 | Cleanup | Todo | later | Decide stale Godot temporary file cleanup | Stale `.tmp` files are confirmed before any deletion and ignore rules are considered. |
-| PB-020 | [#16](https://github.com/benson94879453/rich-war-online/issues/16) | P2 | Test | Todo | sprint1 | Implement map validation smoke script | Headless Godot script runs the planned active-map validation checks and exits non-zero on failure. |
+| PB-020 | [#16](https://github.com/benson94879453/rich-war-online/issues/16) | P2 | Test | Done | sprint1 | Implement map validation smoke script | Headless Godot script runs the planned active-map validation checks and exits non-zero on failure. |
 
 ## Ready Criteria
 

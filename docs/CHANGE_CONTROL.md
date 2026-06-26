@@ -149,6 +149,7 @@ The project prioritizes Web playability, and ENet is not a Web fallback.
 - Added an active board resource inventory for `starq_board.tres`.
 - Added a manual map validation checklist for spawns, route choices, tile mappings, property markers, and failure records.
 - Added a plan for the smallest useful headless map validation smoke script and split implementation into a follow-up issue.
+- Implemented the headless map validation smoke script for the active board resource.
 
 ### 2026-06-26: Prototype Baseline Established
 

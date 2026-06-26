@@ -6,7 +6,7 @@ Baseline date: 2026-06-26
 
 This document defines the smallest useful headless smoke script for validating the active board resource before map data is treated as baseline-ready.
 
-Implementation is tracked separately in [issue #16](https://github.com/benson94879453/rich-war-online/issues/16). This plan intentionally does not introduce a broader test framework.
+Implementation is tracked by [issue #16](https://github.com/benson94879453/rich-war-online/issues/16). This plan intentionally does not introduce a broader test framework.
 
 ## Proposed Script
 
@@ -16,7 +16,7 @@ Implementation is tracked separately in [issue #16](https://github.com/benson948
 | Runtime base | Godot `SceneTree`, matching `res://tools/smoke_game_state_snapshot.gd` |
 | Default board input | `res://resources/maps/starq_board.tres` |
 | CLI arguments | None for v1; keep the active resource path as a script constant |
-| Follow-up implementation | [#16](https://github.com/benson94879453/rich-war-online/issues/16) |
+| Implementation issue | [#16](https://github.com/benson94879453/rich-war-online/issues/16) |
 
 Planned command:
 
