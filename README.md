@@ -110,6 +110,7 @@ res://
     tiles/
   tools/
     smoke_game_state_snapshot.gd
+    smoke_map_validation.gd
 ```
 
 ## Development Flow
@@ -130,7 +131,13 @@ godot --headless --path . --script res://tools/smoke_game_state_snapshot.gd
 
 If `godot` is not on PATH, run the same script from a configured Godot 4.6.x executable.
 
-The planned map validation smoke script is specified in `docs/MAP_VALIDATION_SMOKE_PLAN.md`; implementation is tracked by issue #16.
+Run the map validation smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_map_validation.gd
+```
+
+The map validation script follows `docs/MAP_VALIDATION_SMOKE_PLAN.md`.
 
 ## Manual Test Entry Point
 
