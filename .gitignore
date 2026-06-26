@@ -2,6 +2,11 @@
 .godot/
 .nomedia
 
+# Godot temporary scene/resource writes
+*.tscn*.tmp
+*.tres*.tmp
+*.res*.tmp
+
 # Godot-specific ignores
 .import/
 export.cfg

@@ -37,7 +37,7 @@ Establish the prototype map pipeline baseline so current map data becomes a mana
 
 ## Related Cleanup
 
-- [#14](https://github.com/benson94879453/rich-war-online/issues/14): decide how to handle stale Godot temporary files. This is useful repo hygiene, but it should stay outside map pipeline scope unless it blocks review.
+- [#14](https://github.com/benson94879453/rich-war-online/issues/14): stale Godot temporary files were confirmed, removed, and ignored as repo hygiene outside gameplay scope.
 
 ## Acceptance Criteria
 

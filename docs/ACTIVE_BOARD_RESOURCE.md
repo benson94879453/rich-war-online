@@ -122,9 +122,10 @@ Existing helper methods can support a future map smoke script:
 
 ## Temporary Files
 
-Observed temporary-looking files:
+Decision from [issue #14](https://github.com/benson94879453/rich-war-online/issues/14):
 
-- `res://scenes/Main.tscn2093169919.tmp`
-- `res://resources/tiles/default_board.tres2095199292.tmp`
+- `res://scenes/Main.tscn2093169919.tmp` was a stale temporary write artifact for a legacy demo scene and has been removed.
+- `res://resources/tiles/default_board.tres2095199292.tmp` was a stale temporary write artifact for an older default board resource and has been removed.
+- Similar Godot temporary scene/resource artifacts are ignored by `.gitignore`.
 
-These are outside the active board resource inventory. They should be handled by [issue #14](https://github.com/benson94879453/rich-war-online/issues/14), not mixed into map pipeline or gameplay changes.
+These files were outside the active board resource inventory. The active baseline remains `res://scenes/StarQGame.tscn` with `res://resources/maps/starq_board.tres`.
