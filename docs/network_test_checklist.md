@@ -71,9 +71,12 @@ Use this checklist for each multiplayer prototype pass.
 
 - Disconnect or close Client while game is in progress.
 - Reopen Client and join Host again.
+- Confirm Client network status reports `Reconnected as Pn`.
+- Confirm Client network status includes `synced snapshot #n`.
 - Confirm Client receives a fresh snapshot.
 - Confirm no local stale opening state remains visible after sync.
-- Note current limitation: reseating to the same player is not finalized yet.
+- Confirm Client returns to the same player seat.
+- Confirm a Client with no matching reconnect token does not take the reserved seat.
 
 ## Pass Criteria
 
@@ -81,3 +84,4 @@ Use this checklist for each multiplayer prototype pass.
 - Normal actions do not produce misleading rejected intent logs.
 - Client joining mid-game matches Host state for turn, dice, landed tile, event text, money, positions, and property owners.
 - Pending action buttons appear only for the controlling player.
+- Reconnecting Client status clearly identifies the reclaimed seat and fresh snapshot sync.

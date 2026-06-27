@@ -16,6 +16,9 @@ const INTENT_GRID_ROUTE_CHOICE := "grid_route_choice"
 const INTENT_BUY_PROPERTY := "buy_property"
 const INTENT_SKIP_PROPERTY := "skip_property"
 const SNAPSHOT_REVISION_KEY := "_network_state_revision"
+const ASSIGNMENT_STATUS_JOINED := "joined"
+const ASSIGNMENT_STATUS_RECONNECTED := "reconnected"
+const ASSIGNMENT_STATUS_SPECTATOR := "spectator"
 
 enum NetworkMode {
 	OFFLINE,
@@ -37,6 +40,7 @@ var _local_reconnect_token: String = ""
 var _next_request_id: int = 1
 var _state_revision: int = 0
 var _last_received_state_revision: int = -1
+var _local_assignment_status_message: String = ""
 var _status_message: String = "Offline"
 
 
@@ -100,6 +104,7 @@ func stop_network() -> void:
 	_next_request_id = 1
 	_state_revision = 0
 	_last_received_state_revision = -1
+	_local_assignment_status_message = ""
 	_player_id_by_peer_id.clear()
 	_peer_id_by_player_id.clear()
 	_reconnect_token_by_peer_id.clear()
@@ -222,13 +227,11 @@ func _register_reconnect_token(reconnect_token: String) -> void:
 
 
 @rpc("authority", "call_remote", "reliable")
-func _assign_local_player(player_id: int) -> void:
+func _assign_local_player(player_id: int, assignment_status: String = ASSIGNMENT_STATUS_JOINED) -> void:
 	local_player_id = player_id
 	local_player_changed.emit(local_player_id)
-	var status := "Connected as spectator"
-	if local_player_id >= 0:
-		status = "Connected as P%d" % [local_player_id + 1]
-	_emit_status(status)
+	_local_assignment_status_message = _get_local_assignment_status_message(local_player_id, assignment_status)
+	_emit_status(_local_assignment_status_message)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -249,6 +252,7 @@ func _receive_state_snapshot(snapshot: Dictionary) -> void:
 
 	if revision >= 0:
 		_last_received_state_revision = revision
+	_emit_status(_get_snapshot_status_message(revision))
 	state_snapshot_received.emit(snapshot)
 
 
@@ -336,7 +340,8 @@ func _on_peer_connected(peer_id: int) -> void:
 	if player_id >= 0:
 		_assign_peer_to_player(peer_id, player_id)
 
-	_assign_local_player.rpc_id(peer_id, player_id)
+	var assignment_status := ASSIGNMENT_STATUS_SPECTATOR if player_id < 0 else ASSIGNMENT_STATUS_JOINED
+	_assign_local_player.rpc_id(peer_id, player_id, assignment_status)
 	_send_state_snapshot(peer_id)
 	if player_id >= 0:
 		_emit_status("Peer %d joined as P%d" % [peer_id, player_id + 1])
@@ -533,7 +538,7 @@ func _reassign_peer_to_reserved_player(peer_id: int, player_id: int, reconnect_t
 	_assign_peer_to_player(peer_id, player_id)
 	_bind_reconnect_token_to_player(reconnect_token, player_id)
 	if send_remote_updates:
-		_assign_local_player.rpc_id(peer_id, player_id)
+		_assign_local_player.rpc_id(peer_id, player_id, ASSIGNMENT_STATUS_RECONNECTED)
 		_send_state_snapshot(peer_id)
 
 
@@ -565,6 +570,27 @@ func _is_player_seat_open(player_id: int) -> bool:
 		return false
 
 	return true
+
+
+func _get_local_assignment_status_message(player_id: int, assignment_status: String) -> String:
+	if player_id < 0:
+		return "Connected as spectator"
+
+	if assignment_status == ASSIGNMENT_STATUS_RECONNECTED:
+		return "Reconnected as P%d" % [player_id + 1]
+
+	return "Connected as P%d" % [player_id + 1]
+
+
+func _get_snapshot_status_message(revision: int) -> String:
+	var snapshot_text := "synced snapshot"
+	if revision >= 0:
+		snapshot_text = "synced snapshot #%d" % revision
+
+	if _local_assignment_status_message.is_empty():
+		return "Synced snapshot" if revision < 0 else "Synced snapshot #%d" % revision
+
+	return "%s; %s" % [_local_assignment_status_message, snapshot_text]
 
 
 func _emit_status(message: String) -> void:

@@ -142,20 +142,18 @@ Use this section for `v0.1-local-core-loop` acceptance.
 
 ## 9. Reconnect Smoke Test
 
-Use this section as a smoke test for the current prototype limitation. Same-seat reconnect is not required for `v0.1-local-core-loop`.
+Use this section as a broad reconnect smoke test. Same-seat reconnect is required for `P0.3-reconnect-baseline`, but it remains outside `v0.1-local-core-loop`.
 
 - Connect Client to Host.
 - Advance at least one Client-owned turn.
 - Disconnect or close Client while game is in progress.
 - Reopen Client and join Host again.
+- Confirm Client network status reports `Reconnected as Pn`.
+- Confirm Client network status includes `synced snapshot #n`.
 - Confirm Client receives a fresh snapshot.
 - Confirm no local stale opening state remains visible after sync.
 - Confirm the game remains playable after rejoin.
 - Record whether the Client returned to the same seat.
-
-Known current limitation:
-
-- Same-seat reseating is not finalized yet.
 
 ## 9.5 P0.3 Same-Seat Reconnect Acceptance
 
@@ -169,6 +167,8 @@ Use this section for the next networking baseline defined in `docs/reconnect_bas
 - Keep Host running.
 - Reopen window B and join the same Host.
 - Confirm Client returns to the same player seat.
+- Confirm Client network status reports `Reconnected as Pn`.
+- Confirm Client network status includes `synced snapshot #n`.
 - Confirm Host did not assign the reserved seat to another peer.
 - Confirm Client receives a fresh snapshot.
 - Confirm current round, active player, money, piece positions, property ownership, pending action, dice, landed tile, event text, and recent log lines match Host.
