@@ -19,6 +19,7 @@ const SNAPSHOT_REVISION_KEY := "_network_state_revision"
 const ASSIGNMENT_STATUS_JOINED := "joined"
 const ASSIGNMENT_STATUS_RECONNECTED := "reconnected"
 const ASSIGNMENT_STATUS_SPECTATOR := "spectator"
+const LOCAL_RECONNECT_TOKEN_PATH := "user://reconnect_token.txt"
 
 enum NetworkMode {
 	OFFLINE,
@@ -486,9 +487,34 @@ func _create_state_snapshot() -> Dictionary:
 
 func _ensure_local_reconnect_token() -> String:
 	if _local_reconnect_token.is_empty():
+		_local_reconnect_token = _load_local_reconnect_token()
+	if _local_reconnect_token.is_empty():
 		_local_reconnect_token = _create_local_reconnect_token()
+		_save_local_reconnect_token(_local_reconnect_token)
 
 	return _local_reconnect_token
+
+
+func _load_local_reconnect_token() -> String:
+	if not FileAccess.file_exists(LOCAL_RECONNECT_TOKEN_PATH):
+		return ""
+
+	var token_file := FileAccess.open(LOCAL_RECONNECT_TOKEN_PATH, FileAccess.READ)
+	if token_file == null:
+		return ""
+
+	return token_file.get_as_text().strip_edges()
+
+
+func _save_local_reconnect_token(reconnect_token: String) -> void:
+	if reconnect_token.strip_edges().is_empty():
+		return
+
+	var token_file := FileAccess.open(LOCAL_RECONNECT_TOKEN_PATH, FileAccess.WRITE)
+	if token_file == null:
+		return
+
+	token_file.store_string(reconnect_token.strip_edges())
 
 
 func _create_local_reconnect_token() -> String:
@@ -538,6 +564,7 @@ func _reassign_peer_to_reserved_player(peer_id: int, player_id: int, reconnect_t
 	_assign_peer_to_player(peer_id, player_id)
 	_bind_reconnect_token_to_player(reconnect_token, player_id)
 	if send_remote_updates:
+		_state_revision += 1
 		_assign_local_player.rpc_id(peer_id, player_id, ASSIGNMENT_STATUS_RECONNECTED)
 		_send_state_snapshot(peer_id)
 

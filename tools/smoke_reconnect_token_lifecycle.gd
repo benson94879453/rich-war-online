@@ -13,10 +13,13 @@ func _run_smoke_check() -> void:
 	var second_token := NetworkManager.get_local_reconnect_token()
 	NetworkManager.stop_network()
 	var token_after_stop := NetworkManager.get_local_reconnect_token()
+	NetworkManager._local_reconnect_token = ""
+	var token_after_memory_clear := NetworkManager.get_local_reconnect_token()
 
 	_expect_true(not first_token.is_empty(), "reconnect token is generated")
 	_expect_equal(second_token, first_token, "reconnect token is stable across repeated reads")
 	_expect_equal(token_after_stop, first_token, "reconnect token survives stop_network in the same session")
+	_expect_equal(token_after_memory_clear, first_token, "reconnect token is restored from local storage after process memory resets")
 
 	if _failure_count == 0:
 		print("PASS: Reconnect token lifecycle smoke check")
