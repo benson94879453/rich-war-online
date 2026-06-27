@@ -218,10 +218,7 @@ func _register_reconnect_token(reconnect_token: String) -> void:
 		_emit_status("Peer %d did not provide a reconnect token" % sender_peer_id)
 		return
 
-	_reconnect_token_by_peer_id[sender_peer_id] = clean_token
-	if _player_id_by_peer_id.has(sender_peer_id):
-		_bind_reconnect_token_to_player(clean_token, int(_player_id_by_peer_id[sender_peer_id]))
-	_emit_status("Peer %d registered reconnect token" % sender_peer_id)
+	_handle_peer_reconnect_token(sender_peer_id, clean_token)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -439,6 +436,16 @@ func _assign_peer_to_player(peer_id: int, player_id: int) -> void:
 		local_player_changed.emit(local_player_id)
 
 
+func _release_peer_assignment(peer_id: int) -> void:
+	if not _player_id_by_peer_id.has(peer_id):
+		return
+
+	var player_id := int(_player_id_by_peer_id[peer_id])
+	_player_id_by_peer_id.erase(peer_id)
+	if int(_peer_id_by_player_id.get(player_id, -1)) == peer_id:
+		_peer_id_by_player_id.erase(player_id)
+
+
 func _get_next_available_player_id() -> int:
 	if GameManager.state != null:
 		for player_id in GameManager.state.player_order:
@@ -488,6 +495,46 @@ func _create_local_reconnect_token() -> String:
 		token_rng.randi(),
 		token_rng.randi(),
 	]
+
+
+func _handle_peer_reconnect_token(peer_id: int, reconnect_token: String, send_remote_updates: bool = true) -> void:
+	if peer_id <= 0 or reconnect_token.is_empty():
+		return
+
+	_reconnect_token_by_peer_id[peer_id] = reconnect_token
+	var reserved_player_id := _get_reserved_player_id_for_reconnect_token(reconnect_token)
+	if reserved_player_id >= 0:
+		_reassign_peer_to_reserved_player(peer_id, reserved_player_id, reconnect_token, send_remote_updates)
+		_emit_status("Peer %d reconnected as P%d" % [peer_id, reserved_player_id + 1])
+		return
+
+	if _player_id_by_peer_id.has(peer_id):
+		_bind_reconnect_token_to_player(reconnect_token, int(_player_id_by_peer_id[peer_id]))
+	_emit_status("Peer %d registered reconnect token" % peer_id)
+
+
+func _get_reserved_player_id_for_reconnect_token(reconnect_token: String) -> int:
+	if not _player_id_by_reconnect_token.has(reconnect_token):
+		return -1
+
+	var player_id := int(_player_id_by_reconnect_token[reconnect_token])
+	if not _is_player_seat_reserved(player_id):
+		return -1
+
+	if _peer_id_by_player_id.has(player_id):
+		return -1
+
+	return player_id
+
+
+func _reassign_peer_to_reserved_player(peer_id: int, player_id: int, reconnect_token: String, send_remote_updates: bool = true) -> void:
+	_release_peer_assignment(peer_id)
+	_reconnect_token_by_peer_id[peer_id] = reconnect_token
+	_assign_peer_to_player(peer_id, player_id)
+	_bind_reconnect_token_to_player(reconnect_token, player_id)
+	if send_remote_updates:
+		_assign_local_player.rpc_id(peer_id, player_id)
+		_send_state_snapshot(peer_id)
 
 
 func _bind_reconnect_token_to_player(reconnect_token: String, player_id: int) -> void:

@@ -153,6 +153,12 @@ Run the reconnect seat reservation smoke check with:
 godot --headless --path . --script res://tools/smoke_reconnect_seat_reservation.gd
 ```
 
+Run the reconnect reserved-seat reassignment smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_reserved_seat_reassign.gd
+```
+
 ## Manual Test Entry Point
 
 Use `docs/MANUAL_TEST_CHECKLIST.md` for baseline validation.
