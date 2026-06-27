@@ -147,6 +147,12 @@ Run the reconnect token lifecycle smoke check with:
 godot --headless --path . --script res://tools/smoke_reconnect_token_lifecycle.gd
 ```
 
+Run the reconnect seat reservation smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_seat_reservation.gd
+```
+
 ## Manual Test Entry Point
 
 Use `docs/MANUAL_TEST_CHECKLIST.md` for baseline validation.
