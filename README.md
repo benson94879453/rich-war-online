@@ -86,6 +86,7 @@ res://
     sprints/sprint2_acceptance.md
     sprints/sprint3.md
     sprints/sprint3_networked_10_turn_acceptance.md
+    sprints/sprint3_networked_10_turn_evidence.md
   scenes/
     StarQGame.tscn
     Board.tscn

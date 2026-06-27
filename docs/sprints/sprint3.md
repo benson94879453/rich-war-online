@@ -41,7 +41,7 @@ Issue workflow:
 | --- | --- | --- | --- | --- |
 | PB-026 | [#31](https://github.com/benson94879453/rich-war-online/issues/31) | Done | Update post-Sprint2 planning baseline | Roadmap, MVP scope, Sprint3 plan, and backlog reflect that P0.3 reconnect is complete and Sprint3 targets online-core stability. |
 | PB-027 | [#32](https://github.com/benson94879453/rich-war-online/issues/32) | Done | Define networked 10-turn acceptance pass | Manual checklist and evidence format define how to validate 2-4 networked players for 10 turns without divergence. |
-| PB-028 | [#33](https://github.com/benson94879453/rich-war-online/issues/33) | Planned | Run networked 10-turn acceptance pass | Evidence records at least 10 networked turns or a named blocker, including Host/Client state comparison. |
+| PB-028 | [#33](https://github.com/benson94879453/rich-war-online/issues/33) | Done | Run networked 10-turn acceptance pass | Owner reported the networked 10-turn acceptance pass completed normally with no divergence, stuck pending action, or P0 blocker. |
 | PB-029 | [#34](https://github.com/benson94879453/rich-war-online/issues/34) | Planned | Review network authority failure visibility | Testers can clearly record joined/reconnected/spectator status, snapshot sync, rejected intents, and pending-action failures. |
 | PB-030 | [#35](https://github.com/benson94879453/rich-war-online/issues/35) | Planned | Record v0.2-online-core readiness review | Sprint3 evidence is summarized with a clear ready/not-ready recommendation for moving toward events, buildings, or cards. |
 
@@ -49,6 +49,7 @@ Issue workflow:
 
 - Sprint2 completion is reflected in current planning docs.
 - A tester can run the documented networked 10-turn scenario from the active scene using `docs/sprints/sprint3_networked_10_turn_acceptance.md`.
+- Sprint3 networked acceptance evidence is recorded in `docs/sprints/sprint3_networked_10_turn_evidence.md`.
 - Host and Client stay synchronized for turn, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines.
 - Route choice, Buy, Skip, rent, join snapshot, and reconnect observations are recorded where encountered.
 - Any divergence, script error, stuck pending action, or unclear authority failure becomes a named blocker.
