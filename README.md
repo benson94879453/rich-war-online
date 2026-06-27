@@ -82,6 +82,7 @@ res://
     sprints/sprint0.md
     sprints/sprint1.md
     sprints/sprint2.md
+    sprints/sprint2_acceptance.md
   scenes/
     StarQGame.tscn
     Board.tscn
