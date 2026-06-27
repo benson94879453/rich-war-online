@@ -29,6 +29,8 @@ var local_player_id: int = -1
 var host_can_control_open_seats: bool = true
 var _player_id_by_peer_id: Dictionary = {}
 var _peer_id_by_player_id: Dictionary = {}
+var _reconnect_token_by_peer_id: Dictionary = {}
+var _local_reconnect_token: String = ""
 var _next_request_id: int = 1
 var _state_revision: int = 0
 var _last_received_state_revision: int = -1
@@ -64,6 +66,7 @@ func start_host(port: int = DEFAULT_PORT) -> bool:
 
 
 func join_host(url: String = DEFAULT_URL) -> bool:
+	_ensure_local_reconnect_token()
 	stop_network()
 	var resolved_url := url.strip_edges()
 	if resolved_url.is_empty():
@@ -96,6 +99,7 @@ func stop_network() -> void:
 	_last_received_state_revision = -1
 	_player_id_by_peer_id.clear()
 	_peer_id_by_player_id.clear()
+	_reconnect_token_by_peer_id.clear()
 	local_player_changed.emit(local_player_id)
 	_emit_status("Offline")
 
@@ -132,6 +136,10 @@ func submit_intent(intent_type: String, payload: Dictionary = {}) -> bool:
 		return true
 
 	return false
+
+
+func get_local_reconnect_token() -> String:
+	return _ensure_local_reconnect_token()
 
 
 func is_network_active() -> bool:
@@ -191,6 +199,21 @@ func _request_state_snapshot() -> void:
 		return
 
 	_send_state_snapshot(multiplayer.get_remote_sender_id())
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func _register_reconnect_token(reconnect_token: String) -> void:
+	if not is_host():
+		return
+
+	var sender_peer_id := multiplayer.get_remote_sender_id()
+	var clean_token := reconnect_token.strip_edges()
+	if clean_token.is_empty():
+		_emit_status("Peer %d did not provide a reconnect token" % sender_peer_id)
+		return
+
+	_reconnect_token_by_peer_id[sender_peer_id] = clean_token
+	_emit_status("Peer %d registered reconnect token" % sender_peer_id)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -317,6 +340,7 @@ func _on_peer_connected(peer_id: int) -> void:
 
 
 func _on_peer_disconnected(peer_id: int) -> void:
+	_reconnect_token_by_peer_id.erase(peer_id)
 	if _player_id_by_peer_id.has(peer_id):
 		var player_id := int(_player_id_by_peer_id[peer_id])
 		_player_id_by_peer_id.erase(peer_id)
@@ -327,6 +351,7 @@ func _on_peer_disconnected(peer_id: int) -> void:
 
 func _on_connected_to_server() -> void:
 	_emit_status("Connected, waiting for seat")
+	_register_reconnect_token.rpc_id(1, _ensure_local_reconnect_token())
 	_request_state_snapshot.rpc_id(1)
 
 
@@ -430,6 +455,24 @@ func _create_state_snapshot() -> Dictionary:
 	var snapshot := GameManager.get_state_snapshot()
 	snapshot[SNAPSHOT_REVISION_KEY] = _state_revision
 	return snapshot
+
+
+func _ensure_local_reconnect_token() -> String:
+	if _local_reconnect_token.is_empty():
+		_local_reconnect_token = _create_local_reconnect_token()
+
+	return _local_reconnect_token
+
+
+func _create_local_reconnect_token() -> String:
+	var token_rng := RandomNumberGenerator.new()
+	token_rng.randomize()
+	return "%d-%d-%d-%d" % [
+		int(Time.get_unix_time_from_system()),
+		Time.get_ticks_usec(),
+		token_rng.randi(),
+		token_rng.randi(),
+	]
 
 
 func _emit_status(message: String) -> void:
