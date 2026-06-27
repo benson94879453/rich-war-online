@@ -176,11 +176,15 @@ Use this section for the next networking baseline defined in `docs/reconnect_bas
 
 ## 10. Long Turn Stability
 
+Use `docs/sprints/sprint3_networked_10_turn_acceptance.md` for the full `v0.2-online-core` acceptance procedure and evidence format.
+
 - Play at least 10 turns across two windows.
 - Include at least one Host roll.
 - Include at least one Client roll.
 - Include at least one property decision if the board path allows it.
 - Include at least one route choice if the board path allows it.
+- Include a mid-run snapshot join or reconnect check if the run is for Sprint3 acceptance.
+- Compare Host and Client state after each completed turn: round, active player, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines.
 - Confirm both windows remain in sync.
 - Confirm no misleading rejected intent logs appear during normal accepted actions.
 
@@ -192,4 +196,4 @@ Use this section for the next networking baseline defined in `docs/reconnect_bas
 - Roll, movement, route choice, Buy, and Skip stay Host-authoritative.
 - Pending action buttons appear only for the controlling player.
 - Client joining mid-game matches Host state for turn, dice, landed tile, event text, money, positions, and property owners.
-- Known reconnect limitation is observed and recorded rather than treated as a surprise failure.
+- Reconnect returns to the same seat when the local prototype reconnect token is still available.
