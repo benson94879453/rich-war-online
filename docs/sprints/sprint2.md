@@ -42,11 +42,16 @@ Issue workflow:
 
 | Backlog ID | Issue | Status | Work item | Acceptance |
 | --- | --- | --- | --- | --- |
-| PB-021 | [#20](https://github.com/benson94879453/rich-war-online/issues/20) | Planned | Add reconnect identity token lifecycle | Client creates a prototype reconnect token before joining, keeps it for the prototype session, and can resend it when joining the same Host again. |
-| PB-022 | [#21](https://github.com/benson94879453/rich-war-online/issues/21) | Planned | Add Host seat reservation model | Host tracks peer-to-player, token-to-player, and reserved player seats; disconnected seats are not treated as open seats while the match is active. |
-| PB-023 | [#22](https://github.com/benson94879453/rich-war-online/issues/22) | Planned | Reassign matching reconnect token to reserved seat | A Client reconnecting with a known token returns to the same player seat and does not receive a fresh unrelated seat. |
-| PB-024 | [#23](https://github.com/benson94879453/rich-war-online/issues/23) | Planned | Refresh snapshot and debug status after reconnect | Host sends a fresh snapshot after reseating; Client UI reflects current turn, round, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines. |
-| PB-025 | [#24](https://github.com/benson94879453/rich-war-online/issues/24) | Planned | Run Sprint2 reconnect acceptance pass | Manual two-window QA records same-seat reconnect, reserved-seat protection, snapshot freshness, and continued playability. |
+| PB-021 | [#20](https://github.com/benson94879453/rich-war-online/issues/20) | Done | Add reconnect identity token lifecycle | Client creates a prototype reconnect token before joining, keeps it for the prototype session, and can resend it when joining the same Host again. |
+| PB-022 | [#21](https://github.com/benson94879453/rich-war-online/issues/21) | Done | Add Host seat reservation model | Host tracks peer-to-player, token-to-player, and reserved player seats; disconnected seats are not treated as open seats while the match is active. |
+| PB-023 | [#22](https://github.com/benson94879453/rich-war-online/issues/22) | Done | Reassign matching reconnect token to reserved seat | A Client reconnecting with a known token returns to the same player seat and does not receive a fresh unrelated seat. |
+| PB-024 | [#23](https://github.com/benson94879453/rich-war-online/issues/23) | Done | Refresh snapshot and debug status after reconnect | Host sends a fresh snapshot after reseating; Client UI reflects current turn, round, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines. |
+| PB-025 | [#24](https://github.com/benson94879453/rich-war-online/issues/24) | Done | Run Sprint2 reconnect acceptance pass | Automated reconnect smoke evidence is recorded; manual two-window QA was reported passed on issue #24 after the reserved-seat token mismatch bug was fixed. |
+
+## Acceptance Evidence
+
+- `docs/sprints/sprint2_acceptance.md` records automated smoke results for reconnect token lifecycle, Host reservation, reserved-seat reassignment, reconnect status/snapshot messaging, GameState snapshot restore, and active map validation.
+- Manual two-window acceptance was reported passed on issue #24 after the reserved-seat token mismatch bug was fixed.
 
 ## Suggested Issue Order
 

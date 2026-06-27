@@ -88,4 +88,6 @@ Use two local Godot windows:
 
 ## Current Status
 
-Current implementation does not satisfy this baseline. Reconnect still relies on fresh join behavior and may assign a new seat. This is acceptable for `v0.1-local-core-loop`, but it blocks `P0.3-reconnect-baseline`.
+Current implementation supports the baseline mechanics: the Client stores its reconnect token in local Godot user data, the Host reserves disconnected seats, matching tokens reclaim reserved seats, and reconnect snapshots are sent with a fresh revision.
+
+Manual two-window acceptance was reported passed on issue #24 after the reserved-seat token mismatch bug was fixed.
