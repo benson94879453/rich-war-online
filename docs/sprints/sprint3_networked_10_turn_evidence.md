@@ -14,9 +14,9 @@ The required manual procedure is defined in `docs/sprints/sprint3_networked_10_t
 
 ## Current Status
 
-Status: Manual execution pending.
+Status: Passed by owner on issue #33.
 
-Codex could run the available headless smoke checks, but did not execute the required two-window or multi-window Godot manual run. The 10-turn Host/Client state comparison must still be completed before issue #33 can be closed.
+Codex ran the available headless smoke checks. The required two-window or multi-window Godot manual run was executed by the owner and reported as passing on issue #33.
 
 ## Automated Regression Evidence
 
@@ -37,48 +37,39 @@ Note: the Steam Godot Windows build used in this environment returns process exi
 
 ## Manual 10-Turn Acceptance
 
-Status: Pending.
+Status: Passed by owner.
 
-Required evidence:
+Recorded evidence:
 
-- Date:
-- Branch / commit:
-- Godot version:
-- Windows used:
-- Player seat mapping:
-- Host controls open seats: on/off
-- Completed turns:
-- Route choice encountered: yes/no/not encountered
-- Property Buy/Skip encountered: yes/no/not encountered
-- Rent encountered: yes/no/not encountered
-- Snapshot join or reconnect check: pass/fail
-- Result: pass/fail
+- Date: 2026-06-27
+- Branch / commit: `codex/issue-33-networked-10-turn-pass`
+- Godot version: not separately recorded
+- Windows used: owner-reported networked manual run
+- Player seat mapping: not itemized
+- Host controls open seats: not separately recorded
+- Completed turns: 10-turn acceptance pass completed
+- Route choice encountered: no blocker reported where encountered
+- Property Buy/Skip encountered: no blocker reported where encountered
+- Rent encountered: no blocker reported where encountered
+- Snapshot join or reconnect check: no blocker reported where encountered
+- Result: pass
 
 ## Turn Evidence Table
 
 | Turn # | Acting player | Control window | Action path | Dice / decision | Host state summary | Client state summary | Result |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 |  |  |  |  |  |  | Pending |
-| 2 |  |  |  |  |  |  | Pending |
-| 3 |  |  |  |  |  |  | Pending |
-| 4 |  |  |  |  |  |  | Pending |
-| 5 |  |  |  |  |  |  | Pending |
-| 6 |  |  |  |  |  |  | Pending |
-| 7 |  |  |  |  |  |  | Pending |
-| 8 |  |  |  |  |  |  | Pending |
-| 9 |  |  |  |  |  |  | Pending |
-| 10 |  |  |  |  |  |  | Pending |
+| 1-10 | Mixed | Owner manual run | Networked 10-turn pass | Not itemized | Owner reported normal operation with synchronized Host state | Owner reported no Client divergence | Pass |
 
 ## Snapshot / Reconnect Evidence
 
 | Check | Expected observation | Actual observation | Result |
 | --- | --- | --- | --- |
-| Mid-run join or reconnect status | Client reports joined or `Reconnected as Pn` |  | Pending |
-| Snapshot revision | Client status includes `synced snapshot #n` |  | Pending |
-| Seat assignment | Reconnect returns to the same seat when using the same local reconnect token |  | Pending |
-| State comparison | Round, active player, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines match Host |  | Pending |
-| Continued play | Rejoined or reconnected Client can act when its controlled seat becomes active |  | Pending |
+| Mid-run join or reconnect status | Client reports joined or `Reconnected as Pn` | No blocker reported | Pass |
+| Snapshot revision | Client status includes `synced snapshot #n` | No blocker reported | Pass |
+| Seat assignment | Reconnect returns to the same seat when using the same local reconnect token | No blocker reported | Pass |
+| State comparison | Round, active player, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines match Host | Owner reported no state divergence | Pass |
+| Continued play | Rejoined or reconnected Client can act when its controlled seat becomes active | No blocker reported | Pass |
 
 ## Current Acceptance Read
 
-Automated regression checks pass, but they do not satisfy issue #33 by themselves. Issue #33 remains open until the manual networked 10-turn pass is executed and either passes or records a named blocker.
+Automated regression checks pass, and owner-reported manual acceptance on issue #33 passed. No state divergence, stuck pending action, or P0 blocker was reported.
