@@ -37,11 +37,12 @@ Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale G
 - Host-authoritative validation for player control and pending actions.
 - Snapshot sync when a Client joins an active Host.
 - Basic network debug UI for Host / Join / status and Host open-seat control.
+- Same-seat reconnect for prototype Clients using a persisted local reconnect token.
 - Event log and core game status UI.
 
 ## Not Implemented Yet
 
-- Reliable same-seat reconnect after disconnect.
+- Production account-backed reconnect and cross-device continuity.
 - Lobby, room code, or matchmaking flow.
 - Property upgrades and property valuation.
 - Pass Go salary rules.
@@ -54,7 +55,7 @@ Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale G
 
 ## Known Issues / Prototype Limits
 
-- Reconnect currently gives a fresh seat assignment; reseating to the previous player is not finalized.
+- Reconnect identity is stored in local Godot user data; deleting app data or joining from another device creates a fresh identity.
 - Network testing is manual and focused on two local game windows.
 - The Host can optionally control open seats for prototype testing.
 - UI is functional debug UI, not final game UX.
@@ -80,6 +81,9 @@ res://
     qa_notes.md
     releases/v0.1-local-core-loop.md
     sprints/sprint0.md
+    sprints/sprint1.md
+    sprints/sprint2.md
+    sprints/sprint2_acceptance.md
   scenes/
     StarQGame.tscn
     Board.tscn
@@ -138,6 +142,30 @@ godot --headless --path . --script res://tools/smoke_map_validation.gd
 ```
 
 The map validation script follows `docs/MAP_VALIDATION_SMOKE_PLAN.md`.
+
+Run the reconnect token lifecycle smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_token_lifecycle.gd
+```
+
+Run the reconnect seat reservation smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_seat_reservation.gd
+```
+
+Run the reconnect reserved-seat reassignment smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_reserved_seat_reassign.gd
+```
+
+Run the reconnect status/snapshot smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_reconnect_status_snapshot.gd
+```
 
 ## Manual Test Entry Point
 

@@ -16,6 +16,10 @@ const INTENT_GRID_ROUTE_CHOICE := "grid_route_choice"
 const INTENT_BUY_PROPERTY := "buy_property"
 const INTENT_SKIP_PROPERTY := "skip_property"
 const SNAPSHOT_REVISION_KEY := "_network_state_revision"
+const ASSIGNMENT_STATUS_JOINED := "joined"
+const ASSIGNMENT_STATUS_RECONNECTED := "reconnected"
+const ASSIGNMENT_STATUS_SPECTATOR := "spectator"
+const LOCAL_RECONNECT_TOKEN_PATH := "user://reconnect_token.txt"
 
 enum NetworkMode {
 	OFFLINE,
@@ -29,9 +33,15 @@ var local_player_id: int = -1
 var host_can_control_open_seats: bool = true
 var _player_id_by_peer_id: Dictionary = {}
 var _peer_id_by_player_id: Dictionary = {}
+var _reconnect_token_by_peer_id: Dictionary = {}
+var _player_id_by_reconnect_token: Dictionary = {}
+var _reconnect_token_by_player_id: Dictionary = {}
+var _reserved_player_ids: Dictionary = {}
+var _local_reconnect_token: String = ""
 var _next_request_id: int = 1
 var _state_revision: int = 0
 var _last_received_state_revision: int = -1
+var _local_assignment_status_message: String = ""
 var _status_message: String = "Offline"
 
 
@@ -64,6 +74,7 @@ func start_host(port: int = DEFAULT_PORT) -> bool:
 
 
 func join_host(url: String = DEFAULT_URL) -> bool:
+	_ensure_local_reconnect_token()
 	stop_network()
 	var resolved_url := url.strip_edges()
 	if resolved_url.is_empty():
@@ -94,8 +105,13 @@ func stop_network() -> void:
 	_next_request_id = 1
 	_state_revision = 0
 	_last_received_state_revision = -1
+	_local_assignment_status_message = ""
 	_player_id_by_peer_id.clear()
 	_peer_id_by_player_id.clear()
+	_reconnect_token_by_peer_id.clear()
+	_player_id_by_reconnect_token.clear()
+	_reconnect_token_by_player_id.clear()
+	_reserved_player_ids.clear()
 	local_player_changed.emit(local_player_id)
 	_emit_status("Offline")
 
@@ -134,6 +150,10 @@ func submit_intent(intent_type: String, payload: Dictionary = {}) -> bool:
 	return false
 
 
+func get_local_reconnect_token() -> String:
+	return _ensure_local_reconnect_token()
+
+
 func is_network_active() -> bool:
 	return mode != NetworkMode.OFFLINE
 
@@ -163,7 +183,7 @@ func can_control_player(player_id: int) -> bool:
 		return player_id == local_player_id
 
 	if mode == NetworkMode.HOST:
-		return player_id == local_player_id or (host_can_control_open_seats and not _peer_id_by_player_id.has(player_id))
+		return player_id == local_player_id or (host_can_control_open_seats and _is_player_seat_open(player_id))
 
 	return false
 
@@ -193,14 +213,26 @@ func _request_state_snapshot() -> void:
 	_send_state_snapshot(multiplayer.get_remote_sender_id())
 
 
+@rpc("any_peer", "call_remote", "reliable")
+func _register_reconnect_token(reconnect_token: String) -> void:
+	if not is_host():
+		return
+
+	var sender_peer_id := multiplayer.get_remote_sender_id()
+	var clean_token := reconnect_token.strip_edges()
+	if clean_token.is_empty():
+		_emit_status("Peer %d did not provide a reconnect token" % sender_peer_id)
+		return
+
+	_handle_peer_reconnect_token(sender_peer_id, clean_token)
+
+
 @rpc("authority", "call_remote", "reliable")
-func _assign_local_player(player_id: int) -> void:
+func _assign_local_player(player_id: int, assignment_status: String = ASSIGNMENT_STATUS_JOINED) -> void:
 	local_player_id = player_id
 	local_player_changed.emit(local_player_id)
-	var status := "Connected as spectator"
-	if local_player_id >= 0:
-		status = "Connected as P%d" % [local_player_id + 1]
-	_emit_status(status)
+	_local_assignment_status_message = _get_local_assignment_status_message(local_player_id, assignment_status)
+	_emit_status(_local_assignment_status_message)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -221,6 +253,7 @@ func _receive_state_snapshot(snapshot: Dictionary) -> void:
 
 	if revision >= 0:
 		_last_received_state_revision = revision
+	_emit_status(_get_snapshot_status_message(revision))
 	state_snapshot_received.emit(snapshot)
 
 
@@ -308,7 +341,8 @@ func _on_peer_connected(peer_id: int) -> void:
 	if player_id >= 0:
 		_assign_peer_to_player(peer_id, player_id)
 
-	_assign_local_player.rpc_id(peer_id, player_id)
+	var assignment_status := ASSIGNMENT_STATUS_SPECTATOR if player_id < 0 else ASSIGNMENT_STATUS_JOINED
+	_assign_local_player.rpc_id(peer_id, player_id, assignment_status)
 	_send_state_snapshot(peer_id)
 	if player_id >= 0:
 		_emit_status("Peer %d joined as P%d" % [peer_id, player_id + 1])
@@ -317,16 +351,22 @@ func _on_peer_connected(peer_id: int) -> void:
 
 
 func _on_peer_disconnected(peer_id: int) -> void:
+	var reconnect_token := str(_reconnect_token_by_peer_id.get(peer_id, ""))
+	_reconnect_token_by_peer_id.erase(peer_id)
 	if _player_id_by_peer_id.has(peer_id):
 		var player_id := int(_player_id_by_peer_id[peer_id])
 		_player_id_by_peer_id.erase(peer_id)
 		_peer_id_by_player_id.erase(player_id)
+		if not reconnect_token.is_empty():
+			_reserve_player_seat(player_id, reconnect_token)
 		if is_host():
-			_emit_status("Peer %d disconnected from P%d" % [peer_id, player_id + 1])
+			var reservation_text := " and reserved seat" if _is_player_seat_reserved(player_id) else ""
+			_emit_status("Peer %d disconnected from P%d%s" % [peer_id, player_id + 1, reservation_text])
 
 
 func _on_connected_to_server() -> void:
 	_emit_status("Connected, waiting for seat")
+	_register_reconnect_token.rpc_id(1, _ensure_local_reconnect_token())
 	_request_state_snapshot.rpc_id(1)
 
 
@@ -355,7 +395,7 @@ func _can_peer_control_player(peer_id: int, player_id: int) -> bool:
 	if peer_id == multiplayer.get_unique_id():
 		if player_id == local_player_id:
 			return true
-		return mode == NetworkMode.HOST and host_can_control_open_seats and not _peer_id_by_player_id.has(player_id)
+		return mode == NetworkMode.HOST and host_can_control_open_seats and _is_player_seat_open(player_id)
 
 	return int(_player_id_by_peer_id.get(peer_id, -1)) == player_id
 
@@ -394,19 +434,32 @@ func _take_next_request_id() -> int:
 func _assign_peer_to_player(peer_id: int, player_id: int) -> void:
 	_player_id_by_peer_id[peer_id] = player_id
 	_peer_id_by_player_id[player_id] = peer_id
+	_reserved_player_ids.erase(player_id)
+	if _reconnect_token_by_peer_id.has(peer_id):
+		_bind_reconnect_token_to_player(str(_reconnect_token_by_peer_id[peer_id]), player_id)
 	if peer_id == multiplayer.get_unique_id():
 		local_player_id = player_id
 		local_player_changed.emit(local_player_id)
 
 
+func _release_peer_assignment(peer_id: int) -> void:
+	if not _player_id_by_peer_id.has(peer_id):
+		return
+
+	var player_id := int(_player_id_by_peer_id[peer_id])
+	_player_id_by_peer_id.erase(peer_id)
+	if int(_peer_id_by_player_id.get(player_id, -1)) == peer_id:
+		_peer_id_by_player_id.erase(player_id)
+
+
 func _get_next_available_player_id() -> int:
 	if GameManager.state != null:
 		for player_id in GameManager.state.player_order:
-			if not _peer_id_by_player_id.has(player_id):
+			if _is_player_seat_open(int(player_id)):
 				return int(player_id)
 
 	for player_id in range(4):
-		if not _peer_id_by_player_id.has(player_id):
+		if _is_player_seat_open(player_id):
 			return player_id
 
 	return -1
@@ -430,6 +483,141 @@ func _create_state_snapshot() -> Dictionary:
 	var snapshot := GameManager.get_state_snapshot()
 	snapshot[SNAPSHOT_REVISION_KEY] = _state_revision
 	return snapshot
+
+
+func _ensure_local_reconnect_token() -> String:
+	if _local_reconnect_token.is_empty():
+		_local_reconnect_token = _load_local_reconnect_token()
+	if _local_reconnect_token.is_empty():
+		_local_reconnect_token = _create_local_reconnect_token()
+		_save_local_reconnect_token(_local_reconnect_token)
+
+	return _local_reconnect_token
+
+
+func _load_local_reconnect_token() -> String:
+	if not FileAccess.file_exists(LOCAL_RECONNECT_TOKEN_PATH):
+		return ""
+
+	var token_file := FileAccess.open(LOCAL_RECONNECT_TOKEN_PATH, FileAccess.READ)
+	if token_file == null:
+		return ""
+
+	return token_file.get_as_text().strip_edges()
+
+
+func _save_local_reconnect_token(reconnect_token: String) -> void:
+	if reconnect_token.strip_edges().is_empty():
+		return
+
+	var token_file := FileAccess.open(LOCAL_RECONNECT_TOKEN_PATH, FileAccess.WRITE)
+	if token_file == null:
+		return
+
+	token_file.store_string(reconnect_token.strip_edges())
+
+
+func _create_local_reconnect_token() -> String:
+	var token_rng := RandomNumberGenerator.new()
+	token_rng.randomize()
+	return "%d-%d-%d-%d" % [
+		int(Time.get_unix_time_from_system()),
+		Time.get_ticks_usec(),
+		token_rng.randi(),
+		token_rng.randi(),
+	]
+
+
+func _handle_peer_reconnect_token(peer_id: int, reconnect_token: String, send_remote_updates: bool = true) -> void:
+	if peer_id <= 0 or reconnect_token.is_empty():
+		return
+
+	_reconnect_token_by_peer_id[peer_id] = reconnect_token
+	var reserved_player_id := _get_reserved_player_id_for_reconnect_token(reconnect_token)
+	if reserved_player_id >= 0:
+		_reassign_peer_to_reserved_player(peer_id, reserved_player_id, reconnect_token, send_remote_updates)
+		_emit_status("Peer %d reconnected as P%d" % [peer_id, reserved_player_id + 1])
+		return
+
+	if _player_id_by_peer_id.has(peer_id):
+		_bind_reconnect_token_to_player(reconnect_token, int(_player_id_by_peer_id[peer_id]))
+	_emit_status("Peer %d registered reconnect token" % peer_id)
+
+
+func _get_reserved_player_id_for_reconnect_token(reconnect_token: String) -> int:
+	if not _player_id_by_reconnect_token.has(reconnect_token):
+		return -1
+
+	var player_id := int(_player_id_by_reconnect_token[reconnect_token])
+	if not _is_player_seat_reserved(player_id):
+		return -1
+
+	if _peer_id_by_player_id.has(player_id):
+		return -1
+
+	return player_id
+
+
+func _reassign_peer_to_reserved_player(peer_id: int, player_id: int, reconnect_token: String, send_remote_updates: bool = true) -> void:
+	_release_peer_assignment(peer_id)
+	_reconnect_token_by_peer_id[peer_id] = reconnect_token
+	_assign_peer_to_player(peer_id, player_id)
+	_bind_reconnect_token_to_player(reconnect_token, player_id)
+	if send_remote_updates:
+		_state_revision += 1
+		_assign_local_player.rpc_id(peer_id, player_id, ASSIGNMENT_STATUS_RECONNECTED)
+		_send_state_snapshot(peer_id)
+
+
+func _bind_reconnect_token_to_player(reconnect_token: String, player_id: int) -> void:
+	if reconnect_token.is_empty() or player_id < 0:
+		return
+
+	_player_id_by_reconnect_token[reconnect_token] = player_id
+	_reconnect_token_by_player_id[player_id] = reconnect_token
+
+
+func _reserve_player_seat(player_id: int, reconnect_token: String) -> void:
+	if player_id < 0 or reconnect_token.is_empty():
+		return
+
+	_bind_reconnect_token_to_player(reconnect_token, player_id)
+	_reserved_player_ids[player_id] = true
+
+
+func _is_player_seat_reserved(player_id: int) -> bool:
+	return _reserved_player_ids.has(player_id)
+
+
+func _is_player_seat_open(player_id: int) -> bool:
+	if _peer_id_by_player_id.has(player_id):
+		return false
+
+	if _is_player_seat_reserved(player_id):
+		return false
+
+	return true
+
+
+func _get_local_assignment_status_message(player_id: int, assignment_status: String) -> String:
+	if player_id < 0:
+		return "Connected as spectator"
+
+	if assignment_status == ASSIGNMENT_STATUS_RECONNECTED:
+		return "Reconnected as P%d" % [player_id + 1]
+
+	return "Connected as P%d" % [player_id + 1]
+
+
+func _get_snapshot_status_message(revision: int) -> String:
+	var snapshot_text := "synced snapshot"
+	if revision >= 0:
+		snapshot_text = "synced snapshot #%d" % revision
+
+	if _local_assignment_status_message.is_empty():
+		return "Synced snapshot" if revision < 0 else "Synced snapshot #%d" % revision
+
+	return "%s; %s" % [_local_assignment_status_message, snapshot_text]
 
 
 func _emit_status(message: String) -> void:
