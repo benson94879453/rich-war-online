@@ -10,6 +10,8 @@ Use this checklist for each multiplayer prototype pass.
 - Confirm window A reports the peer joined.
 - Confirm window B reports it connected as P2.
 
+For the Sprint3 `v0.2-online-core` 10-turn acceptance pass, use the full procedure and evidence format in `docs/sprints/sprint3_networked_10_turn_acceptance.md`.
+
 ## Basic Turn Sync
 
 - P1 rolls from Host.
@@ -81,6 +83,7 @@ Use this checklist for each multiplayer prototype pass.
 ## Pass Criteria
 
 - 10 turns can be played across two windows without state divergence.
+- Host and Client state are compared after each completed acceptance turn.
 - Normal actions do not produce misleading rejected intent logs.
 - Client joining mid-game matches Host state for turn, dice, landed tile, event text, money, positions, and property owners.
 - Pending action buttons appear only for the controlling player.
