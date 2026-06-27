@@ -88,6 +88,6 @@ Use two local Godot windows:
 
 ## Current Status
 
-Current implementation supports the automated baseline mechanics: the Client stores its reconnect token in local Godot user data, the Host reserves disconnected seats, matching tokens reclaim reserved seats, and reconnect snapshots are sent with a fresh revision.
+Current implementation supports the baseline mechanics: the Client stores its reconnect token in local Godot user data, the Host reserves disconnected seats, matching tokens reclaim reserved seats, and reconnect snapshots are sent with a fresh revision.
 
-Manual two-window acceptance is still required before closing `P0.3-reconnect-baseline`.
+Manual two-window acceptance was reported passed on issue #24 after the reserved-seat token mismatch bug was fixed.

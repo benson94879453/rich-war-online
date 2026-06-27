@@ -37,7 +37,7 @@ Note: the Steam Godot Windows build used in this environment returns process exi
 
 ## Manual Two-Window Acceptance
 
-Status: Pending human execution.
+Status: Passed by owner on issue #24 after the reserved-seat token mismatch bug was fixed.
 
 The manual two-window acceptance path is documented in `docs/MANUAL_TEST_CHECKLIST.md`, section `9.5 P0.3 Same-Seat Reconnect Acceptance`.
 
@@ -52,4 +52,4 @@ Required manual observations:
 
 ## Current Acceptance Read
 
-Automated evidence covers the data-path and Host-authoritative reconnect mechanics. Full Sprint2 acceptance should not be marked complete until the manual two-window pass above is run and recorded.
+Automated evidence covers the data-path and Host-authoritative reconnect mechanics. Manual two-window acceptance was reported passed on issue #24, so Sprint2 is ready for sprint-branch review and merge-back preparation.

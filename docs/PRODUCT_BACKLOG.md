@@ -64,7 +64,7 @@ Prove a stable multiplayer board-game core loop that can later support intervent
 | PB-022 | [#21](https://github.com/benson94879453/rich-war-online/issues/21) | P1 | Story | Done | sprint2 | Add Host seat reservation model | Host reserves disconnected player seats and excludes reserved seats from normal open-seat assignment. |
 | PB-023 | [#22](https://github.com/benson94879453/rich-war-online/issues/22) | P1 | Story | Done | sprint2 | Reassign matching reconnect token to reserved seat | A reconnecting Client with a known token returns to the same player seat and receives a fresh Host snapshot. |
 | PB-024 | [#23](https://github.com/benson94879453/rich-war-online/issues/23) | P1 | QA/UX | Done | sprint2 | Refresh snapshot and debug status after reconnect | Reconnect status is visible enough for manual QA, and restored UI state matches Host after snapshot sync. |
-| PB-025 | [#24](https://github.com/benson94879453/rich-war-online/issues/24) | P1 | QA | In Progress | sprint2 | Run same-seat reconnect acceptance pass | Automated reconnect smoke evidence is recorded; manual two-window QA still needs human execution. |
+| PB-025 | [#24](https://github.com/benson94879453/rich-war-online/issues/24) | P1 | QA | Done | sprint2 | Run same-seat reconnect acceptance pass | Automated reconnect smoke evidence is recorded; manual two-window QA was reported passed on issue #24 after the reserved-seat token mismatch bug was fixed. |
 
 ## Ready Criteria
 
