@@ -11,6 +11,7 @@ Use this checklist for each multiplayer prototype pass.
 - Confirm window B reports it connected as P2.
 
 For the Sprint3 `v0.2-online-core` 10-turn acceptance pass, use the full procedure and evidence format in `docs/sprints/sprint3_networked_10_turn_acceptance.md`.
+For failure visibility review, use `docs/sprints/sprint3_authority_failure_visibility.md`.
 
 ## Basic Turn Sync
 
@@ -85,6 +86,7 @@ For the Sprint3 `v0.2-online-core` 10-turn acceptance pass, use the full procedu
 - 10 turns can be played across two windows without state divergence.
 - Host and Client state are compared after each completed acceptance turn.
 - Normal actions do not produce misleading rejected intent logs.
+- Any rejected intent is visible enough to capture the attempted action and reason.
 - Client joining mid-game matches Host state for turn, dice, landed tile, event text, money, positions, and property owners.
 - Pending action buttons appear only for the controlling player.
 - Reconnecting Client status clearly identifies the reclaimed seat and fresh snapshot sync.

@@ -177,6 +177,7 @@ Use this section for the next networking baseline defined in `docs/reconnect_bas
 ## 10. Long Turn Stability
 
 Use `docs/sprints/sprint3_networked_10_turn_acceptance.md` for the full `v0.2-online-core` acceptance procedure and evidence format.
+Use `docs/sprints/sprint3_authority_failure_visibility.md` when a networked run exposes rejected intents, unclear controls, stale pending actions, join/reconnect confusion, or snapshot status ambiguity.
 
 - Play at least 10 turns across two windows.
 - Include at least one Host roll.
@@ -187,6 +188,8 @@ Use `docs/sprints/sprint3_networked_10_turn_acceptance.md` for the full `v0.2-on
 - Compare Host and Client state after each completed turn: round, active player, money, positions, ownership, pending action, dice, landed tile, event text, and recent log lines.
 - Confirm both windows remain in sync.
 - Confirm no misleading rejected intent logs appear during normal accepted actions.
+- If a rejected intent appears, record the exact Client event text and Host network status text.
+- If an action is blocked, record whether the controlling window had visible controls and whether non-controlling windows hid those controls.
 
 ## Baseline Pass Criteria
 
