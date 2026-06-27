@@ -52,9 +52,14 @@ Goal:
 
 Make Host-authoritative multiplayer reliable enough for a playable prototype.
 
+Current status:
+
+- `P0.2` WebSocket Host / Client core actions exist.
+- `P0.3-reconnect-baseline` is complete: same-seat reconnect works through a prototype identity token, Host seat reservation, and fresh snapshot sync.
+
 Next key milestone:
 
-- `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token and Host seat reservation.
+- `v0.2-online-core`: 2-4 players can complete 10 networked turns without divergence or stuck pending actions.
 
 ### Epic 4: Special Events, Buildings, And Cards
 
@@ -93,4 +98,6 @@ Initial authoring can be JSON, CSV, or Godot Resources. A visual editor is not r
 
 Sprint1 established the prototype map pipeline baseline without expanding gameplay scope.
 
-Sprint2 should target `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token, Host seat reservation, fresh snapshot sync after reconnect, and manual two-window reconnect acceptance.
+Sprint2 completed `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token, Host seat reservation, fresh snapshot sync after reconnect, and manual two-window reconnect acceptance.
+
+Sprint3 should target `v0.2-online-core` stability: define and run a 2-4 player networked 10-turn acceptance pass, tighten QA visibility for Host-authoritative failures, and record whether the online core is ready before moving into events, buildings, or cards.

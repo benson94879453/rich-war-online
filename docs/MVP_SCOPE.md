@@ -33,6 +33,7 @@ The larger product vision includes intervention cards and reaction windows, but 
 - Host-side action validation.
 - GameState snapshot serialization and restoration.
 - Client join snapshot sync.
+- Prototype same-seat reconnect using a local reconnect token and Host seat reservation.
 - Debug UI for local network testing.
 - Manual QA checklist for baseline validation.
 
@@ -55,7 +56,7 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 
 - Production lobby or account system.
 - Room codes, matchmaking, or public server hosting.
-- Same-seat reconnect guarantee.
+- Production account-backed or cross-device reconnect guarantee.
 - AI players.
 - Final UI art, sound, animation polish, or accessibility pass.
 - Full Web export/release pipeline.
@@ -78,12 +79,11 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 - Client pending-intent locking exists to avoid duplicate local submissions.
 - Stale property-decision rejection display is filtered when the local state has already advanced.
 - Snapshot join sync includes turn, positions, money, property ownership, dice, landing text, event text, and recent log lines.
+- `P0.3` same-seat reconnect baseline exists through a prototype reconnect token, Host seat reservation, and fresh snapshot sync.
 - Manual network checklist exists and is promoted into the formal baseline checklist.
 
 ## Not Completed
 
-- Same-player reconnect after disconnect.
-- Robust seat reservation or player identity token system.
 - Multi-client stress testing beyond local manual windows.
 - Automated gameplay tests.
 - Property upgrades and valuation.
@@ -95,7 +95,7 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 
 ## Known Issues
 
-- Reconnect currently relies on new join behavior and does not guarantee returning to the same player seat.
+- Reconnect identity is prototype-local Godot user data; deleting app data or joining from another device creates a fresh identity.
 - Host open-seat control is a prototype convenience and may hide seat ownership problems during manual testing.
 - Manual testing is currently the source of truth; no automated regression suite exists yet.
 - Legacy demo scenes still exist but are not baseline acceptance targets.
@@ -105,17 +105,17 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 
 Sprint goal:
 
-> Complete the P0.3 reconnect baseline by adding stable player identity, seat reservation, and same-seat rejoin behavior.
+> Establish `v0.2-online-core` confidence by defining and running a 2-4 player networked 10-turn acceptance pass.
 
 Decision:
 
-> Same-seat reconnect is required for `P0.3-reconnect-baseline`, but remains out of scope for `v0.1-local-core-loop`.
+> Same-seat reconnect is now part of the prototype baseline. Before adding events, buildings, or cards, validate that the online core can sustain repeated networked turns without divergence or stuck pending actions.
 
 Candidate stories:
 
-- As a reconnecting Client, I can reclaim my previous player seat.
-- As Host, I can keep disconnected seats reserved for a short prototype grace period.
-- As a tester, I can see connection and seat state clearly in the debug UI.
-- As a developer, I can validate reconnect behavior with the manual checklist.
+- As a tester, I can run a documented networked 10-turn scenario.
+- As Host and Client, core Roll, route choice, Buy, Skip, rent, snapshot, and reconnect flows remain synchronized during a networked run.
+- As a tester, I can see enough debug status to record Host-authoritative failures clearly.
+- As a developer, I can decide whether the next sprint can move toward events/buildings or needs more online-core stabilization.
 
-See `docs/reconnect_baseline.md` for the baseline behavior and manual acceptance criteria.
+See `docs/sprints/sprint3.md` for the Sprint3 baseline and acceptance direction.
