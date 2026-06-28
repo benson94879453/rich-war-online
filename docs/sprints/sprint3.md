@@ -43,7 +43,7 @@ Issue workflow:
 | PB-027 | [#32](https://github.com/benson94879453/rich-war-online/issues/32) | Done | Define networked 10-turn acceptance pass | Manual checklist and evidence format define how to validate 2-4 networked players for 10 turns without divergence. |
 | PB-028 | [#33](https://github.com/benson94879453/rich-war-online/issues/33) | Done | Run networked 10-turn acceptance pass | Owner reported the networked 10-turn acceptance pass completed normally with no divergence, stuck pending action, or P0 blocker. |
 | PB-029 | [#34](https://github.com/benson94879453/rich-war-online/issues/34) | Done | Review network authority failure visibility | Testers can clearly record joined/reconnected/spectator status, snapshot sync, rejected intents, and pending-action failures. |
-| PB-030 | [#35](https://github.com/benson94879453/rich-war-online/issues/35) | Planned | Record v0.2-online-core readiness review | Sprint3 evidence is summarized with a clear ready/not-ready recommendation for moving toward events, buildings, or cards. |
+| PB-030 | [#35](https://github.com/benson94879453/rich-war-online/issues/35) | Done | Record v0.2-online-core readiness review | Sprint3 evidence is summarized with a clear ready/not-ready recommendation for moving toward events, buildings, or cards. |
 
 ## Acceptance Criteria
 
@@ -58,4 +58,4 @@ Issue workflow:
 
 ## Review Notes
 
-Sprint3 should protect the foundation before the project moves into more expressive gameplay systems. Events, buildings, cards, and stock mechanics will multiply state transitions, so the online core should first prove it can survive repeated networked turns with clear acceptance evidence.
+Sprint3 protected the foundation before the project moves into more expressive gameplay systems. The owner-reported networked 10-turn acceptance pass completed without state divergence, stuck pending actions, or P0 blockers. The current recommendation is ready for the next scoped gameplay-system sprint, starting with events or special buildings before cards.
