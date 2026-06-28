@@ -103,6 +103,7 @@ res://
       EventBus.gd
     core/
       StarQGame.gd
+      ActionDispatcher.gd
       Board.gd
       TurnSystem.gd
       GridMovementSystem.gd
@@ -118,6 +119,7 @@ res://
     maps/
     tiles/
   tools/
+    smoke_action_dispatcher.gd
     smoke_game_state_snapshot.gd
     smoke_map_validation.gd
 ```
@@ -132,7 +134,13 @@ res://
 
 ## Smoke Checks
 
-Run the GameState snapshot smoke check with a Godot command-line runner:
+Run the action dispatcher smoke check with a Godot command-line runner:
+
+```bash
+godot --headless --path . --script res://tools/smoke_action_dispatcher.gd
+```
+
+Run the GameState snapshot smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_game_state_snapshot.gd
