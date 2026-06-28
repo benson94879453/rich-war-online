@@ -11,6 +11,14 @@ var pending_property_purchase: Dictionary = {}
 var pending_movement: MovementState
 var player_map_states_by_id: Dictionary = {}
 var pending_grid_movement: GridMovementState
+var hands_by_player_id: Dictionary = {}
+var deck_states: Dictionary = {}
+var discard_piles: Dictionary = {}
+var status_by_player_id: Dictionary = {}
+var pending_intervention: Dictionary = {}
+var game_over: bool = false
+var winner_player_id: int = -1
+var round_limit: int = 20
 
 
 func initialize(players: Array[PlayerState]) -> void:
@@ -21,6 +29,14 @@ func initialize(players: Array[PlayerState]) -> void:
 	pending_movement = null
 	player_map_states_by_id.clear()
 	pending_grid_movement = null
+	hands_by_player_id.clear()
+	deck_states.clear()
+	discard_piles.clear()
+	status_by_player_id.clear()
+	pending_intervention.clear()
+	game_over = false
+	winner_player_id = -1
+	round_limit = 20
 
 	for player in players:
 		players_by_id[player.player_id] = player
@@ -161,6 +177,14 @@ func to_dict() -> Dictionary:
 		"pending_movement": pending_movement_data,
 		"player_map_states_by_id": player_map_states,
 		"pending_grid_movement": pending_grid_movement_data,
+		"hands_by_player_id": hands_by_player_id.duplicate(true),
+		"deck_states": deck_states.duplicate(true),
+		"discard_piles": discard_piles.duplicate(true),
+		"status_by_player_id": status_by_player_id.duplicate(true),
+		"pending_intervention": pending_intervention.duplicate(true),
+		"game_over": game_over,
+		"winner_player_id": winner_player_id,
+		"round_limit": round_limit,
 	}
 
 
@@ -177,6 +201,14 @@ static func from_dict(data: Dictionary) -> GameState:
 	state.current_round = int(data.get("current_round", 1))
 	state.property_owner_by_tile = data.get("property_owner_by_tile", {})
 	state.pending_property_purchase = data.get("pending_property_purchase", {})
+	state.hands_by_player_id = _duplicate_dictionary(data.get("hands_by_player_id", {}))
+	state.deck_states = _duplicate_dictionary(data.get("deck_states", {}))
+	state.discard_piles = _duplicate_dictionary(data.get("discard_piles", {}))
+	state.status_by_player_id = _duplicate_dictionary(data.get("status_by_player_id", {}))
+	state.pending_intervention = _duplicate_dictionary(data.get("pending_intervention", {}))
+	state.game_over = bool(data.get("game_over", false))
+	state.winner_player_id = int(data.get("winner_player_id", -1))
+	state.round_limit = int(data.get("round_limit", 20))
 	var serialized_pending_movement: Dictionary = data.get("pending_movement", {})
 	if not serialized_pending_movement.is_empty():
 		state.pending_movement = MovementState.from_dict(serialized_pending_movement)
@@ -190,3 +222,11 @@ static func from_dict(data: Dictionary) -> GameState:
 	if not serialized_pending_grid_movement.is_empty():
 		state.pending_grid_movement = GridMovementState.from_dict(serialized_pending_grid_movement)
 	return state
+
+
+static func _duplicate_dictionary(value: Variant) -> Dictionary:
+	if value is Dictionary:
+		var dictionary: Dictionary = value
+		return dictionary.duplicate(true)
+
+	return {}

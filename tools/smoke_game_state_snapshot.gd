@@ -28,6 +28,30 @@ func _run_smoke_check() -> void:
 	state.set_property_owner(12, 1)
 	state.set_property_owner(24, 3)
 	state.begin_property_purchase(2, 36)
+	state.hands_by_player_id = {
+		0: [&"dice_plus_1", &"skip_toll"],
+		2: [&"shield"],
+	}
+	state.deck_states = {
+		&"intervention": {
+			"draw": [&"dice_plus_1"],
+			"discard": [&"skip_toll"],
+		},
+	}
+	state.discard_piles = {
+		&"chance": [&"gain_100"],
+	}
+	state.status_by_player_id = {
+		1: [&"shielded"],
+	}
+	state.pending_intervention = {
+		"window_id": &"pre_roll",
+		"acting_player_id": 2,
+		"eligible_players": [0, 1, 3],
+	}
+	state.game_over = true
+	state.winner_player_id = 1
+	state.round_limit = 12
 	state.player_map_states_by_id[0] = PlayerMapState.new(Vector2i(3, 4), BoardConnectionData.Direction.RIGHT)
 	state.player_map_states_by_id[1] = PlayerMapState.new(Vector2i(5, 6), BoardConnectionData.Direction.DOWN)
 
@@ -56,6 +80,30 @@ func _run_smoke_check() -> void:
 	_expect_true(restored.has_pending_property_purchase(), "pending property purchase survives restore")
 	_expect_equal(int(restored.pending_property_purchase.get("player_id", -1)), 2, "pending purchase player survives restore")
 	_expect_equal(int(restored.pending_property_purchase.get("tile_index", -1)), 36, "pending purchase tile survives restore")
+	_expect_equal(restored.hands_by_player_id, {
+		0: [&"dice_plus_1", &"skip_toll"],
+		2: [&"shield"],
+	}, "reserved hands survive restore")
+	_expect_equal(restored.deck_states, {
+		&"intervention": {
+			"draw": [&"dice_plus_1"],
+			"discard": [&"skip_toll"],
+		},
+	}, "reserved deck states survive restore")
+	_expect_equal(restored.discard_piles, {
+		&"chance": [&"gain_100"],
+	}, "reserved discard piles survive restore")
+	_expect_equal(restored.status_by_player_id, {
+		1: [&"shielded"],
+	}, "reserved statuses survive restore")
+	_expect_equal(restored.pending_intervention, {
+		"window_id": &"pre_roll",
+		"acting_player_id": 2,
+		"eligible_players": [0, 1, 3],
+	}, "reserved pending intervention survives restore")
+	_expect_true(restored.game_over, "reserved game over survives restore")
+	_expect_equal(restored.winner_player_id, 1, "reserved winner survives restore")
+	_expect_equal(restored.round_limit, 12, "reserved round limit survives restore")
 
 	var restored_map_state := restored.get_player_map_state(1)
 	_expect_true(restored_map_state != null, "player map state survives restore")
