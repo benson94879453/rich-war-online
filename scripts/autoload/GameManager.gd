@@ -64,6 +64,7 @@ func request_roll() -> bool:
 		"dice_value": dice_value,
 	})
 	state.begin_movement(MovementState.new(player_id, player.tile_index, player.entered_from_tile_index, dice_value))
+	turn_system.begin_movement()
 	return _advance_pending_movement()
 
 
@@ -234,6 +235,7 @@ func _request_grid_roll() -> bool:
 		"dice_value": dice_value,
 	})
 	state.begin_grid_movement(GridMovementState.new(player_id, player_map_state.grid_position, player_map_state.direction, dice_value))
+	turn_system.begin_movement()
 	return _advance_pending_grid_movement()
 
 
@@ -298,6 +300,7 @@ func _emit_grid_movement_if_needed(player_id: int, previous_grid_position: Vecto
 
 
 func _resolve_grid_landing(player: PlayerState, player_map_state: PlayerMapState, dice_value: int) -> void:
+	turn_system.begin_landing_resolve()
 	var map_grid: BoardMapGridData = board_data.get_map_grid()
 	var node_id: int = map_grid.get_node_id(player_map_state.grid_position) if map_grid != null else -1
 	var tile_index: int = board_data.get_tile_index_for_source_node_id(node_id)
@@ -371,6 +374,7 @@ func _advance_pending_movement() -> bool:
 
 
 func _resolve_landing(player: PlayerState, dice_value: int) -> void:
+	turn_system.begin_landing_resolve()
 	var landed_tile_data: BoardTileData = board_data.get_tile(player.tile_index)
 	_emit(GameEvent.PLAYER_LANDED, {
 		"player_id": player.player_id,
