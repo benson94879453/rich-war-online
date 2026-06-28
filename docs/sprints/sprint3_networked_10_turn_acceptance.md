@@ -104,6 +104,8 @@ Mark the run failed and create or link a blocker issue if any of these happen:
 - Reconnect loses the previous seat while the same local reconnect token is available.
 - A failure occurs but the UI/status/log does not make the cause recordable.
 
+Use `docs/sprints/sprint3_authority_failure_visibility.md` to classify whether the failure was visible enough to diagnose.
+
 ## Pass Criteria
 
 The pass is successful when:
