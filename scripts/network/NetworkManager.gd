@@ -11,10 +11,10 @@ signal state_snapshot_received(snapshot: Dictionary)
 const DEFAULT_PORT := 8910
 const DEFAULT_URL := "ws://127.0.0.1:%d" % DEFAULT_PORT
 
-const INTENT_ROLL := "roll"
-const INTENT_GRID_ROUTE_CHOICE := "grid_route_choice"
-const INTENT_BUY_PROPERTY := "buy_property"
-const INTENT_SKIP_PROPERTY := "skip_property"
+const INTENT_ROLL := ActionDispatcher.ACTION_ROLL
+const INTENT_GRID_ROUTE_CHOICE := ActionDispatcher.ACTION_GRID_ROUTE_CHOICE
+const INTENT_BUY_PROPERTY := ActionDispatcher.ACTION_BUY_PROPERTY
+const INTENT_SKIP_PROPERTY := ActionDispatcher.ACTION_SKIP_PROPERTY
 const SNAPSHOT_REVISION_KEY := "_network_state_revision"
 const ASSIGNMENT_STATUS_JOINED := "joined"
 const ASSIGNMENT_STATUS_RECONNECTED := "reconnected"
@@ -43,6 +43,7 @@ var _state_revision: int = 0
 var _last_received_state_revision: int = -1
 var _local_assignment_status_message: String = ""
 var _status_message: String = "Offline"
+var _action_dispatcher: ActionDispatcher = ActionDispatcher.new()
 
 
 func _ready() -> void:
@@ -264,73 +265,18 @@ func _receive_intent_rejected_with_request(intent_type: String, reason: String, 
 
 
 func _execute_intent(sender_peer_id: int, request_id: int, intent_type: String, payload: Dictionary = {}) -> bool:
-	var rejection_reason := _get_intent_rejection_reason(sender_peer_id, intent_type)
-	if not rejection_reason.is_empty():
+	var dispatch_result := _action_dispatcher.submit_action(sender_peer_id, intent_type, payload, Callable(self, "_can_peer_control_player"))
+	if not bool(dispatch_result.get(ActionDispatcher.RESULT_ACCEPTED, false)):
+		var rejection_reason := str(dispatch_result.get(ActionDispatcher.RESULT_REJECTION_REASON, "game rejected intent"))
 		_reject_intent(sender_peer_id, intent_type, rejection_reason, request_id)
 		return false
 
-	var accepted := false
-	match intent_type:
-		INTENT_ROLL:
-			accepted = GameManager.request_roll()
-		INTENT_GRID_ROUTE_CHOICE:
-			accepted = GameManager.request_grid_route_choice(int(payload.get("direction", BoardConnectionData.Direction.NONE)))
-		INTENT_BUY_PROPERTY:
-			accepted = GameManager.request_buy_pending_property()
-		INTENT_SKIP_PROPERTY:
-			accepted = GameManager.request_skip_pending_property()
-		_:
-			accepted = false
-
-	if not accepted:
-		_reject_intent(sender_peer_id, intent_type, "game rejected intent", request_id)
-		return false
-
 	_accept_intent(sender_peer_id, intent_type, request_id)
-	if accepted and is_host():
+	if is_host():
 		_state_revision += 1
 		_broadcast_state_snapshot()
 
-	return accepted
-
-
-func _get_intent_rejection_reason(sender_peer_id: int, intent_type: String) -> String:
-	if GameManager.state == null:
-		return "game not ready"
-
-	if mode == NetworkMode.OFFLINE:
-		return ""
-
-	if not _is_known_intent(intent_type):
-		return "unknown intent"
-
-	match intent_type:
-		INTENT_ROLL:
-			var current_player_id := GameManager.state.get_current_player_id()
-			if not _can_peer_control_player(sender_peer_id, current_player_id):
-				return "not your turn"
-			if not GameManager.turn_system.can_roll():
-				return "roll is not available"
-			if GameManager.state.has_pending_movement() or GameManager.state.has_pending_grid_movement():
-				return "movement is pending"
-		INTENT_GRID_ROUTE_CHOICE:
-			var route_player_id := GameManager.state.get_current_player_id()
-			if not _can_peer_control_player(sender_peer_id, route_player_id):
-				return "not your route choice"
-			if not GameManager.turn_system.can_resolve_route_choice():
-				return "route choice is not available"
-			if not GameManager.state.has_pending_grid_movement():
-				return "no grid movement pending"
-		INTENT_BUY_PROPERTY, INTENT_SKIP_PROPERTY:
-			if not GameManager.state.has_pending_property_purchase():
-				return "no property decision pending"
-			var property_player_id := int(GameManager.state.pending_property_purchase.get("player_id", -1))
-			if not _can_peer_control_player(sender_peer_id, property_player_id):
-				return "not your property decision"
-			if not GameManager.turn_system.can_resolve_property_decision():
-				return "property decision is not available"
-
-	return ""
+	return true
 
 
 func _on_peer_connected(peer_id: int) -> void:
@@ -398,14 +344,6 @@ func _can_peer_control_player(peer_id: int, player_id: int) -> bool:
 		return mode == NetworkMode.HOST and host_can_control_open_seats and _is_player_seat_open(player_id)
 
 	return int(_player_id_by_peer_id.get(peer_id, -1)) == player_id
-
-
-func _is_known_intent(intent_type: String) -> bool:
-	match intent_type:
-		INTENT_ROLL, INTENT_GRID_ROUTE_CHOICE, INTENT_BUY_PROPERTY, INTENT_SKIP_PROPERTY:
-			return true
-
-	return false
 
 
 func _accept_intent(peer_id: int, intent_type: String, request_id: int) -> void:
