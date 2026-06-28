@@ -14,7 +14,7 @@ var state: GameState
 var board_data: BoardData
 var board_navigator: BoardNavigator = BoardNavigator.new()
 var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
-var tile_effect_resolver: TileEffectResolver = TileEffectResolver.new()
+var effect_service: EffectService = EffectService.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _last_dice_roll: Dictionary = {}
@@ -432,17 +432,21 @@ func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
 
 
 func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void:
-	var resolution: TileEffectResolution = tile_effect_resolver.resolve(player, tile_data)
-	if not resolution.was_applied:
+	var result: EffectResult = effect_service.apply_tile_effect(player, tile_data)
+	if result.is_rejected():
+		push_warning("Tile effect %s was rejected: %s" % [str(result.effect_id), result.rejection_reason])
+		return
+
+	if not result.was_applied:
 		return
 
 	_emit(GameEvent.TILE_EFFECT_RESOLVED, {
 		"player_id": player.player_id,
 		"tile_index": tile_data.index,
 		"tile_name": tile_data.display_name,
-		"effect_id": tile_data.effect_id,
-		"money_delta": resolution.money_delta,
-		"money_after": resolution.money_after,
+		"effect_id": result.effect_id,
+		"money_delta": result.money_delta,
+		"money_after": result.money_after,
 	})
 
 

@@ -105,6 +105,8 @@ res://
       StarQGame.gd
       ActionDispatcher.gd
       Board.gd
+      EffectResult.gd
+      EffectService.gd
       TurnSystem.gd
       GridMovementSystem.gd
       GameUI.gd
@@ -120,6 +122,7 @@ res://
     tiles/
   tools/
     smoke_action_dispatcher.gd
+    smoke_effect_service.gd
     smoke_game_state_snapshot.gd
     smoke_map_validation.gd
 ```
@@ -138,6 +141,12 @@ Run the action dispatcher smoke check with a Godot command-line runner:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_action_dispatcher.gd
+```
+
+Run the effect service smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_effect_service.gd
 ```
 
 Run the GameState snapshot smoke check with:
