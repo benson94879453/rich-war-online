@@ -56,10 +56,11 @@ Current status:
 
 - `P0.2` WebSocket Host / Client core actions exist.
 - `P0.3-reconnect-baseline` is complete: same-seat reconnect works through a prototype identity token, Host seat reservation, and fresh snapshot sync.
+- `v0.2-online-core` is ready based on Sprint3 evidence: owner-reported 10-turn networked acceptance passed, automated smoke checks passed, and authority failure visibility was reviewed.
 
 Next key milestone:
 
-- `v0.2-online-core`: 2-4 players can complete 10 networked turns without divergence or stuck pending actions.
+- `v0.3-event-building-loop`: add a small Host-authoritative event or special-building loop without destabilizing turn, pending-action, snapshot, or reconnect behavior.
 
 ### Epic 4: Special Events, Buildings, And Cards
 
@@ -100,4 +101,6 @@ Sprint1 established the prototype map pipeline baseline without expanding gamepl
 
 Sprint2 completed `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token, Host seat reservation, fresh snapshot sync after reconnect, and manual two-window reconnect acceptance.
 
-Sprint3 should target `v0.2-online-core` stability: define and run a 2-4 player networked 10-turn acceptance pass, tighten QA visibility for Host-authoritative failures, and record whether the online core is ready before moving into events, buildings, or cards.
+Sprint3 completed `v0.2-online-core` stability: it defined and ran a networked 10-turn acceptance pass, reviewed Host-authoritative failure visibility, and recorded readiness to move into a narrowly scoped gameplay-system sprint.
+
+Next recommended direction: start `v0.3-event-building-loop` with a small event or special-building slice. Cards should still wait until event/building resolution proves stable under Host authority.
