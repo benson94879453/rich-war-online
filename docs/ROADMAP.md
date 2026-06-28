@@ -52,9 +52,15 @@ Goal:
 
 Make Host-authoritative multiplayer reliable enough for a playable prototype.
 
+Current status:
+
+- `P0.2` WebSocket Host / Client core actions exist.
+- `P0.3-reconnect-baseline` is complete: same-seat reconnect works through a prototype identity token, Host seat reservation, and fresh snapshot sync.
+- `v0.2-online-core` is ready based on Sprint3 evidence: owner-reported 10-turn networked acceptance passed, automated smoke checks passed, and authority failure visibility was reviewed.
+
 Next key milestone:
 
-- `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token and Host seat reservation.
+- `v0.3-event-building-loop`: add a small Host-authoritative event or special-building loop without destabilizing turn, pending-action, snapshot, or reconnect behavior.
 
 ### Epic 4: Special Events, Buildings, And Cards
 
@@ -93,4 +99,8 @@ Initial authoring can be JSON, CSV, or Godot Resources. A visual editor is not r
 
 Sprint1 established the prototype map pipeline baseline without expanding gameplay scope.
 
-Sprint2 should target `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token, Host seat reservation, fresh snapshot sync after reconnect, and manual two-window reconnect acceptance.
+Sprint2 completed `P0.3-reconnect-baseline`: same-seat reconnect through a prototype identity token, Host seat reservation, fresh snapshot sync after reconnect, and manual two-window reconnect acceptance.
+
+Sprint3 completed `v0.2-online-core` stability: it defined and ran a networked 10-turn acceptance pass, reviewed Host-authoritative failure visibility, and recorded readiness to move into a narrowly scoped gameplay-system sprint.
+
+Next recommended direction: start `v0.3-event-building-loop` with a small event or special-building slice. Cards should still wait until event/building resolution proves stable under Host authority.
