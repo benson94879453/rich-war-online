@@ -133,6 +133,7 @@ res://
     smoke_effect_service.gd
     smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
+    smoke_snapshot_summary_tracker.gd
     smoke_turn_system_fsm.gd
     smoke_map_validation.gd
 ```
@@ -193,6 +194,12 @@ Run the GameState reserved defaults smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_game_state_reserved_defaults.gd
+```
+
+Run the snapshot summary tracker smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_snapshot_summary_tracker.gd
 ```
 
 Run the GameState snapshot smoke check with:
