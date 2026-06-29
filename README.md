@@ -104,6 +104,8 @@ res://
     core/
       StarQGame.gd
       ActionDispatcher.gd
+      EventDefinition.gd
+      EventService.gd
       Board.gd
       EffectResult.gd
       EffectService.gd
@@ -124,7 +126,10 @@ res://
     scenarios/
       README.md
       scenario_10_roll_local_action_pipeline.gd
+      scenario_event_landing_pipeline.gd
     smoke_action_dispatcher.gd
+    smoke_event_service.gd
+    smoke_event_landing_binding.gd
     smoke_effect_service.gd
     smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
@@ -148,6 +153,12 @@ Run the local 10-roll action pipeline scenario with:
 godot --headless --path . --script res://tools/scenarios/scenario_10_roll_local_action_pipeline.gd
 ```
 
+Run the event landing pipeline scenario with:
+
+```bash
+godot --headless --path . --script res://tools/scenarios/scenario_event_landing_pipeline.gd
+```
+
 Run the action dispatcher smoke check with a Godot command-line runner:
 
 ```bash
@@ -158,6 +169,18 @@ Run the effect service smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_effect_service.gd
+```
+
+Run the event service smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_event_service.gd
+```
+
+Run the event landing binding smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_event_landing_binding.gd
 ```
 
 Run the TurnSystem FSM smoke check with:

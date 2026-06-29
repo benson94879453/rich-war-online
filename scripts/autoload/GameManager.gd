@@ -9,6 +9,7 @@ const UI_SUMMARY_EVENT_MESSAGE_KEY := "event_message"
 const UI_SUMMARY_LOG_LINES_KEY := "log_lines"
 const UI_SUMMARY_LOG_LINE_LIMIT := 20
 const EffectServiceScript := preload("res://scripts/core/EffectService.gd")
+const EventServiceScript := preload("res://scripts/core/EventService.gd")
 const GameEventScript := preload("res://scripts/core/GameEvent.gd")
 
 
@@ -17,6 +18,7 @@ var board_data: BoardData
 var board_navigator: BoardNavigator = BoardNavigator.new()
 var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
 var effect_service: Variant = EffectServiceScript.new()
+var event_service: Variant = EventServiceScript.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _last_dice_roll: Dictionary = {}
@@ -438,12 +440,31 @@ func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
 
 
 func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void:
+	if _resolve_event_tile(player, tile_data):
+		return
+
 	var result: Variant = effect_service.apply_tile_effect(player, tile_data)
+	_emit_effect_result(player, tile_data, result)
+
+
+func _resolve_event_tile(player: PlayerState, tile_data: BoardTileData) -> bool:
+	var event_definition: Variant = event_service.create_event_for_tile(tile_data)
+	if event_definition == null:
+		return false
+
+	var result: Variant = event_service.apply_event(event_definition, {
+		EventServiceScript.CONTEXT_PLAYER: player,
+	})
+	_emit_effect_result(player, tile_data, result)
+	return true
+
+
+func _emit_effect_result(player: PlayerState, tile_data: BoardTileData, result: Variant) -> void:
 	if result.is_rejected():
 		push_warning("Tile effect %s was rejected: %s" % [str(result.effect_id), result.rejection_reason])
 		return
 
-	if not result.was_applied:
+	if player == null or tile_data == null or not result.was_applied:
 		return
 
 	_emit(GameEventScript.TILE_EFFECT_RESOLVED, {
@@ -451,6 +472,8 @@ func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void
 		"tile_index": tile_data.index,
 		"tile_name": tile_data.display_name,
 		"effect_id": result.effect_id,
+		"source_type": result.source_type,
+		"source_id": result.source_id,
 		"money_delta": result.money_delta,
 		"money_after": result.money_after,
 	})
