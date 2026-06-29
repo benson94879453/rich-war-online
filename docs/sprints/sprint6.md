@@ -60,11 +60,11 @@ Sprint6 should not attempt to split all of this at once. It should remove isolat
 
 | Backlog ID | Issue | Status | Work item | Acceptance |
 | --- | --- | --- | --- | --- |
-| PB-042 | [#68](https://github.com/benson94879453/rich-war-online/issues/68) | In Progress | Plan GameManager decomposition baseline | Sprint6 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
-| PB-043 | [#69](https://github.com/benson94879453/rich-war-online/issues/69) | Planned | Extract snapshot summary tracking from GameManager | Snapshot UI summary state and formatting are delegated while snapshot payload compatibility remains intact. |
-| PB-044 | [#70](https://github.com/benson94879453/rich-war-online/issues/70) | Planned | Extract property purchase and rent resolution boundary | Current Buy, Skip, insufficient-funds, purchase offer, and rent behavior live behind a focused boundary without behavior changes. |
-| PB-045 | [#71](https://github.com/benson94879453/rich-war-online/issues/71) | Planned | Extract landing resolution orchestration boundary | Landing sequencing delegates through a focused resolver while property, rent, money tile, and `starq_chance` behavior remains stable. |
-| PB-046 | [#72](https://github.com/benson94879453/rich-war-online/issues/72) | Planned | Record GameManager decomposition acceptance review | Sprint6 evidence is summarized with remaining risks and a clear recommendation for the next gameplay-system slice. |
+| PB-042 | [#68](https://github.com/benson94879453/rich-war-online/issues/68) | Done | Plan GameManager decomposition baseline | Sprint6 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
+| PB-043 | [#69](https://github.com/benson94879453/rich-war-online/issues/69) | Done | Extract snapshot summary tracking from GameManager | Snapshot UI summary state and formatting are delegated while snapshot payload compatibility remains intact. |
+| PB-044 | [#70](https://github.com/benson94879453/rich-war-online/issues/70) | Done | Extract property purchase and rent resolution boundary | Current Buy, Skip, insufficient-funds, purchase offer, and rent behavior live behind a focused boundary without behavior changes. |
+| PB-045 | [#71](https://github.com/benson94879453/rich-war-online/issues/71) | Done | Extract landing resolution orchestration boundary | Landing sequencing delegates through a focused resolver while property, rent, money tile, and `starq_chance` behavior remains stable. |
+| PB-046 | [#72](https://github.com/benson94879453/rich-war-online/issues/72) | Done | Record GameManager decomposition acceptance review | Sprint6 evidence is summarized with remaining risks and a clear recommendation for the next gameplay-system slice. |
 
 ## Recommended Order
 
