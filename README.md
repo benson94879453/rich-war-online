@@ -121,6 +121,9 @@ res://
     maps/
     tiles/
   tools/
+    scenarios/
+      README.md
+      scenario_10_roll_local_action_pipeline.gd
     smoke_action_dispatcher.gd
     smoke_effect_service.gd
     smoke_game_state_reserved_defaults.gd
@@ -138,6 +141,12 @@ res://
 5. Keep changes small enough to match one Scrum story or bug fix.
 
 ## Smoke Checks
+
+Run the local 10-roll action pipeline scenario with:
+
+```bash
+godot --headless --path . --script res://tools/scenarios/scenario_10_roll_local_action_pipeline.gd
+```
 
 Run the action dispatcher smoke check with a Godot command-line runner:
 
