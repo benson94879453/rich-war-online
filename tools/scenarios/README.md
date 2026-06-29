@@ -21,3 +21,11 @@ Run the local 10-roll action pipeline scenario with:
 ```bash
 godot --headless --path . --script res://tools/scenarios/scenario_10_roll_local_action_pipeline.gd
 ```
+
+Run the event landing pipeline scenario with:
+
+```bash
+godot --headless --path . --script res://tools/scenarios/scenario_event_landing_pipeline.gd
+```
+
+The event landing scenario targets the active-map `starq_chance` effect id. It finds a deterministic grid roll path to the selected event tile, submits the roll through `ActionDispatcher`, verifies the prototype event money result, and checks snapshot round-trip state. Later building, card, or intervention-window scenarios should follow this pattern: force one narrow active-board path, submit through the public action pipeline, assert exact state deltas, and then round-trip the snapshot fields owned by that slice.
