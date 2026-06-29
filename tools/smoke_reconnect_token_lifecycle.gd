@@ -9,12 +9,18 @@ func _init() -> void:
 
 
 func _run_smoke_check() -> void:
-	var first_token := NetworkManager.get_local_reconnect_token()
-	var second_token := NetworkManager.get_local_reconnect_token()
-	NetworkManager.stop_network()
-	var token_after_stop := NetworkManager.get_local_reconnect_token()
-	NetworkManager._local_reconnect_token = ""
-	var token_after_memory_clear := NetworkManager.get_local_reconnect_token()
+	var network_manager: Variant = _get_network_manager()
+	if network_manager == null:
+		_failure_count += 1
+		push_error("NetworkManager autoload is not available.")
+		return
+
+	var first_token: String = network_manager.get_local_reconnect_token()
+	var second_token: String = network_manager.get_local_reconnect_token()
+	network_manager.stop_network()
+	var token_after_stop: String = network_manager.get_local_reconnect_token()
+	network_manager._local_reconnect_token = ""
+	var token_after_memory_clear: String = network_manager.get_local_reconnect_token()
 
 	_expect_true(not first_token.is_empty(), "reconnect token is generated")
 	_expect_equal(second_token, first_token, "reconnect token is stable across repeated reads")
@@ -27,6 +33,10 @@ func _run_smoke_check() -> void:
 	else:
 		push_error("FAIL: Reconnect token lifecycle smoke check had %d failure(s)" % _failure_count)
 		quit(1)
+
+
+func _get_network_manager() -> Variant:
+	return root.get_node_or_null("/root/NetworkManager")
 
 
 func _expect_true(value: bool, label: String) -> void:

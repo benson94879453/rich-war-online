@@ -34,50 +34,63 @@ func get_action_rejection_reason(sender_peer_id: int, action_type: String, _payl
 	if not is_known_action(action_type):
 		return "unknown intent"
 
-	if GameManager.state == null:
+	var game_manager: Variant = _get_game_manager()
+	if game_manager == null or game_manager.state == null:
 		return "game not ready"
 
 	match action_type:
 		ACTION_ROLL:
-			var current_player_id := GameManager.state.get_current_player_id()
+			var current_player_id: int = game_manager.state.get_current_player_id()
 			if not _can_control_player(control_resolver, sender_peer_id, current_player_id):
 				return "not your turn"
-			if not GameManager.turn_system.can_roll():
+			if not game_manager.turn_system.can_roll():
 				return "roll is not available"
-			if GameManager.state.has_pending_movement() or GameManager.state.has_pending_grid_movement():
+			if game_manager.state.has_pending_movement() or game_manager.state.has_pending_grid_movement():
 				return "movement is pending"
 		ACTION_GRID_ROUTE_CHOICE:
-			var route_player_id := GameManager.state.get_current_player_id()
+			var route_player_id: int = game_manager.state.get_current_player_id()
 			if not _can_control_player(control_resolver, sender_peer_id, route_player_id):
 				return "not your route choice"
-			if not GameManager.turn_system.can_resolve_route_choice():
+			if not game_manager.turn_system.can_resolve_route_choice():
 				return "route choice is not available"
-			if not GameManager.state.has_pending_grid_movement():
+			if not game_manager.state.has_pending_grid_movement():
 				return "no grid movement pending"
 		ACTION_BUY_PROPERTY, ACTION_SKIP_PROPERTY:
-			if not GameManager.state.has_pending_property_purchase():
+			if not game_manager.state.has_pending_property_purchase():
 				return "no property decision pending"
-			var property_player_id := int(GameManager.state.pending_property_purchase.get("player_id", -1))
+			var property_player_id := int(game_manager.state.pending_property_purchase.get("player_id", -1))
 			if not _can_control_player(control_resolver, sender_peer_id, property_player_id):
 				return "not your property decision"
-			if not GameManager.turn_system.can_resolve_property_decision():
+			if not game_manager.turn_system.can_resolve_property_decision():
 				return "property decision is not available"
 
 	return ""
 
 
 func _dispatch_action(action_type: String, payload: Dictionary) -> bool:
+	var game_manager: Variant = _get_game_manager()
+	if game_manager == null:
+		return false
+
 	match action_type:
 		ACTION_ROLL:
-			return GameManager.request_roll()
+			return game_manager.request_roll()
 		ACTION_GRID_ROUTE_CHOICE:
-			return GameManager.request_grid_route_choice(int(payload.get("direction", BoardConnectionData.Direction.NONE)))
+			return game_manager.request_grid_route_choice(int(payload.get("direction", 0)))
 		ACTION_BUY_PROPERTY:
-			return GameManager.request_buy_pending_property()
+			return game_manager.request_buy_pending_property()
 		ACTION_SKIP_PROPERTY:
-			return GameManager.request_skip_pending_property()
+			return game_manager.request_skip_pending_property()
 
 	return false
+
+
+func _get_game_manager() -> Variant:
+	var main_loop: MainLoop = Engine.get_main_loop()
+	if main_loop is SceneTree:
+		return main_loop.root.get_node_or_null("/root/GameManager")
+
+	return null
 
 
 func _can_control_player(control_resolver: Callable, sender_peer_id: int, player_id: int) -> bool:

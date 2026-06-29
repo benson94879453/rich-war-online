@@ -8,13 +8,15 @@ const UI_SUMMARY_LAST_LANDING_KEY := "last_landing"
 const UI_SUMMARY_EVENT_MESSAGE_KEY := "event_message"
 const UI_SUMMARY_LOG_LINES_KEY := "log_lines"
 const UI_SUMMARY_LOG_LINE_LIMIT := 20
+const EffectServiceScript := preload("res://scripts/core/EffectService.gd")
+const GameEventScript := preload("res://scripts/core/GameEvent.gd")
 
 
 var state: GameState
 var board_data: BoardData
 var board_navigator: BoardNavigator = BoardNavigator.new()
 var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
-var effect_service: EffectService = EffectService.new()
+var effect_service: Variant = EffectServiceScript.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _last_dice_roll: Dictionary = {}
@@ -41,8 +43,8 @@ func start_local_game(players: Array[PlayerState], data: BoardData) -> void:
 	if state.has_pending_movement() and state.pending_movement.is_waiting_for_route_choice():
 		turn_system.begin_route_decision()
 
-	_emit(GameEvent.GAME_STARTED, {"state": state.to_dict()})
-	_emit(GameEvent.ROUND_STARTED, {"round": state.current_round})
+	_emit(GameEventScript.GAME_STARTED, {"state": state.to_dict()})
+	_emit(GameEventScript.ROUND_STARTED, {"round": state.current_round})
 	_emit_current_turn_started()
 
 
@@ -59,7 +61,7 @@ func request_roll() -> bool:
 		return false
 
 	var dice_value: int = _rng.randi_range(1, 6)
-	_emit(GameEvent.DICE_ROLLED, {
+	_emit(GameEventScript.DICE_ROLLED, {
 		"player_id": player_id,
 		"dice_value": dice_value,
 	})
@@ -93,7 +95,7 @@ func request_route_choice(next_tile_index: int) -> bool:
 		return false
 
 	player.move_to_tile(movement_state.current_tile_index, movement_state.entered_from_tile_index)
-	_emit(GameEvent.PLAYER_MOVED, {
+	_emit(GameEventScript.PLAYER_MOVED, {
 		"player_id": player.player_id,
 		"from_tile_index": previous_tile_index,
 		"to_tile_index": movement_state.current_tile_index,
@@ -146,7 +148,7 @@ func request_buy_pending_property() -> bool:
 		return true
 
 	if player.money < tile_data.price:
-		_emit(GameEvent.PROPERTY_PURCHASE_SKIPPED, {
+		_emit(GameEventScript.PROPERTY_PURCHASE_SKIPPED, {
 			"player_id": player_id,
 			"tile_index": tile_index,
 			"tile_name": tile_data.display_name,
@@ -157,7 +159,7 @@ func request_buy_pending_property() -> bool:
 
 	player.add_money(-tile_data.price)
 	state.set_property_owner(tile_index, player_id)
-	_emit(GameEvent.PROPERTY_PURCHASED, {
+	_emit(GameEventScript.PROPERTY_PURCHASED, {
 		"player_id": player_id,
 		"tile_index": tile_index,
 		"tile_name": tile_data.display_name,
@@ -178,7 +180,7 @@ func request_skip_pending_property() -> bool:
 	var player_id: int = int(state.pending_property_purchase["player_id"])
 	var tile_index: int = int(state.pending_property_purchase["tile_index"])
 	var tile_data: BoardTileData = board_data.get_tile(tile_index)
-	_emit(GameEvent.PROPERTY_PURCHASE_SKIPPED, {
+	_emit(GameEventScript.PROPERTY_PURCHASE_SKIPPED, {
 		"player_id": player_id,
 		"tile_index": tile_index,
 		"tile_name": _get_tile_name(tile_data),
@@ -230,7 +232,7 @@ func _request_grid_roll() -> bool:
 		return false
 
 	var dice_value: int = _rng.randi_range(1, 6)
-	_emit(GameEvent.DICE_ROLLED, {
+	_emit(GameEventScript.DICE_ROLLED, {
 		"player_id": player_id,
 		"dice_value": dice_value,
 	})
@@ -264,7 +266,7 @@ func _advance_pending_grid_movement() -> bool:
 
 	if move_result.requires_route_choice():
 		turn_system.begin_route_decision()
-		_emit(GameEvent.MAP_ROUTE_CHOICE_REQUESTED, {
+		_emit(GameEventScript.MAP_ROUTE_CHOICE_REQUESTED, {
 			"player_id": player.player_id,
 			"grid_position": movement_state.current_grid_position,
 			"directions": move_result.route_choice_directions.duplicate(),
@@ -291,7 +293,7 @@ func _emit_grid_movement_if_needed(player_id: int, previous_grid_position: Vecto
 	if move_result.path_grid_positions.is_empty():
 		return
 
-	_emit(GameEvent.MAP_PLAYER_MOVED, {
+	_emit(GameEventScript.MAP_PLAYER_MOVED, {
 		"player_id": player_id,
 		"from_grid_position": previous_grid_position,
 		"to_grid_position": move_result.current_grid_position,
@@ -308,7 +310,7 @@ func _resolve_grid_landing(player: PlayerState, player_map_state: PlayerMapState
 	if tile_data != null:
 		player.move_to_tile(tile_index)
 
-	_emit(GameEvent.MAP_PLAYER_LANDED, {
+	_emit(GameEventScript.MAP_PLAYER_LANDED, {
 		"player_id": player.player_id,
 		"grid_position": player_map_state.grid_position,
 		"node_id": node_id,
@@ -347,7 +349,7 @@ func _advance_pending_movement() -> bool:
 
 	if not move_result.path_tile_indices.is_empty():
 		player.move_to_tile(movement_state.current_tile_index, movement_state.entered_from_tile_index)
-		_emit(GameEvent.PLAYER_MOVED, {
+		_emit(GameEventScript.PLAYER_MOVED, {
 			"player_id": player.player_id,
 			"from_tile_index": previous_tile_index,
 			"to_tile_index": movement_state.current_tile_index,
@@ -356,7 +358,7 @@ func _advance_pending_movement() -> bool:
 
 	if move_result.requires_route_choice():
 		turn_system.begin_route_decision()
-		_emit(GameEvent.ROUTE_CHOICE_REQUESTED, {
+		_emit(GameEventScript.ROUTE_CHOICE_REQUESTED, {
 			"player_id": player.player_id,
 			"tile_index": movement_state.current_tile_index,
 			"next_tile_indices": move_result.route_choice_tile_indices.duplicate(),
@@ -376,7 +378,7 @@ func _advance_pending_movement() -> bool:
 func _resolve_landing(player: PlayerState, dice_value: int) -> void:
 	turn_system.begin_landing_resolve()
 	var landed_tile_data: BoardTileData = board_data.get_tile(player.tile_index)
-	_emit(GameEvent.PLAYER_LANDED, {
+	_emit(GameEventScript.PLAYER_LANDED, {
 		"player_id": player.player_id,
 		"tile_index": player.tile_index,
 		"tile_name": _get_tile_name(landed_tile_data),
@@ -400,7 +402,7 @@ func _begin_property_purchase_if_available(player_id: int, tile_data: BoardTileD
 
 	state.begin_property_purchase(player_id, tile_data.index)
 	turn_system.begin_property_decision()
-	_emit(GameEvent.PROPERTY_PURCHASE_OFFERED, {
+	_emit(GameEventScript.PROPERTY_PURCHASE_OFFERED, {
 		"player_id": player_id,
 		"tile_index": tile_data.index,
 		"tile_name": tile_data.display_name,
@@ -424,7 +426,7 @@ func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
 
 	payer.add_money(-rent_amount)
 	property_owner.add_money(rent_amount)
-	_emit(GameEvent.RENT_PAID, {
+	_emit(GameEventScript.RENT_PAID, {
 		"payer_id": payer.player_id,
 		"owner_id": owner_id,
 		"tile_index": tile_data.index,
@@ -436,7 +438,7 @@ func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
 
 
 func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void:
-	var result: EffectResult = effect_service.apply_tile_effect(player, tile_data)
+	var result: Variant = effect_service.apply_tile_effect(player, tile_data)
 	if result.is_rejected():
 		push_warning("Tile effect %s was rejected: %s" % [str(result.effect_id), result.rejection_reason])
 		return
@@ -444,7 +446,7 @@ func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void
 	if not result.was_applied:
 		return
 
-	_emit(GameEvent.TILE_EFFECT_RESOLVED, {
+	_emit(GameEventScript.TILE_EFFECT_RESOLVED, {
 		"player_id": player.player_id,
 		"tile_index": tile_data.index,
 		"tile_name": tile_data.display_name,
@@ -460,16 +462,16 @@ func _complete_property_decision(player_id: int) -> void:
 
 
 func _complete_turn(player_id: int) -> void:
-	_emit(GameEvent.TURN_ENDED, {"player_id": player_id})
+	_emit(GameEventScript.TURN_ENDED, {"player_id": player_id})
 	var began_new_round: bool = turn_system.complete_turn(state)
 	if began_new_round:
-		_emit(GameEvent.ROUND_STARTED, {"round": state.current_round})
+		_emit(GameEventScript.ROUND_STARTED, {"round": state.current_round})
 
 	_emit_current_turn_started()
 
 
 func _emit_current_turn_started() -> void:
-	_emit(GameEvent.TURN_STARTED, {
+	_emit(GameEventScript.TURN_STARTED, {
 		"player_id": state.get_current_player_id(),
 		"round": state.current_round,
 	})
@@ -517,27 +519,27 @@ func _restore_snapshot_ui_summary(snapshot: Dictionary) -> void:
 
 func _record_snapshot_ui_summary(event_type: String, payload: Dictionary) -> void:
 	match event_type:
-		GameEvent.ROUND_STARTED:
+		GameEventScript.ROUND_STARTED:
 			_record_round_started_summary(payload)
-		GameEvent.DICE_ROLLED:
+		GameEventScript.DICE_ROLLED:
 			_last_dice_roll = payload.duplicate(true)
-		GameEvent.PLAYER_LANDED:
+		GameEventScript.PLAYER_LANDED:
 			_last_landing = payload.duplicate(true)
 			_last_event_message = ""
 			_append_snapshot_log_line(_get_player_landed_summary(payload))
-		GameEvent.MAP_PLAYER_LANDED:
+		GameEventScript.MAP_PLAYER_LANDED:
 			_last_landing = payload.duplicate(true)
 			_last_event_message = ""
 			_append_snapshot_log_line(_get_map_player_landed_summary(payload))
-		GameEvent.TILE_EFFECT_RESOLVED:
+		GameEventScript.TILE_EFFECT_RESOLVED:
 			_set_snapshot_event_message(_get_tile_effect_summary(payload))
-		GameEvent.RENT_PAID:
+		GameEventScript.RENT_PAID:
 			_set_snapshot_event_message(_get_rent_paid_summary(payload))
-		GameEvent.PROPERTY_PURCHASE_OFFERED:
+		GameEventScript.PROPERTY_PURCHASE_OFFERED:
 			_set_snapshot_event_message(_get_property_purchase_offered_summary(payload))
-		GameEvent.PROPERTY_PURCHASED:
+		GameEventScript.PROPERTY_PURCHASED:
 			_set_snapshot_event_message(_get_property_purchased_summary(payload))
-		GameEvent.PROPERTY_PURCHASE_SKIPPED:
+		GameEventScript.PROPERTY_PURCHASE_SKIPPED:
 			_set_snapshot_event_message(_get_property_purchase_skipped_summary(payload))
 
 
@@ -620,7 +622,13 @@ func _append_snapshot_log_line(message: String) -> void:
 
 func _emit(event_type: String, payload: Dictionary) -> void:
 	_record_snapshot_ui_summary(event_type, payload)
-	EventBus.emit_game_event(GameEvent.new(event_type, payload))
+	var event_bus: Variant = _get_event_bus()
+	if event_bus != null:
+		event_bus.emit_game_event(GameEventScript.new(event_type, payload))
+
+
+func _get_event_bus() -> Variant:
+	return get_node_or_null("/root/EventBus")
 
 
 func _get_tile_name(tile_data: BoardTileData) -> String:

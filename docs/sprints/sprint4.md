@@ -1,6 +1,7 @@
 # Sprint4
 
-Start date: TBD
+Start date: 2026-06-28
+Closeout date: 2026-06-29
 
 ## Sprint Goal
 
@@ -42,12 +43,12 @@ Issue workflow:
 
 | Backlog ID | Issue | Status | Work item | Acceptance |
 | --- | --- | --- | --- | --- |
-| PB-031 | [#42](https://github.com/benson94879453/rich-war-online/issues/42) | In Progress | Record action/effect foundation planning baseline | Sprint4 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
-| PB-032 | [#43](https://github.com/benson94879453/rich-war-online/issues/43) | Planned | Introduce ActionDispatcher baseline | Existing roll, route choice, Buy, and Skip actions can flow through a single dispatch entry point while Host authority remains intact. |
-| PB-033 | [#44](https://github.com/benson94879453/rich-war-online/issues/44) | Planned | Introduce EffectService baseline | Current tile money effects keep working through a shared effect service entry point that can later support cards, events, statuses, and buildings. |
-| PB-034 | [#45](https://github.com/benson94879453/rich-war-online/issues/45) | Planned | Expand TurnSystem FSM baseline | Turn phase vocabulary supports explicit future intervention windows while existing movement, route, property, and rent flows remain stable. |
-| PB-035 | [#46](https://github.com/benson94879453/rich-war-online/issues/46) | Planned | Add GameState snapshot reserved fields | Future hand, deck, discard, status, pending-intervention, and game-over fields have stable defaults and survive snapshot round-trip. |
-| PB-036 | [#47](https://github.com/benson94879453/rich-war-online/issues/47) | Planned | Add scenario smoke baseline | At least one narrow scenario smoke path exists and is documented as the extension point for later event/building/card scenarios. |
+| PB-031 | [#42](https://github.com/benson94879453/rich-war-online/issues/42) | Done | Record action/effect foundation planning baseline | Sprint4 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
+| PB-032 | [#43](https://github.com/benson94879453/rich-war-online/issues/43) | Done | Introduce ActionDispatcher baseline | Existing roll, route choice, Buy, and Skip actions can flow through a single dispatch entry point while Host authority remains intact. |
+| PB-033 | [#44](https://github.com/benson94879453/rich-war-online/issues/44) | Done | Introduce EffectService baseline | Current tile money effects keep working through a shared effect service entry point that can later support cards, events, statuses, and buildings. |
+| PB-034 | [#45](https://github.com/benson94879453/rich-war-online/issues/45) | Done | Expand TurnSystem FSM baseline | Turn phase vocabulary supports explicit future intervention windows while existing movement, route, property, and rent flows remain stable. |
+| PB-035 | [#46](https://github.com/benson94879453/rich-war-online/issues/46) | Done | Add GameState snapshot reserved fields | Future hand, deck, discard, status, pending-intervention, and game-over fields have stable defaults and survive snapshot round-trip. |
+| PB-036 | [#47](https://github.com/benson94879453/rich-war-online/issues/47) | Done | Add scenario smoke baseline | At least one narrow scenario smoke path exists and is documented as the extension point for later event/building/card scenarios. |
 
 ## Recommended Order
 
@@ -97,3 +98,5 @@ Manual checks should be recorded only if actually executed:
 ## Review Notes
 
 Sprint4 is an architecture-foundation sprint, not a feature-expansion sprint. The expected output is a safer path into `v0.3-event-building-loop`, where a small event or special-building slice can later be implemented without pushing more game rules directly into `GameManager`, `NetworkManager`, or scene UI code.
+
+Closeout evidence is recorded in `docs/sprints/sprint4_review.md`.
