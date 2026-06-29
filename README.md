@@ -128,6 +128,7 @@ res://
       scenario_10_roll_local_action_pipeline.gd
     smoke_action_dispatcher.gd
     smoke_event_service.gd
+    smoke_event_landing_binding.gd
     smoke_effect_service.gd
     smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
@@ -167,6 +168,12 @@ Run the event service smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_event_service.gd
+```
+
+Run the event landing binding smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_event_landing_binding.gd
 ```
 
 Run the TurnSystem FSM smoke check with:

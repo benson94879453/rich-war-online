@@ -3,7 +3,9 @@ class_name EventService
 
 
 const EVENT_GAIN_MONEY := &"prototype_gain_money"
+const EVENT_STARQ_CHANCE := &"starq_chance"
 const SOURCE_EVENT := &"event"
+const PROTOTYPE_CHANCE_MONEY_DELTA := 25
 
 const CONTEXT_PLAYER := "player"
 const CONTEXT_EVENT_DEFINITION := "event_definition"
@@ -24,6 +26,22 @@ func apply_event(event_definition: Variant, context: Dictionary = {}) -> Variant
 		return _create_noop_result(event_definition)
 
 	return _apply_money_event(player, event_definition)
+
+
+func create_event_for_tile(tile_data: BoardTileData) -> Variant:
+	if tile_data == null:
+		return null
+
+	match tile_data.effect_id:
+		EVENT_STARQ_CHANCE:
+			return EventDefinitionScript.new(
+				EVENT_STARQ_CHANCE,
+				tile_data.display_name,
+				EffectServiceScript.EFFECT_MONEY_DELTA,
+				PROTOTYPE_CHANCE_MONEY_DELTA
+			)
+
+	return null
 
 
 func create_prototype_money_event(money_delta: int) -> Variant:
