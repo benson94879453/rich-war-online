@@ -4,6 +4,7 @@ extends Node
 const SNAPSHOT_TURN_PHASE_KEY := "turn_phase"
 const SNAPSHOT_UI_SUMMARY_KEY := "ui_summary"
 const SnapshotSummaryTrackerScript := preload("res://scripts/core/SnapshotSummaryTracker.gd")
+const PropertyResolutionServiceScript := preload("res://scripts/core/PropertyResolutionService.gd")
 const UI_SUMMARY_LAST_DICE_KEY := SnapshotSummaryTrackerScript.LAST_DICE_KEY
 const UI_SUMMARY_LAST_LANDING_KEY := SnapshotSummaryTrackerScript.LAST_LANDING_KEY
 const UI_SUMMARY_EVENT_MESSAGE_KEY := SnapshotSummaryTrackerScript.EVENT_MESSAGE_KEY
@@ -20,6 +21,7 @@ var board_navigator: BoardNavigator = BoardNavigator.new()
 var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
 var effect_service: Variant = EffectServiceScript.new()
 var event_service: Variant = EventServiceScript.new()
+var property_service: Variant = PropertyResolutionServiceScript.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _snapshot_summary: SnapshotSummaryTracker = SnapshotSummaryTrackerScript.new()
@@ -139,35 +141,7 @@ func request_buy_pending_property() -> bool:
 	if not state.has_pending_property_purchase():
 		return false
 
-	var player_id: int = int(state.pending_property_purchase["player_id"])
-	var tile_index: int = int(state.pending_property_purchase["tile_index"])
-	var player: PlayerState = state.get_player(player_id)
-	var tile_data: BoardTileData = board_data.get_tile(tile_index)
-	if player == null or tile_data == null:
-		_complete_property_decision(player_id)
-		return true
-
-	if player.money < tile_data.price:
-		_emit(GameEventScript.PROPERTY_PURCHASE_SKIPPED, {
-			"player_id": player_id,
-			"tile_index": tile_index,
-			"tile_name": tile_data.display_name,
-			"reason": "insufficient_funds",
-		})
-		_complete_property_decision(player_id)
-		return true
-
-	player.add_money(-tile_data.price)
-	state.set_property_owner(tile_index, player_id)
-	_emit(GameEventScript.PROPERTY_PURCHASED, {
-		"player_id": player_id,
-		"tile_index": tile_index,
-		"tile_name": tile_data.display_name,
-		"price": tile_data.price,
-		"money": player.money,
-	})
-	_complete_property_decision(player_id)
-	return true
+	return _finish_property_resolution(property_service.buy_pending_property(state, board_data))
 
 
 func request_skip_pending_property() -> bool:
@@ -177,17 +151,7 @@ func request_skip_pending_property() -> bool:
 	if not state.has_pending_property_purchase():
 		return false
 
-	var player_id: int = int(state.pending_property_purchase["player_id"])
-	var tile_index: int = int(state.pending_property_purchase["tile_index"])
-	var tile_data: BoardTileData = board_data.get_tile(tile_index)
-	_emit(GameEventScript.PROPERTY_PURCHASE_SKIPPED, {
-		"player_id": player_id,
-		"tile_index": tile_index,
-		"tile_name": _get_tile_name(tile_data),
-		"reason": "skipped",
-	})
-	_complete_property_decision(player_id)
-	return true
+	return _finish_property_resolution(property_service.skip_pending_property(state, board_data))
 
 
 func get_state_snapshot() -> Dictionary:
@@ -318,10 +282,10 @@ func _resolve_grid_landing(player: PlayerState, player_map_state: PlayerMapState
 		"tile_name": _get_tile_name(tile_data) if tile_data != null else "Road",
 		"dice_value": dice_value,
 	})
-	if _begin_property_purchase_if_available(player.player_id, tile_data):
+	if _offer_property_purchase_if_available(player.player_id, tile_data):
 		return
 
-	_apply_rent_if_owed(player, tile_data)
+	_emit_property_event(property_service.apply_rent_if_owed(state, player, tile_data))
 	_resolve_tile_effect(player, tile_data)
 	_complete_turn(player.player_id)
 
@@ -385,56 +349,42 @@ func _resolve_landing(player: PlayerState, dice_value: int) -> void:
 		"dice_value": dice_value,
 	})
 
-	if _begin_property_purchase_if_available(player.player_id, landed_tile_data):
+	if _offer_property_purchase_if_available(player.player_id, landed_tile_data):
 		return
 
-	_apply_rent_if_owed(player, landed_tile_data)
+	_emit_property_event(property_service.apply_rent_if_owed(state, player, landed_tile_data))
 	_resolve_tile_effect(player, landed_tile_data)
 	_complete_turn(player.player_id)
 
 
-func _begin_property_purchase_if_available(player_id: int, tile_data: BoardTileData) -> bool:
-	if tile_data == null or not tile_data.is_property():
+func _offer_property_purchase_if_available(player_id: int, tile_data: BoardTileData) -> bool:
+	var result: Dictionary = property_service.create_purchase_offer(state, player_id, tile_data)
+	if not bool(result.get(PropertyResolutionServiceScript.RESULT_HANDLED, false)):
 		return false
 
-	if state.get_property_owner(tile_data.index) != -1:
-		return false
-
-	state.begin_property_purchase(player_id, tile_data.index)
 	turn_system.begin_property_decision()
-	_emit(GameEventScript.PROPERTY_PURCHASE_OFFERED, {
-		"player_id": player_id,
-		"tile_index": tile_data.index,
-		"tile_name": tile_data.display_name,
-		"price": tile_data.price,
-	})
+	_emit_property_event(result)
 	return true
 
 
-func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
-	if payer == null or tile_data == null or not tile_data.is_property():
+func _finish_property_resolution(result: Dictionary) -> bool:
+	if not bool(result.get(PropertyResolutionServiceScript.RESULT_HANDLED, false)):
+		return false
+
+	_emit_property_event(result)
+	if bool(result.get(PropertyResolutionServiceScript.RESULT_COMPLETES_TURN, false)):
+		_complete_turn(int(result.get(PropertyResolutionServiceScript.RESULT_PLAYER_ID, -1)))
+
+	return true
+
+
+func _emit_property_event(result: Dictionary) -> void:
+	var event_type: String = str(result.get(PropertyResolutionServiceScript.RESULT_EVENT_TYPE, ""))
+	if event_type.is_empty():
 		return
 
-	var owner_id: int = state.get_property_owner(tile_data.index)
-	if owner_id == -1 or owner_id == payer.player_id:
-		return
-
-	var property_owner: PlayerState = state.get_player(owner_id)
-	var rent_amount: int = tile_data.get_base_rent()
-	if property_owner == null or rent_amount <= 0:
-		return
-
-	payer.add_money(-rent_amount)
-	property_owner.add_money(rent_amount)
-	_emit(GameEventScript.RENT_PAID, {
-		"payer_id": payer.player_id,
-		"owner_id": owner_id,
-		"tile_index": tile_data.index,
-		"tile_name": tile_data.display_name,
-		"amount": rent_amount,
-		"payer_money": payer.money,
-		"owner_money": property_owner.money,
-	})
+	var event_payload: Dictionary = result.get(PropertyResolutionServiceScript.RESULT_EVENT_PAYLOAD, {})
+	_emit(event_type, event_payload)
 
 
 func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void:

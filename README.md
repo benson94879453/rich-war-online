@@ -133,6 +133,7 @@ res://
     smoke_effect_service.gd
     smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
+    smoke_property_resolution_service.gd
     smoke_snapshot_summary_tracker.gd
     smoke_turn_system_fsm.gd
     smoke_map_validation.gd
@@ -182,6 +183,12 @@ Run the event landing binding smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_event_landing_binding.gd
+```
+
+Run the property resolution service smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_property_resolution_service.gd
 ```
 
 Run the TurnSystem FSM smoke check with:
