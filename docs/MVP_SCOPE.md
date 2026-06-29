@@ -80,6 +80,7 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 - Stale property-decision rejection display is filtered when the local state has already advanced.
 - Snapshot join sync includes turn, positions, money, property ownership, dice, landing text, event text, and recent log lines.
 - `P0.3` same-seat reconnect baseline exists through a prototype reconnect token, Host seat reservation, and fresh snapshot sync.
+- First narrow event slice exists: active `starq_chance` landings resolve through `EventService` and have headless scenario smoke coverage.
 - Manual network checklist exists and is promoted into the formal baseline checklist.
 
 ## Not Completed
@@ -105,17 +106,17 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 
 Sprint goal:
 
-> Establish `v0.2-online-core` confidence by defining and running a 2-4 player networked 10-turn acceptance pass.
+> Reduce `GameManager` god-object risk before expanding special buildings, full event decks, cards, or intervention windows.
 
 Decision:
 
-> Same-seat reconnect is now part of the prototype baseline. Before adding events, buildings, or cards, validate that the online core can sustain repeated networked turns without divergence or stuck pending actions.
+> The first event slice is now part of the prototype baseline. Before adding larger gameplay systems, extract stable `GameManager` responsibilities behind narrower service boundaries so future event/building/card work does not keep increasing orchestration risk.
 
 Candidate stories:
 
-- As a tester, I can run a documented networked 10-turn scenario.
-- As Host and Client, core Roll, route choice, Buy, Skip, rent, snapshot, and reconnect flows remain synchronized during a networked run.
-- As a tester, I can see enough debug status to record Host-authoritative failures clearly.
-- As a developer, I can decide whether the next sprint can move toward events/buildings or needs more online-core stabilization.
+- As a developer, I can change snapshot UI summary behavior behind a focused component without changing snapshot payload shape.
+- As a developer, I can change property purchase/rent rules behind a focused boundary without changing Buy, Skip, or rent behavior.
+- As a developer, I can evolve landing resolution behind a focused boundary before adding special buildings or card timing windows.
+- As a tester, I can keep the existing scenario, event, snapshot, reconnect, and map smoke checks green through the refactor.
 
-See `docs/sprints/sprint3.md` for the Sprint3 baseline and acceptance direction.
+See `docs/sprints/sprint6.md` for the Sprint6 baseline and acceptance direction.
