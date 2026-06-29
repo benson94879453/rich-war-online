@@ -103,4 +103,6 @@ Sprint2 completed `P0.3-reconnect-baseline`: same-seat reconnect through a proto
 
 Sprint3 completed `v0.2-online-core` stability: it defined and ran a networked 10-turn acceptance pass, reviewed Host-authoritative failure visibility, and recorded readiness to move into a narrowly scoped gameplay-system sprint.
 
-Next recommended direction: start `v0.3-event-building-loop` with a small event or special-building slice. Cards should still wait until event/building resolution proves stable under Host authority.
+Sprint5 completed the first narrow `v0.3-event-building-loop` slice: a deterministic prototype event can resolve through a reusable event service, active `starq_chance` landings route through the Host-authoritative landing pipeline, and scenario smoke coverage proves snapshot round-trip behavior.
+
+Next recommended direction: run Sprint6 as a `GameManager` decomposition sprint before adding special buildings or card timing windows. Cards should still wait until event/building boundaries are clearer and stable under Host authority.
