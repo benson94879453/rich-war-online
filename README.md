@@ -123,6 +123,7 @@ res://
   tools/
     smoke_action_dispatcher.gd
     smoke_effect_service.gd
+    smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
     smoke_turn_system_fsm.gd
     smoke_map_validation.gd
@@ -154,6 +155,12 @@ Run the TurnSystem FSM smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_turn_system_fsm.gd
+```
+
+Run the GameState reserved defaults smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_game_state_reserved_defaults.gd
 ```
 
 Run the GameState snapshot smoke check with:
