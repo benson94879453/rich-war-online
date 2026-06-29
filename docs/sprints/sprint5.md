@@ -43,11 +43,11 @@ Issue workflow:
 
 | Backlog ID | Issue | Status | Work item | Acceptance |
 | --- | --- | --- | --- | --- |
-| PB-037 | [#56](https://github.com/benson94879453/rich-war-online/issues/56) | In Progress | Record event/building loop planning baseline | Sprint5 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
-| PB-038 | [#57](https://github.com/benson94879453/rich-war-online/issues/57) | Planned | Add EventDefinition and EventService baseline | A small event service can resolve one fixed money event through the existing effect/result path without adding full decks or cards. |
-| PB-039 | [#58](https://github.com/benson94879453/rich-war-online/issues/58) | Planned | Bind prototype event resolution to active tile landings | One selected active-map event-like tile resolves through the event service while existing property, rent, route, and money tile behavior stays stable. |
-| PB-040 | [#61](https://github.com/benson94879453/rich-war-online/issues/61) | Planned | Add event landing scenario smoke coverage | A headless scenario smoke path proves the selected event landing resolves and round-trips through snapshot state. |
-| PB-041 | [#59](https://github.com/benson94879453/rich-war-online/issues/59) | Planned | Record event/building loop acceptance review | Sprint5 evidence is summarized with a clear recommendation for moving from first event slice toward buildings or card timing windows. |
+| PB-037 | [#56](https://github.com/benson94879453/rich-war-online/issues/56) | Done | Record event/building loop planning baseline | Sprint5 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
+| PB-038 | [#57](https://github.com/benson94879453/rich-war-online/issues/57) | Done | Add EventDefinition and EventService baseline | A small event service can resolve one fixed money event through the existing effect/result path without adding full decks or cards. |
+| PB-039 | [#58](https://github.com/benson94879453/rich-war-online/issues/58) | Done | Bind prototype event resolution to active tile landings | One selected active-map event-like tile resolves through the event service while existing property, rent, route, and money tile behavior stays stable. |
+| PB-040 | [#61](https://github.com/benson94879453/rich-war-online/issues/61) | Done | Add event landing scenario smoke coverage | A headless scenario smoke path proves the selected event landing resolves and round-trips through snapshot state. |
+| PB-041 | [#59](https://github.com/benson94879453/rich-war-online/issues/59) | Done | Record event/building loop acceptance review | Sprint5 evidence is summarized with a clear recommendation for moving from first event slice toward buildings or card timing windows. |
 
 ## Recommended Order
 
@@ -98,3 +98,5 @@ Manual checks should be recorded only if actually executed:
 ## Review Notes
 
 Sprint5 is the first gameplay-system expansion after the online core and Sprint4 architecture foundation. The expected output is not a complete event/building system; it is a narrow proof that a new Host-authoritative gameplay effect can enter the turn loop, mutate state safely, appear in validation, and leave the project ready for a broader special-building or card-window sprint.
+
+Closeout evidence is recorded in [sprint5_review.md](sprint5_review.md).
