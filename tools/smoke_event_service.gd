@@ -61,6 +61,21 @@ func _run_smoke_check() -> void:
 	_expect_equal(unsupported_result.rejection_reason, "missing event definition", "missing event rejection reason is explicit")
 	_expect_equal(player.money, 1075, "missing event does not change player money")
 
+	var chance_tile := BoardTileData.new()
+	chance_tile.index = 98
+	chance_tile.display_name = "Chance"
+	chance_tile.tile_type = BoardTileData.TileType.CHANCE
+	chance_tile.effect_id = EventServiceScript.EVENT_STARQ_CHANCE
+	var tile_event: Variant = service.create_event_for_tile(chance_tile)
+	_expect_true(tile_event != null, "starq chance tile creates a prototype event")
+	if tile_event != null:
+		_expect_equal(tile_event.event_id, EventServiceScript.EVENT_STARQ_CHANCE, "starq chance event preserves tile effect id")
+		_expect_equal(tile_event.money_delta, EventServiceScript.PROTOTYPE_CHANCE_MONEY_DELTA, "starq chance event uses deterministic prototype delta")
+
+	var unsupported_tile := BoardTileData.new()
+	unsupported_tile.effect_id = &"starq_type_13"
+	_expect_equal(service.create_event_for_tile(unsupported_tile), null, "unsupported special placeholder has no prototype event")
+
 
 func _expect_true(value: bool, label: String) -> void:
 	if value:
