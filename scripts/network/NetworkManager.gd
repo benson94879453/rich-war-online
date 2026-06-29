@@ -11,10 +11,12 @@ signal state_snapshot_received(snapshot: Dictionary)
 const DEFAULT_PORT := 8910
 const DEFAULT_URL := "ws://127.0.0.1:%d" % DEFAULT_PORT
 
-const INTENT_ROLL := "roll"
-const INTENT_GRID_ROUTE_CHOICE := "grid_route_choice"
-const INTENT_BUY_PROPERTY := "buy_property"
-const INTENT_SKIP_PROPERTY := "skip_property"
+const ActionDispatcherScript := preload("res://scripts/core/ActionDispatcher.gd")
+const GameEventScript := preload("res://scripts/core/GameEvent.gd")
+const INTENT_ROLL := ActionDispatcherScript.ACTION_ROLL
+const INTENT_GRID_ROUTE_CHOICE := ActionDispatcherScript.ACTION_GRID_ROUTE_CHOICE
+const INTENT_BUY_PROPERTY := ActionDispatcherScript.ACTION_BUY_PROPERTY
+const INTENT_SKIP_PROPERTY := ActionDispatcherScript.ACTION_SKIP_PROPERTY
 const SNAPSHOT_REVISION_KEY := "_network_state_revision"
 const ASSIGNMENT_STATUS_JOINED := "joined"
 const ASSIGNMENT_STATUS_RECONNECTED := "reconnected"
@@ -43,6 +45,7 @@ var _state_revision: int = 0
 var _last_received_state_revision: int = -1
 var _local_assignment_status_message: String = ""
 var _status_message: String = "Offline"
+var _action_dispatcher := ActionDispatcherScript.new()
 
 
 func _ready() -> void:
@@ -51,7 +54,9 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
-	EventBus.game_event_emitted.connect(_on_game_event)
+	var event_bus: Variant = _get_event_bus()
+	if event_bus != null:
+		event_bus.game_event_emitted.connect(_on_game_event)
 	_emit_status(_status_message)
 
 
@@ -237,7 +242,9 @@ func _assign_local_player(player_id: int, assignment_status: String = ASSIGNMENT
 
 @rpc("authority", "call_remote", "reliable")
 func _receive_game_event(event_data: Dictionary) -> void:
-	EventBus.emit_game_event(GameEvent.from_dict(event_data))
+	var event_bus: Variant = _get_event_bus()
+	if event_bus != null:
+		event_bus.emit_game_event(GameEventScript.from_dict(event_data))
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -264,73 +271,18 @@ func _receive_intent_rejected_with_request(intent_type: String, reason: String, 
 
 
 func _execute_intent(sender_peer_id: int, request_id: int, intent_type: String, payload: Dictionary = {}) -> bool:
-	var rejection_reason := _get_intent_rejection_reason(sender_peer_id, intent_type)
-	if not rejection_reason.is_empty():
+	var dispatch_result := _action_dispatcher.submit_action(sender_peer_id, intent_type, payload, Callable(self, "_can_peer_control_player"))
+	if not bool(dispatch_result.get(ActionDispatcherScript.RESULT_ACCEPTED, false)):
+		var rejection_reason := str(dispatch_result.get(ActionDispatcherScript.RESULT_REJECTION_REASON, "game rejected intent"))
 		_reject_intent(sender_peer_id, intent_type, rejection_reason, request_id)
 		return false
 
-	var accepted := false
-	match intent_type:
-		INTENT_ROLL:
-			accepted = GameManager.request_roll()
-		INTENT_GRID_ROUTE_CHOICE:
-			accepted = GameManager.request_grid_route_choice(int(payload.get("direction", BoardConnectionData.Direction.NONE)))
-		INTENT_BUY_PROPERTY:
-			accepted = GameManager.request_buy_pending_property()
-		INTENT_SKIP_PROPERTY:
-			accepted = GameManager.request_skip_pending_property()
-		_:
-			accepted = false
-
-	if not accepted:
-		_reject_intent(sender_peer_id, intent_type, "game rejected intent", request_id)
-		return false
-
 	_accept_intent(sender_peer_id, intent_type, request_id)
-	if accepted and is_host():
+	if is_host():
 		_state_revision += 1
 		_broadcast_state_snapshot()
 
-	return accepted
-
-
-func _get_intent_rejection_reason(sender_peer_id: int, intent_type: String) -> String:
-	if GameManager.state == null:
-		return "game not ready"
-
-	if mode == NetworkMode.OFFLINE:
-		return ""
-
-	if not _is_known_intent(intent_type):
-		return "unknown intent"
-
-	match intent_type:
-		INTENT_ROLL:
-			var current_player_id := GameManager.state.get_current_player_id()
-			if not _can_peer_control_player(sender_peer_id, current_player_id):
-				return "not your turn"
-			if not GameManager.turn_system.can_roll():
-				return "roll is not available"
-			if GameManager.state.has_pending_movement() or GameManager.state.has_pending_grid_movement():
-				return "movement is pending"
-		INTENT_GRID_ROUTE_CHOICE:
-			var route_player_id := GameManager.state.get_current_player_id()
-			if not _can_peer_control_player(sender_peer_id, route_player_id):
-				return "not your route choice"
-			if not GameManager.turn_system.can_resolve_route_choice():
-				return "route choice is not available"
-			if not GameManager.state.has_pending_grid_movement():
-				return "no grid movement pending"
-		INTENT_BUY_PROPERTY, INTENT_SKIP_PROPERTY:
-			if not GameManager.state.has_pending_property_purchase():
-				return "no property decision pending"
-			var property_player_id := int(GameManager.state.pending_property_purchase.get("player_id", -1))
-			if not _can_peer_control_player(sender_peer_id, property_player_id):
-				return "not your property decision"
-			if not GameManager.turn_system.can_resolve_property_decision():
-				return "property decision is not available"
-
-	return ""
+	return true
 
 
 func _on_peer_connected(peer_id: int) -> void:
@@ -380,7 +332,7 @@ func _on_server_disconnected() -> void:
 	_emit_status("Server disconnected")
 
 
-func _on_game_event(event: GameEvent) -> void:
+func _on_game_event(event: Variant) -> void:
 	if is_host():
 		_receive_game_event.rpc(event.to_dict())
 
@@ -398,14 +350,6 @@ func _can_peer_control_player(peer_id: int, player_id: int) -> bool:
 		return mode == NetworkMode.HOST and host_can_control_open_seats and _is_player_seat_open(player_id)
 
 	return int(_player_id_by_peer_id.get(peer_id, -1)) == player_id
-
-
-func _is_known_intent(intent_type: String) -> bool:
-	match intent_type:
-		INTENT_ROLL, INTENT_GRID_ROUTE_CHOICE, INTENT_BUY_PROPERTY, INTENT_SKIP_PROPERTY:
-			return true
-
-	return false
 
 
 func _accept_intent(peer_id: int, intent_type: String, request_id: int) -> void:
@@ -453,8 +397,9 @@ func _release_peer_assignment(peer_id: int) -> void:
 
 
 func _get_next_available_player_id() -> int:
-	if GameManager.state != null:
-		for player_id in GameManager.state.player_order:
+	var game_manager: Variant = _get_game_manager()
+	if game_manager != null and game_manager.state != null:
+		for player_id in game_manager.state.player_order:
 			if _is_player_seat_open(int(player_id)):
 				return int(player_id)
 
@@ -466,23 +411,37 @@ func _get_next_available_player_id() -> int:
 
 
 func _send_state_snapshot(peer_id: int) -> void:
-	if GameManager.state == null:
+	var game_manager: Variant = _get_game_manager()
+	if game_manager == null or game_manager.state == null:
 		return
 
 	_receive_state_snapshot.rpc_id(peer_id, _create_state_snapshot())
 
 
 func _broadcast_state_snapshot() -> void:
-	if GameManager.state == null:
+	var game_manager: Variant = _get_game_manager()
+	if game_manager == null or game_manager.state == null:
 		return
 
 	_receive_state_snapshot.rpc(_create_state_snapshot())
 
 
 func _create_state_snapshot() -> Dictionary:
-	var snapshot := GameManager.get_state_snapshot()
+	var game_manager: Variant = _get_game_manager()
+	if game_manager == null:
+		return {}
+
+	var snapshot: Dictionary = game_manager.get_state_snapshot()
 	snapshot[SNAPSHOT_REVISION_KEY] = _state_revision
 	return snapshot
+
+
+func _get_game_manager() -> Variant:
+	return get_node_or_null("/root/GameManager")
+
+
+func _get_event_bus() -> Variant:
+	return get_node_or_null("/root/EventBus")
 
 
 func _ensure_local_reconnect_token() -> String:

@@ -2,11 +2,14 @@ extends RefCounted
 class_name TileEffectResolver
 
 
+var _effect_service: EffectService = EffectService.new()
+
+
 func resolve(player: PlayerState, tile_data: BoardTileData) -> TileEffectResolution:
 	var resolution := TileEffectResolution.new()
-	if player == null or tile_data == null or not tile_data.has_money_effect():
+	var result: EffectResult = _effect_service.apply_tile_effect(player, tile_data)
+	if not result.was_applied:
 		return resolution
 
-	player.add_money(tile_data.money_delta)
-	resolution.apply_money_change(tile_data.money_delta, player.money)
+	resolution.apply_money_change(result.money_delta, result.money_after)
 	return resolution
