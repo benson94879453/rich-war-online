@@ -106,6 +106,7 @@ res://
       ActionDispatcher.gd
       EventDefinition.gd
       EventService.gd
+      LandingResolutionService.gd
       Board.gd
       EffectResult.gd
       EffectService.gd

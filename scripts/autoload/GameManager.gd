@@ -5,6 +5,7 @@ const SNAPSHOT_TURN_PHASE_KEY := "turn_phase"
 const SNAPSHOT_UI_SUMMARY_KEY := "ui_summary"
 const SnapshotSummaryTrackerScript := preload("res://scripts/core/SnapshotSummaryTracker.gd")
 const PropertyResolutionServiceScript := preload("res://scripts/core/PropertyResolutionService.gd")
+const LandingResolutionServiceScript := preload("res://scripts/core/LandingResolutionService.gd")
 const UI_SUMMARY_LAST_DICE_KEY := SnapshotSummaryTrackerScript.LAST_DICE_KEY
 const UI_SUMMARY_LAST_LANDING_KEY := SnapshotSummaryTrackerScript.LAST_LANDING_KEY
 const UI_SUMMARY_EVENT_MESSAGE_KEY := SnapshotSummaryTrackerScript.EVENT_MESSAGE_KEY
@@ -22,6 +23,7 @@ var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
 var effect_service: Variant = EffectServiceScript.new()
 var event_service: Variant = EventServiceScript.new()
 var property_service: Variant = PropertyResolutionServiceScript.new()
+var landing_resolution_service: Variant = LandingResolutionServiceScript.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _snapshot_summary: SnapshotSummaryTracker = SnapshotSummaryTrackerScript.new()
@@ -267,27 +269,16 @@ func _emit_grid_movement_if_needed(player_id: int, previous_grid_position: Vecto
 
 func _resolve_grid_landing(player: PlayerState, player_map_state: PlayerMapState, dice_value: int) -> void:
 	turn_system.begin_landing_resolve()
-	var map_grid: BoardMapGridData = board_data.get_map_grid()
-	var node_id: int = map_grid.get_node_id(player_map_state.grid_position) if map_grid != null else -1
-	var tile_index: int = board_data.get_tile_index_for_source_node_id(node_id)
-	var tile_data: BoardTileData = board_data.get_tile(tile_index) if tile_index >= 0 else null
-	if tile_data != null:
-		player.move_to_tile(tile_index)
-
-	_emit(GameEventScript.MAP_PLAYER_LANDED, {
-		"player_id": player.player_id,
-		"grid_position": player_map_state.grid_position,
-		"node_id": node_id,
-		"tile_index": tile_index,
-		"tile_name": _get_tile_name(tile_data) if tile_data != null else "Road",
-		"dice_value": dice_value,
-	})
-	if _offer_property_purchase_if_available(player.player_id, tile_data):
-		return
-
-	_emit_property_event(property_service.apply_rent_if_owed(state, player, tile_data))
-	_resolve_tile_effect(player, tile_data)
-	_complete_turn(player.player_id)
+	_finish_landing_resolution(landing_resolution_service.resolve_grid_landing(
+		state,
+		board_data,
+		player,
+		player_map_state,
+		dice_value,
+		property_service,
+		effect_service,
+		event_service
+	))
 
 
 func _uses_grid_map() -> bool:
@@ -341,30 +332,37 @@ func _advance_pending_movement() -> bool:
 
 func _resolve_landing(player: PlayerState, dice_value: int) -> void:
 	turn_system.begin_landing_resolve()
-	var landed_tile_data: BoardTileData = board_data.get_tile(player.tile_index)
-	_emit(GameEventScript.PLAYER_LANDED, {
-		"player_id": player.player_id,
-		"tile_index": player.tile_index,
-		"tile_name": _get_tile_name(landed_tile_data),
-		"dice_value": dice_value,
-	})
+	_finish_landing_resolution(landing_resolution_service.resolve_board_landing(
+		state,
+		board_data,
+		player,
+		dice_value,
+		property_service,
+		effect_service,
+		event_service
+	))
 
-	if _offer_property_purchase_if_available(player.player_id, landed_tile_data):
+
+func _finish_landing_resolution(result: Dictionary) -> void:
+	_emit_landing_warnings(result)
+	if bool(result.get(LandingResolutionServiceScript.RESULT_PAUSES_FOR_PROPERTY, false)):
+		turn_system.begin_property_decision()
+		_emit_landing_events(result)
 		return
 
-	_emit_property_event(property_service.apply_rent_if_owed(state, player, landed_tile_data))
-	_resolve_tile_effect(player, landed_tile_data)
-	_complete_turn(player.player_id)
+	_emit_landing_events(result)
+	if bool(result.get(LandingResolutionServiceScript.RESULT_COMPLETES_TURN, false)):
+		_complete_turn(int(result.get(LandingResolutionServiceScript.RESULT_PLAYER_ID, -1)))
 
 
-func _offer_property_purchase_if_available(player_id: int, tile_data: BoardTileData) -> bool:
-	var result: Dictionary = property_service.create_purchase_offer(state, player_id, tile_data)
-	if not bool(result.get(PropertyResolutionServiceScript.RESULT_HANDLED, false)):
-		return false
+func _emit_landing_warnings(result: Dictionary) -> void:
+	for warning in result.get(LandingResolutionServiceScript.RESULT_WARNINGS, []):
+		push_warning(str(warning))
 
-	turn_system.begin_property_decision()
-	_emit_property_event(result)
-	return true
+
+func _emit_landing_events(result: Dictionary) -> void:
+	for event in result.get(LandingResolutionServiceScript.RESULT_EVENTS, []):
+		_emit(str(event.get(LandingResolutionServiceScript.EVENT_TYPE, "")), event.get(LandingResolutionServiceScript.EVENT_PAYLOAD, {}))
 
 
 func _finish_property_resolution(result: Dictionary) -> bool:
@@ -388,43 +386,9 @@ func _emit_property_event(result: Dictionary) -> void:
 
 
 func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void:
-	if _resolve_event_tile(player, tile_data):
-		return
-
-	var result: Variant = effect_service.apply_tile_effect(player, tile_data)
-	_emit_effect_result(player, tile_data, result)
-
-
-func _resolve_event_tile(player: PlayerState, tile_data: BoardTileData) -> bool:
-	var event_definition: Variant = event_service.create_event_for_tile(tile_data)
-	if event_definition == null:
-		return false
-
-	var result: Variant = event_service.apply_event(event_definition, {
-		EventServiceScript.CONTEXT_PLAYER: player,
-	})
-	_emit_effect_result(player, tile_data, result)
-	return true
-
-
-func _emit_effect_result(player: PlayerState, tile_data: BoardTileData, result: Variant) -> void:
-	if result.is_rejected():
-		push_warning("Tile effect %s was rejected: %s" % [str(result.effect_id), result.rejection_reason])
-		return
-
-	if player == null or tile_data == null or not result.was_applied:
-		return
-
-	_emit(GameEventScript.TILE_EFFECT_RESOLVED, {
-		"player_id": player.player_id,
-		"tile_index": tile_data.index,
-		"tile_name": tile_data.display_name,
-		"effect_id": result.effect_id,
-		"source_type": result.source_type,
-		"source_id": result.source_id,
-		"money_delta": result.money_delta,
-		"money_after": result.money_after,
-	})
+	var result: Dictionary = landing_resolution_service.resolve_tile_effect(player, tile_data, effect_service, event_service)
+	_emit_landing_warnings(result)
+	_emit_landing_events(result)
 
 
 func _complete_property_decision(player_id: int) -> void:
@@ -457,10 +421,3 @@ func _emit(event_type: String, payload: Dictionary) -> void:
 
 func _get_event_bus() -> Variant:
 	return get_node_or_null("/root/EventBus")
-
-
-func _get_tile_name(tile_data: BoardTileData) -> String:
-	if tile_data == null:
-		return "Unknown"
-
-	return tile_data.display_name
