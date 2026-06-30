@@ -7,6 +7,9 @@
 *.tres*.tmp
 *.res*.tmp
 
+# Headless smoke scripts can generate local Godot script UIDs.
+tools/smoke_*.gd.uid
+
 # Godot-specific ignores
 .import/
 export.cfg
