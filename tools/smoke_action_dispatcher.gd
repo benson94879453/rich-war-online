@@ -45,6 +45,7 @@ func _run_smoke_check() -> void:
 		"roll rejects when peer cannot control current player"
 	)
 
+	game_manager.state.clear_pending_intervention()
 	_expect_rejected(
 		_dispatcher.submit_action(1, ActionDispatcherScript.ACTION_PLAY_CARD, _create_card_payload(1), Callable(self, "_can_control_player")),
 		"no card intervention pending",
@@ -67,7 +68,7 @@ func _run_smoke_check() -> void:
 	_allowed_player_id = 1
 	_expect_rejected(
 		_dispatcher.submit_action(1, ActionDispatcherScript.ACTION_PLAY_CARD, _create_card_payload(2), Callable(self, "_can_control_player")),
-		"not active card player",
+		"not your card action",
 		"card play rejects when the actor does not match the pending intervention"
 	)
 	_expect_rejected(
@@ -89,6 +90,7 @@ func _run_smoke_check() -> void:
 		_dispatcher.submit_action(1, ActionDispatcherScript.ACTION_PLAY_CARD, _create_card_payload(1), Callable(self, "_can_control_player")),
 		"card play accepts a valid pending intervention envelope"
 	)
+	_begin_card_intervention()
 	_expect_true(
 		network_manager.submit_play_card(1, CardServiceScript.CARD_PROTOTYPE_PRE_ROLL_GRANT, CardDefinitionScript.TIMING_PRE_ROLL, 0),
 		"NetworkManager card envelope accepts a valid pending intervention"

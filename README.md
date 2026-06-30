@@ -140,6 +140,7 @@ res://
       scenario_event_landing_pipeline.gd
     smoke_action_dispatcher.gd
     smoke_card_service.gd
+    smoke_prototype_pre_roll_card.gd
     smoke_event_service.gd
     smoke_event_landing_binding.gd
     smoke_effect_service.gd
@@ -203,6 +204,12 @@ Run the card service smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_card_service.gd
+```
+
+Run the prototype pre-roll card smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_prototype_pre_roll_card.gd
 ```
 
 Run the event service smoke check with:

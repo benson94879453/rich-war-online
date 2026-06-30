@@ -123,6 +123,9 @@ func _get_card_action_rejection_reason(game_manager: Variant, sender_peer_id: in
 	if not game_manager.state.has_pending_intervention():
 		return "no card intervention pending"
 
+	if not game_manager.turn_system.can_roll() or game_manager.state.has_pending_movement() or game_manager.state.has_pending_grid_movement() or game_manager.state.has_pending_property_purchase():
+		return "card window is not available"
+
 	var player_id := int(payload.get(PAYLOAD_PLAYER_ID, -1))
 	if player_id < 0:
 		return "missing card player"
@@ -162,6 +165,8 @@ func _get_card_action_rejection_reason(game_manager: Variant, sender_peer_id: in
 		var target_player_id := int(payload.get(PAYLOAD_TARGET_PLAYER_ID, -1))
 		var pending_target_player_id := int(pending_intervention.get(PENDING_TARGET_PLAYER_ID, -1))
 		if target_player_id != pending_target_player_id:
+			return "invalid card target"
+		if game_manager.state.get_player(target_player_id) == null:
 			return "invalid card target"
 
 	return ""
