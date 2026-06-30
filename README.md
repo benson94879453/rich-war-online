@@ -89,6 +89,13 @@ res://
     sprints/sprint3_networked_10_turn_acceptance.md
     sprints/sprint3_networked_10_turn_evidence.md
     sprints/sprint3_readiness_review.md
+    sprints/sprint4.md
+    sprints/sprint4_review.md
+    sprints/sprint5.md
+    sprints/sprint5_review.md
+    sprints/sprint6.md
+    sprints/sprint6_review.md
+    sprints/sprint7.md
   scenes/
     StarQGame.tscn
     Board.tscn

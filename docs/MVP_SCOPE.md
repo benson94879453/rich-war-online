@@ -106,17 +106,17 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 
 Sprint goal:
 
-> Reduce `GameManager` god-object risk before expanding special buildings, full event decks, cards, or intervention windows.
+> Establish the first `v0.4-card-window-loop` baseline by proving one narrow Host-authoritative card intervention window.
 
 Decision:
 
-> The first event slice is now part of the prototype baseline. Before adding larger gameplay systems, extract stable `GameManager` responsibilities behind narrower service boundaries so future event/building/card work does not keep increasing orchestration risk.
+> Sprint6 completed the `GameManager` decomposition baseline. The next sprint can start v0.4 with a deliberately small card slice: one deterministic pre-roll intervention card, one validation path, one effect path, and one scenario smoke.
 
 Candidate stories:
 
-- As a developer, I can change snapshot UI summary behavior behind a focused component without changing snapshot payload shape.
-- As a developer, I can change property purchase/rent rules behind a focused boundary without changing Buy, Skip, or rent behavior.
-- As a developer, I can evolve landing resolution behind a focused boundary before adding special buildings or card timing windows.
-- As a tester, I can keep the existing scenario, event, snapshot, reconnect, and map smoke checks green through the refactor.
+- As a developer, I can define a prototype card behind a focused data/service boundary.
+- As a developer, I can use existing snapshot card fields for prototype hand, discard, and pending intervention state without changing their serialized keys.
+- As a developer, I can submit a narrow card-play action through Host-authoritative validation.
+- As a tester, I can run a headless scenario that proves one valid pre-roll card play and normal turn continuation.
 
-See `docs/sprints/sprint6.md` for the Sprint6 baseline and acceptance direction.
+See `docs/sprints/sprint7.md` for the Sprint7 baseline and acceptance direction.

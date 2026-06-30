@@ -105,4 +105,6 @@ Sprint3 completed `v0.2-online-core` stability: it defined and ran a networked 1
 
 Sprint5 completed the first narrow `v0.3-event-building-loop` slice: a deterministic prototype event can resolve through a reusable event service, active `starq_chance` landings route through the Host-authoritative landing pipeline, and scenario smoke coverage proves snapshot round-trip behavior.
 
-Next recommended direction: run Sprint6 as a `GameManager` decomposition sprint before adding special buildings or card timing windows. Cards should still wait until event/building boundaries are clearer and stable under Host authority.
+Sprint6 completed the `GameManager` decomposition baseline: snapshot summary tracking, property purchase/rent rules, and landing resolution now live behind focused boundaries while existing smoke and scenario checks remain stable.
+
+Next recommended direction: run Sprint7 as the first `v0.4-card-window-loop` planning and implementation sprint. The first slice should prove one deterministic pre-roll intervention card under Host authority before expanding into full decks, counter-card chains, timers, or final UI.
