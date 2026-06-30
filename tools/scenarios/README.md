@@ -28,4 +28,12 @@ Run the event landing pipeline scenario with:
 godot --headless --path . --script res://tools/scenarios/scenario_event_landing_pipeline.gd
 ```
 
+Run the card window pipeline scenario with:
+
+```bash
+godot --headless --path . --script res://tools/scenarios/scenario_card_window_pipeline.gd
+```
+
 The event landing scenario targets the active-map `starq_chance` effect id. It finds a deterministic grid roll path to the selected event tile, submits the roll through `ActionDispatcher`, verifies the prototype event money result, and checks snapshot round-trip state. Later building, card, or intervention-window scenarios should follow this pattern: force one narrow active-board path, submit through the public action pipeline, assert exact state deltas, and then round-trip the snapshot fields owned by that slice.
+
+The card window scenario starts from the active board, verifies the deterministic prototype pre-roll card window, proves an invalid actor rejection, resolves the valid card play through `ActionDispatcher`, checks the effect/consume/discard state, round-trips the owned card snapshot fields, and confirms the current player can continue into a roll.
