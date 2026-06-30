@@ -142,6 +142,7 @@ res://
     smoke_event_service.gd
     smoke_event_landing_binding.gd
     smoke_effect_service.gd
+    smoke_game_state_card_state.gd
     smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
     smoke_property_resolution_service.gd
@@ -200,6 +201,12 @@ Run the event landing binding smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_event_landing_binding.gd
+```
+
+Run the GameState card-state smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_game_state_card_state.gd
 ```
 
 Run the property resolution service smoke check with:

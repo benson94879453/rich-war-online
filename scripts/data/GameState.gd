@@ -149,6 +149,86 @@ func set_property_owner(tile_index: int, player_id: int) -> void:
 	property_owner_by_tile[tile_index] = player_id
 
 
+func get_player_hand(player_id: int) -> Array:
+	return _duplicate_array(hands_by_player_id.get(player_id, []))
+
+
+func set_player_hand(player_id: int, card_ids: Array) -> void:
+	hands_by_player_id[player_id] = _duplicate_array(card_ids)
+
+
+func add_card_to_hand(player_id: int, card_id: StringName) -> void:
+	var hand: Array = get_player_hand(player_id)
+	hand.append(card_id)
+	set_player_hand(player_id, hand)
+
+
+func has_card_in_hand(player_id: int, card_id: StringName) -> bool:
+	return get_player_hand(player_id).has(card_id)
+
+
+func remove_card_from_hand(player_id: int, card_id: StringName) -> bool:
+	var hand: Array = get_player_hand(player_id)
+	var card_index: int = hand.find(card_id)
+	if card_index < 0:
+		return false
+
+	hand.remove_at(card_index)
+	set_player_hand(player_id, hand)
+	return true
+
+
+func get_deck_cards(deck_id: StringName) -> Array:
+	var deck_state: Dictionary = deck_states.get(deck_id, {})
+	return _duplicate_array(deck_state.get("cards", []))
+
+
+func set_deck_cards(deck_id: StringName, card_ids: Array) -> void:
+	var deck_state: Dictionary = deck_states.get(deck_id, {}).duplicate(true)
+	deck_state["cards"] = _duplicate_array(card_ids)
+	deck_states[deck_id] = deck_state
+
+
+func get_discard_pile(pile_id: StringName) -> Array:
+	return _duplicate_array(discard_piles.get(pile_id, []))
+
+
+func set_discard_pile(pile_id: StringName, card_ids: Array) -> void:
+	discard_piles[pile_id] = _duplicate_array(card_ids)
+
+
+func add_card_to_discard(pile_id: StringName, card_id: StringName) -> void:
+	var pile: Array = get_discard_pile(pile_id)
+	pile.append(card_id)
+	set_discard_pile(pile_id, pile)
+
+
+func begin_pending_intervention(
+		window_id: StringName,
+		acting_player_id: int,
+		eligible_player_ids: Array,
+		target_player_id: int = -1,
+		card_id: StringName = &""
+) -> void:
+	pending_intervention = {
+		"window_id": window_id,
+		"acting_player_id": acting_player_id,
+		"eligible_players": _duplicate_array(eligible_player_ids),
+	}
+	if target_player_id >= 0:
+		pending_intervention["target_player_id"] = target_player_id
+	if card_id != &"":
+		pending_intervention["card_id"] = card_id
+
+
+func clear_pending_intervention() -> void:
+	pending_intervention.clear()
+
+
+func has_pending_intervention() -> bool:
+	return not pending_intervention.is_empty()
+
+
 func to_dict() -> Dictionary:
 	var players: Array[Dictionary] = []
 	var pending_movement_data: Dictionary = {}
@@ -230,3 +310,11 @@ static func _duplicate_dictionary(value: Variant) -> Dictionary:
 		return dictionary.duplicate(true)
 
 	return {}
+
+
+static func _duplicate_array(value: Variant) -> Array:
+	if value is Array:
+		var array: Array = value
+		return array.duplicate(true)
+
+	return []
