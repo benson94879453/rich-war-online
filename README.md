@@ -138,6 +138,7 @@ res://
       README.md
       scenario_10_roll_local_action_pipeline.gd
       scenario_event_landing_pipeline.gd
+      scenario_card_window_pipeline.gd
     smoke_action_dispatcher.gd
     smoke_card_service.gd
     smoke_prototype_pre_roll_card.gd
@@ -186,6 +187,12 @@ Run the event landing pipeline scenario with:
 
 ```bash
 godot --headless --path . --script res://tools/scenarios/scenario_event_landing_pipeline.gd
+```
+
+Run the card window pipeline scenario with:
+
+```bash
+godot --headless --path . --script res://tools/scenarios/scenario_card_window_pipeline.gd
 ```
 
 Run the action dispatcher smoke check with a Godot command-line runner:
