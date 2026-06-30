@@ -14,6 +14,9 @@ const UI_SUMMARY_LOG_LINE_LIMIT := SnapshotSummaryTrackerScript.LOG_LINE_LIMIT
 const EffectServiceScript := preload("res://scripts/core/EffectService.gd")
 const EventServiceScript := preload("res://scripts/core/EventService.gd")
 const GameEventScript := preload("res://scripts/core/GameEvent.gd")
+const CardServiceScript := preload("res://scripts/core/CardService.gd")
+const CardDefinitionScript := preload("res://scripts/core/CardDefinition.gd")
+const PROTOTYPE_CARD_DISCARD_PILE := &"prototype_card_discard"
 
 
 var state: GameState
@@ -22,6 +25,7 @@ var board_navigator: BoardNavigator = BoardNavigator.new()
 var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
 var effect_service: Variant = EffectServiceScript.new()
 var event_service: Variant = EventServiceScript.new()
+var card_service: Variant = CardServiceScript.new()
 var property_service: Variant = PropertyResolutionServiceScript.new()
 var landing_resolution_service: Variant = LandingResolutionServiceScript.new()
 var turn_system: TurnSystem = TurnSystem.new()
@@ -47,6 +51,8 @@ func start_local_game(players: Array[PlayerState], data: BoardData) -> void:
 	if state.has_pending_movement() and state.pending_movement.is_waiting_for_route_choice():
 		turn_system.begin_route_decision()
 
+	_seed_prototype_pre_roll_card()
+	_prepare_prototype_pre_roll_window()
 	_emit(GameEventScript.GAME_STARTED, {"state": state.to_dict()})
 	_emit(GameEventScript.ROUND_STARTED, {"round": state.current_round})
 	_emit_current_turn_started()
@@ -56,6 +62,7 @@ func request_roll() -> bool:
 	if state == null or board_data == null or not turn_system.can_roll() or state.has_pending_movement() or state.has_pending_grid_movement():
 		return false
 
+	state.clear_pending_intervention()
 	if _uses_grid_map():
 		return _request_grid_roll()
 
@@ -154,6 +161,37 @@ func request_skip_pending_property() -> bool:
 		return false
 
 	return _finish_property_resolution(property_service.skip_pending_property(state, board_data))
+
+
+func request_play_card_intent(payload: Dictionary) -> bool:
+	if state == null or not state.has_pending_intervention() or not turn_system.can_roll():
+		return false
+
+	var acting_player_id := int(payload.get("player_id", -1))
+	var card_id := _get_string_name(payload.get("card_id", &""))
+	var window_id := _get_string_name(payload.get("window_id", &""))
+	var target_player_id := int(payload.get("target_player_id", state.get_current_player_id()))
+	if acting_player_id < 0 or card_id != CardServiceScript.CARD_PROTOTYPE_PRE_ROLL_GRANT or window_id != CardDefinitionScript.TIMING_PRE_ROLL:
+		return false
+
+	var card_definition: CardDefinition = card_service.create_prototype_pre_roll_card()
+	var target_player: PlayerState = state.get_player(target_player_id)
+	if target_player == null:
+		return false
+
+	if not state.remove_card_from_hand(acting_player_id, card_id):
+		return false
+
+	var result: Variant = card_service.apply_card(card_definition, {
+		CardServiceScript.CONTEXT_TARGET_PLAYER: target_player,
+	})
+	if result == null or not bool(result.was_applied):
+		state.add_card_to_hand(acting_player_id, card_id)
+		return false
+
+	state.add_card_to_discard(PROTOTYPE_CARD_DISCARD_PILE, card_id)
+	state.clear_pending_intervention()
+	return true
 
 
 func get_state_snapshot() -> Dictionary:
@@ -406,6 +444,7 @@ func _complete_turn(player_id: int) -> void:
 
 
 func _emit_current_turn_started() -> void:
+	_prepare_prototype_pre_roll_window()
 	_emit(GameEventScript.TURN_STARTED, {
 		"player_id": state.get_current_player_id(),
 		"round": state.current_round,
@@ -421,3 +460,62 @@ func _emit(event_type: String, payload: Dictionary) -> void:
 
 func _get_event_bus() -> Variant:
 	return get_node_or_null("/root/EventBus")
+
+
+func _seed_prototype_pre_roll_card() -> void:
+	if state == null or state.player_order.size() < 2:
+		return
+
+	var current_player_id := state.get_current_player_id()
+	for player_id_value in state.player_order:
+		var player_id := int(player_id_value)
+		if player_id != current_player_id:
+			state.add_card_to_hand(player_id, CardServiceScript.CARD_PROTOTYPE_PRE_ROLL_GRANT)
+			return
+
+
+func _prepare_prototype_pre_roll_window() -> void:
+	if state == null:
+		return
+
+	state.clear_pending_intervention()
+	if not turn_system.can_roll() or state.has_pending_movement() or state.has_pending_grid_movement() or state.has_pending_property_purchase():
+		return
+
+	var target_player_id := state.get_current_player_id()
+	var acting_player_id := _get_prototype_pre_roll_actor(target_player_id)
+	if acting_player_id < 0:
+		return
+
+	state.begin_pending_intervention(
+		CardDefinitionScript.TIMING_PRE_ROLL,
+		acting_player_id,
+		[acting_player_id],
+		target_player_id,
+		CardServiceScript.CARD_PROTOTYPE_PRE_ROLL_GRANT
+	)
+
+
+func _get_prototype_pre_roll_actor(target_player_id: int) -> int:
+	if state == null:
+		return -1
+
+	for player_id_value in state.player_order:
+		var player_id := int(player_id_value)
+		if player_id == target_player_id:
+			continue
+		if state.has_card_in_hand(player_id, CardServiceScript.CARD_PROTOTYPE_PRE_ROLL_GRANT):
+			return player_id
+
+	return -1
+
+
+func _get_string_name(value: Variant) -> StringName:
+	if value == null:
+		return &""
+
+	var text := str(value).strip_edges()
+	if text.is_empty():
+		return &""
+
+	return StringName(text)

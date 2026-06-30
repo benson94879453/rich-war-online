@@ -35,6 +35,7 @@ Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale G
 - Serializable `GameState` snapshots with turn phase and UI summary data.
 - Host / Client WebSocket prototype with intent-based Roll, Buy, Skip, and route choice requests.
 - Host-authoritative validation for player control and pending actions.
+- Narrow Host-authoritative card-play intent envelope for the prototype intervention-window path.
 - Snapshot sync when a Client joins an active Host.
 - Basic network debug UI for Host / Join / status and Host open-seat control.
 - Same-seat reconnect for prototype Clients using a persisted local reconnect token.
@@ -89,6 +90,14 @@ res://
     sprints/sprint3_networked_10_turn_acceptance.md
     sprints/sprint3_networked_10_turn_evidence.md
     sprints/sprint3_readiness_review.md
+    sprints/sprint4.md
+    sprints/sprint4_review.md
+    sprints/sprint5.md
+    sprints/sprint5_review.md
+    sprints/sprint6.md
+    sprints/sprint6_review.md
+    sprints/sprint7.md
+    sprints/sprint7_review.md
   scenes/
     StarQGame.tscn
     Board.tscn
@@ -104,6 +113,8 @@ res://
     core/
       StarQGame.gd
       ActionDispatcher.gd
+      CardDefinition.gd
+      CardService.gd
       EventDefinition.gd
       EventService.gd
       LandingResolutionService.gd
@@ -128,10 +139,14 @@ res://
       README.md
       scenario_10_roll_local_action_pipeline.gd
       scenario_event_landing_pipeline.gd
+      scenario_card_window_pipeline.gd
     smoke_action_dispatcher.gd
+    smoke_card_service.gd
+    smoke_prototype_pre_roll_card.gd
     smoke_event_service.gd
     smoke_event_landing_binding.gd
     smoke_effect_service.gd
+    smoke_game_state_card_state.gd
     smoke_game_state_reserved_defaults.gd
     smoke_game_state_snapshot.gd
     smoke_property_resolution_service.gd
@@ -150,6 +165,19 @@ res://
 
 ## Smoke Checks
 
+The minimal card-play action payload shape is:
+
+```gdscript
+{
+	"player_id": int,
+	"card_id": StringName,
+	"window_id": StringName,
+	"target_player_id": int,
+}
+```
+
+`target_player_id` is included when the pending intervention window has a fixed target. Sprint7 keeps this as an intent envelope; card effect resolution, card consumption, and visible card UI are handled by later Sprint7 slices.
+
 Run the local 10-roll action pipeline scenario with:
 
 ```bash
@@ -160,6 +188,12 @@ Run the event landing pipeline scenario with:
 
 ```bash
 godot --headless --path . --script res://tools/scenarios/scenario_event_landing_pipeline.gd
+```
+
+Run the card window pipeline scenario with:
+
+```bash
+godot --headless --path . --script res://tools/scenarios/scenario_card_window_pipeline.gd
 ```
 
 Run the action dispatcher smoke check with a Godot command-line runner:
@@ -174,6 +208,18 @@ Run the effect service smoke check with:
 godot --headless --path . --script res://tools/smoke_effect_service.gd
 ```
 
+Run the card service smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_card_service.gd
+```
+
+Run the prototype pre-roll card smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_prototype_pre_roll_card.gd
+```
+
 Run the event service smoke check with:
 
 ```bash
@@ -184,6 +230,12 @@ Run the event landing binding smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_event_landing_binding.gd
+```
+
+Run the GameState card-state smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_game_state_card_state.gd
 ```
 
 Run the property resolution service smoke check with:
