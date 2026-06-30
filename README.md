@@ -35,6 +35,7 @@ Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale G
 - Serializable `GameState` snapshots with turn phase and UI summary data.
 - Host / Client WebSocket prototype with intent-based Roll, Buy, Skip, and route choice requests.
 - Host-authoritative validation for player control and pending actions.
+- Narrow Host-authoritative card-play intent envelope for the prototype intervention-window path.
 - Snapshot sync when a Client joins an active Host.
 - Basic network debug UI for Host / Join / status and Host open-seat control.
 - Same-seat reconnect for prototype Clients using a persisted local reconnect token.
@@ -160,6 +161,19 @@ res://
 5. Keep changes small enough to match one Scrum story or bug fix.
 
 ## Smoke Checks
+
+The minimal card-play action payload shape is:
+
+```gdscript
+{
+	"player_id": int,
+	"card_id": StringName,
+	"window_id": StringName,
+	"target_player_id": int,
+}
+```
+
+`target_player_id` is included when the pending intervention window has a fixed target. Sprint7 keeps this as an intent envelope; card effect resolution, card consumption, and visible card UI are handled by later Sprint7 slices.
 
 Run the local 10-roll action pipeline scenario with:
 
