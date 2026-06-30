@@ -3,11 +3,14 @@ extends Node
 
 const SNAPSHOT_TURN_PHASE_KEY := "turn_phase"
 const SNAPSHOT_UI_SUMMARY_KEY := "ui_summary"
-const UI_SUMMARY_LAST_DICE_KEY := "last_dice_roll"
-const UI_SUMMARY_LAST_LANDING_KEY := "last_landing"
-const UI_SUMMARY_EVENT_MESSAGE_KEY := "event_message"
-const UI_SUMMARY_LOG_LINES_KEY := "log_lines"
-const UI_SUMMARY_LOG_LINE_LIMIT := 20
+const SnapshotSummaryTrackerScript := preload("res://scripts/core/SnapshotSummaryTracker.gd")
+const PropertyResolutionServiceScript := preload("res://scripts/core/PropertyResolutionService.gd")
+const LandingResolutionServiceScript := preload("res://scripts/core/LandingResolutionService.gd")
+const UI_SUMMARY_LAST_DICE_KEY := SnapshotSummaryTrackerScript.LAST_DICE_KEY
+const UI_SUMMARY_LAST_LANDING_KEY := SnapshotSummaryTrackerScript.LAST_LANDING_KEY
+const UI_SUMMARY_EVENT_MESSAGE_KEY := SnapshotSummaryTrackerScript.EVENT_MESSAGE_KEY
+const UI_SUMMARY_LOG_LINES_KEY := SnapshotSummaryTrackerScript.LOG_LINES_KEY
+const UI_SUMMARY_LOG_LINE_LIMIT := SnapshotSummaryTrackerScript.LOG_LINE_LIMIT
 const EffectServiceScript := preload("res://scripts/core/EffectService.gd")
 const EventServiceScript := preload("res://scripts/core/EventService.gd")
 const GameEventScript := preload("res://scripts/core/GameEvent.gd")
@@ -19,12 +22,11 @@ var board_navigator: BoardNavigator = BoardNavigator.new()
 var grid_movement_system: GridMovementSystem = GridMovementSystem.new()
 var effect_service: Variant = EffectServiceScript.new()
 var event_service: Variant = EventServiceScript.new()
+var property_service: Variant = PropertyResolutionServiceScript.new()
+var landing_resolution_service: Variant = LandingResolutionServiceScript.new()
 var turn_system: TurnSystem = TurnSystem.new()
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var _last_dice_roll: Dictionary = {}
-var _last_landing: Dictionary = {}
-var _last_event_message: String = ""
-var _snapshot_log_lines: Array[String] = []
+var _snapshot_summary: SnapshotSummaryTracker = SnapshotSummaryTrackerScript.new()
 
 
 func _ready() -> void:
@@ -32,7 +34,7 @@ func _ready() -> void:
 
 
 func start_local_game(players: Array[PlayerState], data: BoardData) -> void:
-	_reset_snapshot_ui_summary()
+	_snapshot_summary.reset()
 	state = GameState.new()
 	state.initialize(players)
 	board_data = data
@@ -141,35 +143,7 @@ func request_buy_pending_property() -> bool:
 	if not state.has_pending_property_purchase():
 		return false
 
-	var player_id: int = int(state.pending_property_purchase["player_id"])
-	var tile_index: int = int(state.pending_property_purchase["tile_index"])
-	var player: PlayerState = state.get_player(player_id)
-	var tile_data: BoardTileData = board_data.get_tile(tile_index)
-	if player == null or tile_data == null:
-		_complete_property_decision(player_id)
-		return true
-
-	if player.money < tile_data.price:
-		_emit(GameEventScript.PROPERTY_PURCHASE_SKIPPED, {
-			"player_id": player_id,
-			"tile_index": tile_index,
-			"tile_name": tile_data.display_name,
-			"reason": "insufficient_funds",
-		})
-		_complete_property_decision(player_id)
-		return true
-
-	player.add_money(-tile_data.price)
-	state.set_property_owner(tile_index, player_id)
-	_emit(GameEventScript.PROPERTY_PURCHASED, {
-		"player_id": player_id,
-		"tile_index": tile_index,
-		"tile_name": tile_data.display_name,
-		"price": tile_data.price,
-		"money": player.money,
-	})
-	_complete_property_decision(player_id)
-	return true
+	return _finish_property_resolution(property_service.buy_pending_property(state, board_data))
 
 
 func request_skip_pending_property() -> bool:
@@ -179,17 +153,7 @@ func request_skip_pending_property() -> bool:
 	if not state.has_pending_property_purchase():
 		return false
 
-	var player_id: int = int(state.pending_property_purchase["player_id"])
-	var tile_index: int = int(state.pending_property_purchase["tile_index"])
-	var tile_data: BoardTileData = board_data.get_tile(tile_index)
-	_emit(GameEventScript.PROPERTY_PURCHASE_SKIPPED, {
-		"player_id": player_id,
-		"tile_index": tile_index,
-		"tile_name": _get_tile_name(tile_data),
-		"reason": "skipped",
-	})
-	_complete_property_decision(player_id)
-	return true
+	return _finish_property_resolution(property_service.skip_pending_property(state, board_data))
 
 
 func get_state_snapshot() -> Dictionary:
@@ -198,7 +162,7 @@ func get_state_snapshot() -> Dictionary:
 
 	var snapshot := state.to_dict()
 	snapshot[SNAPSHOT_TURN_PHASE_KEY] = turn_system.get_phase()
-	snapshot[SNAPSHOT_UI_SUMMARY_KEY] = _get_snapshot_ui_summary()
+	snapshot[SNAPSHOT_UI_SUMMARY_KEY] = _snapshot_summary.to_dict()
 	return snapshot
 
 
@@ -210,7 +174,7 @@ func restore_state_snapshot(snapshot: Dictionary, data: BoardData) -> void:
 	if map_grid != null:
 		grid_movement_system.set_map_grid(map_grid)
 	_restore_turn_phase_from_snapshot(snapshot)
-	_restore_snapshot_ui_summary(snapshot)
+	_snapshot_summary.restore(snapshot.get(SNAPSHOT_UI_SUMMARY_KEY, {}))
 
 
 func _restore_turn_phase_from_snapshot(snapshot: Dictionary) -> void:
@@ -305,27 +269,16 @@ func _emit_grid_movement_if_needed(player_id: int, previous_grid_position: Vecto
 
 func _resolve_grid_landing(player: PlayerState, player_map_state: PlayerMapState, dice_value: int) -> void:
 	turn_system.begin_landing_resolve()
-	var map_grid: BoardMapGridData = board_data.get_map_grid()
-	var node_id: int = map_grid.get_node_id(player_map_state.grid_position) if map_grid != null else -1
-	var tile_index: int = board_data.get_tile_index_for_source_node_id(node_id)
-	var tile_data: BoardTileData = board_data.get_tile(tile_index) if tile_index >= 0 else null
-	if tile_data != null:
-		player.move_to_tile(tile_index)
-
-	_emit(GameEventScript.MAP_PLAYER_LANDED, {
-		"player_id": player.player_id,
-		"grid_position": player_map_state.grid_position,
-		"node_id": node_id,
-		"tile_index": tile_index,
-		"tile_name": _get_tile_name(tile_data) if tile_data != null else "Road",
-		"dice_value": dice_value,
-	})
-	if _begin_property_purchase_if_available(player.player_id, tile_data):
-		return
-
-	_apply_rent_if_owed(player, tile_data)
-	_resolve_tile_effect(player, tile_data)
-	_complete_turn(player.player_id)
+	_finish_landing_resolution(landing_resolution_service.resolve_grid_landing(
+		state,
+		board_data,
+		player,
+		player_map_state,
+		dice_value,
+		property_service,
+		effect_service,
+		event_service
+	))
 
 
 func _uses_grid_map() -> bool:
@@ -379,104 +332,63 @@ func _advance_pending_movement() -> bool:
 
 func _resolve_landing(player: PlayerState, dice_value: int) -> void:
 	turn_system.begin_landing_resolve()
-	var landed_tile_data: BoardTileData = board_data.get_tile(player.tile_index)
-	_emit(GameEventScript.PLAYER_LANDED, {
-		"player_id": player.player_id,
-		"tile_index": player.tile_index,
-		"tile_name": _get_tile_name(landed_tile_data),
-		"dice_value": dice_value,
-	})
+	_finish_landing_resolution(landing_resolution_service.resolve_board_landing(
+		state,
+		board_data,
+		player,
+		dice_value,
+		property_service,
+		effect_service,
+		event_service
+	))
 
-	if _begin_property_purchase_if_available(player.player_id, landed_tile_data):
+
+func _finish_landing_resolution(result: Dictionary) -> void:
+	_emit_landing_warnings(result)
+	if bool(result.get(LandingResolutionServiceScript.RESULT_PAUSES_FOR_PROPERTY, false)):
+		turn_system.begin_property_decision()
+		_emit_landing_events(result)
 		return
 
-	_apply_rent_if_owed(player, landed_tile_data)
-	_resolve_tile_effect(player, landed_tile_data)
-	_complete_turn(player.player_id)
+	_emit_landing_events(result)
+	if bool(result.get(LandingResolutionServiceScript.RESULT_COMPLETES_TURN, false)):
+		_complete_turn(int(result.get(LandingResolutionServiceScript.RESULT_PLAYER_ID, -1)))
 
 
-func _begin_property_purchase_if_available(player_id: int, tile_data: BoardTileData) -> bool:
-	if tile_data == null or not tile_data.is_property():
+func _emit_landing_warnings(result: Dictionary) -> void:
+	for warning in result.get(LandingResolutionServiceScript.RESULT_WARNINGS, []):
+		push_warning(str(warning))
+
+
+func _emit_landing_events(result: Dictionary) -> void:
+	for event in result.get(LandingResolutionServiceScript.RESULT_EVENTS, []):
+		_emit(str(event.get(LandingResolutionServiceScript.EVENT_TYPE, "")), event.get(LandingResolutionServiceScript.EVENT_PAYLOAD, {}))
+
+
+func _finish_property_resolution(result: Dictionary) -> bool:
+	if not bool(result.get(PropertyResolutionServiceScript.RESULT_HANDLED, false)):
 		return false
 
-	if state.get_property_owner(tile_data.index) != -1:
-		return false
+	_emit_property_event(result)
+	if bool(result.get(PropertyResolutionServiceScript.RESULT_COMPLETES_TURN, false)):
+		_complete_turn(int(result.get(PropertyResolutionServiceScript.RESULT_PLAYER_ID, -1)))
 
-	state.begin_property_purchase(player_id, tile_data.index)
-	turn_system.begin_property_decision()
-	_emit(GameEventScript.PROPERTY_PURCHASE_OFFERED, {
-		"player_id": player_id,
-		"tile_index": tile_data.index,
-		"tile_name": tile_data.display_name,
-		"price": tile_data.price,
-	})
 	return true
 
 
-func _apply_rent_if_owed(payer: PlayerState, tile_data: BoardTileData) -> void:
-	if payer == null or tile_data == null or not tile_data.is_property():
+func _emit_property_event(result: Dictionary) -> void:
+	var event_type: String = str(result.get(PropertyResolutionServiceScript.RESULT_EVENT_TYPE, ""))
+	if event_type.is_empty():
 		return
 
-	var owner_id: int = state.get_property_owner(tile_data.index)
-	if owner_id == -1 or owner_id == payer.player_id:
-		return
-
-	var property_owner: PlayerState = state.get_player(owner_id)
-	var rent_amount: int = tile_data.get_base_rent()
-	if property_owner == null or rent_amount <= 0:
-		return
-
-	payer.add_money(-rent_amount)
-	property_owner.add_money(rent_amount)
-	_emit(GameEventScript.RENT_PAID, {
-		"payer_id": payer.player_id,
-		"owner_id": owner_id,
-		"tile_index": tile_data.index,
-		"tile_name": tile_data.display_name,
-		"amount": rent_amount,
-		"payer_money": payer.money,
-		"owner_money": property_owner.money,
-	})
+	var event_payload: Dictionary = result.get(PropertyResolutionServiceScript.RESULT_EVENT_PAYLOAD, {})
+	_emit(event_type, event_payload)
 
 
 func _resolve_tile_effect(player: PlayerState, tile_data: BoardTileData) -> void:
-	if _resolve_event_tile(player, tile_data):
-		return
-
-	var result: Variant = effect_service.apply_tile_effect(player, tile_data)
-	_emit_effect_result(player, tile_data, result)
-
-
-func _resolve_event_tile(player: PlayerState, tile_data: BoardTileData) -> bool:
-	var event_definition: Variant = event_service.create_event_for_tile(tile_data)
-	if event_definition == null:
-		return false
-
-	var result: Variant = event_service.apply_event(event_definition, {
-		EventServiceScript.CONTEXT_PLAYER: player,
-	})
-	_emit_effect_result(player, tile_data, result)
-	return true
-
-
-func _emit_effect_result(player: PlayerState, tile_data: BoardTileData, result: Variant) -> void:
-	if result.is_rejected():
-		push_warning("Tile effect %s was rejected: %s" % [str(result.effect_id), result.rejection_reason])
-		return
-
-	if player == null or tile_data == null or not result.was_applied:
-		return
-
-	_emit(GameEventScript.TILE_EFFECT_RESOLVED, {
-		"player_id": player.player_id,
-		"tile_index": tile_data.index,
-		"tile_name": tile_data.display_name,
-		"effect_id": result.effect_id,
-		"source_type": result.source_type,
-		"source_id": result.source_id,
-		"money_delta": result.money_delta,
-		"money_after": result.money_after,
-	})
+	var result: Dictionary = landing_resolution_service.resolve_tile_effect(player, tile_data, effect_service, event_service)
+	_emit_landing_warnings(result)
+	_emit_landing_events(result)
 
 
 func _complete_property_decision(player_id: int) -> void:
@@ -500,151 +412,8 @@ func _emit_current_turn_started() -> void:
 	})
 
 
-func _reset_snapshot_ui_summary() -> void:
-	_last_dice_roll.clear()
-	_last_landing.clear()
-	_last_event_message = ""
-	_snapshot_log_lines.clear()
-
-
-func _get_snapshot_ui_summary() -> Dictionary:
-	return {
-		UI_SUMMARY_LAST_DICE_KEY: _last_dice_roll.duplicate(true),
-		UI_SUMMARY_LAST_LANDING_KEY: _last_landing.duplicate(true),
-		UI_SUMMARY_EVENT_MESSAGE_KEY: _last_event_message,
-		UI_SUMMARY_LOG_LINES_KEY: _snapshot_log_lines.duplicate(),
-	}
-
-
-func _restore_snapshot_ui_summary(snapshot: Dictionary) -> void:
-	_reset_snapshot_ui_summary()
-	var raw_summary: Variant = snapshot.get(SNAPSHOT_UI_SUMMARY_KEY, {})
-	if not (raw_summary is Dictionary):
-		return
-
-	var summary: Dictionary = raw_summary
-	var raw_dice: Variant = summary.get(UI_SUMMARY_LAST_DICE_KEY, {})
-	if raw_dice is Dictionary:
-		var dice_summary: Dictionary = raw_dice
-		_last_dice_roll = dice_summary.duplicate(true)
-
-	var raw_landing: Variant = summary.get(UI_SUMMARY_LAST_LANDING_KEY, {})
-	if raw_landing is Dictionary:
-		var landing_summary: Dictionary = raw_landing
-		_last_landing = landing_summary.duplicate(true)
-
-	_last_event_message = str(summary.get(UI_SUMMARY_EVENT_MESSAGE_KEY, ""))
-	var raw_log_lines: Variant = summary.get(UI_SUMMARY_LOG_LINES_KEY, [])
-	if raw_log_lines is Array:
-		for raw_line in raw_log_lines:
-			_append_snapshot_log_line(str(raw_line))
-
-
-func _record_snapshot_ui_summary(event_type: String, payload: Dictionary) -> void:
-	match event_type:
-		GameEventScript.ROUND_STARTED:
-			_record_round_started_summary(payload)
-		GameEventScript.DICE_ROLLED:
-			_last_dice_roll = payload.duplicate(true)
-		GameEventScript.PLAYER_LANDED:
-			_last_landing = payload.duplicate(true)
-			_last_event_message = ""
-			_append_snapshot_log_line(_get_player_landed_summary(payload))
-		GameEventScript.MAP_PLAYER_LANDED:
-			_last_landing = payload.duplicate(true)
-			_last_event_message = ""
-			_append_snapshot_log_line(_get_map_player_landed_summary(payload))
-		GameEventScript.TILE_EFFECT_RESOLVED:
-			_set_snapshot_event_message(_get_tile_effect_summary(payload))
-		GameEventScript.RENT_PAID:
-			_set_snapshot_event_message(_get_rent_paid_summary(payload))
-		GameEventScript.PROPERTY_PURCHASE_OFFERED:
-			_set_snapshot_event_message(_get_property_purchase_offered_summary(payload))
-		GameEventScript.PROPERTY_PURCHASED:
-			_set_snapshot_event_message(_get_property_purchased_summary(payload))
-		GameEventScript.PROPERTY_PURCHASE_SKIPPED:
-			_set_snapshot_event_message(_get_property_purchase_skipped_summary(payload))
-
-
-func _record_round_started_summary(payload: Dictionary) -> void:
-	var round_number: int = int(payload.get("round", 1))
-	if round_number > 1:
-		_append_snapshot_log_line("Round %d begins" % round_number)
-
-
-func _get_player_landed_summary(payload: Dictionary) -> String:
-	var player_id: int = int(payload.get("player_id", -1))
-	var dice_value: int = int(payload.get("dice_value", 0))
-	var tile_index: int = int(payload.get("tile_index", -1))
-	var tile_name: String = str(payload.get("tile_name", "Unknown"))
-	return "P%d rolled %d -> tile %02d %s" % [player_id + 1, dice_value, tile_index, tile_name]
-
-
-func _get_map_player_landed_summary(payload: Dictionary) -> String:
-	var player_id: int = int(payload.get("player_id", -1))
-	var dice_value: int = int(payload.get("dice_value", 0))
-	var node_id: int = int(payload.get("node_id", -1))
-	var tile_name: String = str(payload.get("tile_name", "Unknown"))
-	return "P%d rolled %d -> node %d %s" % [player_id + 1, dice_value, node_id, tile_name]
-
-
-func _get_tile_effect_summary(payload: Dictionary) -> String:
-	var player_id: int = int(payload.get("player_id", -1))
-	var tile_name: String = str(payload.get("tile_name", "tile"))
-	var money_delta: int = int(payload.get("money_delta", 0))
-	var delta_text: String = "+$%d" % money_delta if money_delta >= 0 else "-$%d" % abs(money_delta)
-	var verb: String = "received" if money_delta >= 0 else "lost"
-	return "P%d %s %s on %s" % [player_id + 1, verb, delta_text, tile_name]
-
-
-func _get_rent_paid_summary(payload: Dictionary) -> String:
-	var payer_id: int = int(payload.get("payer_id", -1))
-	var owner_id: int = int(payload.get("owner_id", -1))
-	var amount: int = int(payload.get("amount", 0))
-	var tile_name: String = str(payload.get("tile_name", "property"))
-	return "P%d paid P%d $%d rent for %s" % [payer_id + 1, owner_id + 1, amount, tile_name]
-
-
-func _get_property_purchase_offered_summary(payload: Dictionary) -> String:
-	var player_id: int = int(payload.get("player_id", -1))
-	var tile_name: String = str(payload.get("tile_name", "property"))
-	var price: int = int(payload.get("price", 0))
-	return "P%d can buy %s for $%d" % [player_id + 1, tile_name, price]
-
-
-func _get_property_purchased_summary(payload: Dictionary) -> String:
-	var player_id: int = int(payload.get("player_id", -1))
-	var tile_name: String = str(payload.get("tile_name", "property"))
-	var price: int = int(payload.get("price", 0))
-	return "P%d bought %s for $%d" % [player_id + 1, tile_name, price]
-
-
-func _get_property_purchase_skipped_summary(payload: Dictionary) -> String:
-	var player_id: int = int(payload.get("player_id", -1))
-	var tile_name: String = str(payload.get("tile_name", "property"))
-	var reason: String = str(payload.get("reason", "skipped"))
-	if reason == "insufficient_funds":
-		return "P%d cannot afford %s" % [player_id + 1, tile_name]
-
-	return "P%d skipped %s" % [player_id + 1, tile_name]
-
-
-func _set_snapshot_event_message(message: String) -> void:
-	_last_event_message = message
-	_append_snapshot_log_line(message)
-
-
-func _append_snapshot_log_line(message: String) -> void:
-	if message.is_empty():
-		return
-
-	_snapshot_log_lines.append(message)
-	while _snapshot_log_lines.size() > UI_SUMMARY_LOG_LINE_LIMIT:
-		_snapshot_log_lines.remove_at(0)
-
-
 func _emit(event_type: String, payload: Dictionary) -> void:
-	_record_snapshot_ui_summary(event_type, payload)
+	_snapshot_summary.record_event(event_type, payload)
 	var event_bus: Variant = _get_event_bus()
 	if event_bus != null:
 		event_bus.emit_game_event(GameEventScript.new(event_type, payload))
@@ -652,10 +421,3 @@ func _emit(event_type: String, payload: Dictionary) -> void:
 
 func _get_event_bus() -> Variant:
 	return get_node_or_null("/root/EventBus")
-
-
-func _get_tile_name(tile_data: BoardTileData) -> String:
-	if tile_data == null:
-		return "Unknown"
-
-	return tile_data.display_name
