@@ -70,13 +70,13 @@ If this slice becomes too large, prefer reducing UI/network surface before expan
 
 | Backlog ID | Issue | Status | Work item | Acceptance |
 | --- | --- | --- | --- | --- |
-| PB-047 | [#81](https://github.com/benson94879453/rich-war-online/issues/81) | In Progress | Plan v0.4 card intervention window baseline | Sprint7 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
-| PB-048 | [#82](https://github.com/benson94879453/rich-war-online/issues/82) | Planned | Add CardDefinition and CardService baseline | One prototype card definition can be validated and resolved through a focused service boundary. |
-| PB-049 | [#83](https://github.com/benson94879453/rich-war-online/issues/83) | Planned | Activate card state snapshot helpers | Prototype hand, discard, and pending intervention state can be represented and round-tripped without changing snapshot keys. |
-| PB-050 | [#84](https://github.com/benson94879453/rich-war-online/issues/84) | Planned | Add Host-authoritative card action intent envelope | Card-play action payloads can be accepted or rejected through a narrow Host-authoritative path without regressing existing actions. |
-| PB-051 | [#85](https://github.com/benson94879453/rich-war-online/issues/85) | Planned | Implement prototype pre-roll intervention card | One fixed card can resolve in a valid pre-roll window, apply its effect, consume/discard the card, and let turn flow continue. |
-| PB-052 | [#86](https://github.com/benson94879453/rich-war-online/issues/86) | Planned | Add card window scenario smoke coverage | A headless scenario proves the valid card-window path and key rejection or continuation behavior. |
-| PB-053 | [#87](https://github.com/benson94879453/rich-war-online/issues/87) | Planned | Record v0.4 card window baseline acceptance review | Sprint7 evidence is summarized with remaining risks and a clear recommendation for the next card-system slice. |
+| PB-047 | [#81](https://github.com/benson94879453/rich-war-online/issues/81) | Done | Plan v0.4 card intervention window baseline | Sprint7 plan, scope, out-of-scope items, issue order, validation expectations, and branch strategy are documented. |
+| PB-048 | [#82](https://github.com/benson94879453/rich-war-online/issues/82) | Done | Add CardDefinition and CardService baseline | One prototype card definition can be validated and resolved through a focused service boundary. |
+| PB-049 | [#83](https://github.com/benson94879453/rich-war-online/issues/83) | Done | Activate card state snapshot helpers | Prototype hand, discard, and pending intervention state can be represented and round-tripped without changing snapshot keys. |
+| PB-050 | [#84](https://github.com/benson94879453/rich-war-online/issues/84) | Done | Add Host-authoritative card action intent envelope | Card-play action payloads can be accepted or rejected through a narrow Host-authoritative path without regressing existing actions. |
+| PB-051 | [#85](https://github.com/benson94879453/rich-war-online/issues/85) | Done | Implement prototype pre-roll intervention card | One fixed card can resolve in a valid pre-roll window, apply its effect, consume/discard the card, and let turn flow continue. |
+| PB-052 | [#86](https://github.com/benson94879453/rich-war-online/issues/86) | Done | Add card window scenario smoke coverage | A headless scenario proves the valid card-window path and key rejection or continuation behavior. |
+| PB-053 | [#87](https://github.com/benson94879453/rich-war-online/issues/87) | In Review | Record v0.4 card window baseline acceptance review | Sprint7 evidence is summarized with remaining risks and a clear recommendation for the next card-system slice. |
 
 ## Recommended Order
 
