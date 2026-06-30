@@ -17,6 +17,7 @@ const INTENT_ROLL := ActionDispatcherScript.ACTION_ROLL
 const INTENT_GRID_ROUTE_CHOICE := ActionDispatcherScript.ACTION_GRID_ROUTE_CHOICE
 const INTENT_BUY_PROPERTY := ActionDispatcherScript.ACTION_BUY_PROPERTY
 const INTENT_SKIP_PROPERTY := ActionDispatcherScript.ACTION_SKIP_PROPERTY
+const INTENT_PLAY_CARD := ActionDispatcherScript.ACTION_PLAY_CARD
 const SNAPSHOT_REVISION_KEY := "_network_state_revision"
 const ASSIGNMENT_STATUS_JOINED := "joined"
 const ASSIGNMENT_STATUS_RECONNECTED := "reconnected"
@@ -135,6 +136,18 @@ func submit_buy_property() -> bool:
 
 func submit_skip_property() -> bool:
 	return submit_intent(INTENT_SKIP_PROPERTY)
+
+
+func submit_play_card(player_id: int, card_id: StringName, window_id: StringName, target_player_id: int = -1) -> bool:
+	var payload := {
+		ActionDispatcherScript.PAYLOAD_PLAYER_ID: player_id,
+		ActionDispatcherScript.PAYLOAD_CARD_ID: card_id,
+		ActionDispatcherScript.PAYLOAD_WINDOW_ID: window_id,
+	}
+	if target_player_id >= 0:
+		payload[ActionDispatcherScript.PAYLOAD_TARGET_PLAYER_ID] = target_player_id
+
+	return submit_intent(INTENT_PLAY_CARD, payload)
 
 
 func submit_intent(intent_type: String, payload: Dictionary = {}) -> bool:

@@ -156,6 +156,10 @@ func request_skip_pending_property() -> bool:
 	return _finish_property_resolution(property_service.skip_pending_property(state, board_data))
 
 
+func request_play_card_intent(_payload: Dictionary) -> bool:
+	return state != null and state.has_pending_intervention()
+
+
 func get_state_snapshot() -> Dictionary:
 	if state == null:
 		return {}
