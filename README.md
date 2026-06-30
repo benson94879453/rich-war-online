@@ -111,6 +111,8 @@ res://
     core/
       StarQGame.gd
       ActionDispatcher.gd
+      CardDefinition.gd
+      CardService.gd
       EventDefinition.gd
       EventService.gd
       LandingResolutionService.gd
@@ -136,6 +138,7 @@ res://
       scenario_10_roll_local_action_pipeline.gd
       scenario_event_landing_pipeline.gd
     smoke_action_dispatcher.gd
+    smoke_card_service.gd
     smoke_event_service.gd
     smoke_event_landing_binding.gd
     smoke_effect_service.gd
@@ -179,6 +182,12 @@ Run the effect service smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_effect_service.gd
+```
+
+Run the card service smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_card_service.gd
 ```
 
 Run the event service smoke check with:
