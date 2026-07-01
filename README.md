@@ -47,9 +47,9 @@ Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale G
 - Lobby, room code, or matchmaking flow.
 - Property upgrades and property valuation.
 - Pass Go salary rules.
-- Card draw, chance, fate, and special tile systems.
+- Full card draw, chance, fate, and special tile systems.
 - Player status effects.
-- Intervention windows and intervention cards.
+- Production intervention-window UX and full intervention-card system.
 - Stock market system.
 - End-game scoring and full bankruptcy settlement.
 - Production Web export pipeline.
@@ -98,6 +98,7 @@ res://
     sprints/sprint6_review.md
     sprints/sprint7.md
     sprints/sprint7_review.md
+    sprints/sprint8.md
   scenes/
     StarQGame.tscn
     Board.tscn
@@ -176,7 +177,7 @@ The minimal card-play action payload shape is:
 }
 ```
 
-`target_player_id` is included when the pending intervention window has a fixed target. Sprint7 keeps this as an intent envelope; card effect resolution, card consumption, and visible card UI are handled by later Sprint7 slices.
+`target_player_id` is included when the pending intervention window has a fixed target. Sprint7 established the headless card-window path; Sprint8 moves toward a visible active-scene card playtest surface without turning it into a full card system.
 
 Run the local 10-roll action pipeline scenario with:
 

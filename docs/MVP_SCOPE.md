@@ -63,7 +63,7 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 - Property upgrades.
 - Full bankruptcy liquidation and end-game scoring.
 - Stock market system.
-- Card draw, chance/fate cards, intervention cards, counter cards.
+- Full card draw, chance/fate card decks, counter cards, and production card UX.
 - Timed intervention windows.
 - Complex status effects such as jail, hospital, speed, slow, shields, luck, or misfortune.
 - Balance tuning.
@@ -90,7 +90,7 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 - Property upgrades and valuation.
 - Pass Go salary behavior.
 - Special tile effects beyond the current basic resolver.
-- Intervention windows and card system.
+- Full card system and production intervention UX.
 - Stock market.
 - Game-over and winner calculation.
 
@@ -106,17 +106,17 @@ Stale Godot temporary scene/resource write artifacts are not part of the active 
 
 Sprint goal:
 
-> Establish the first `v0.4-card-window-loop` baseline by proving one narrow Host-authoritative card intervention window.
+> Establish the first visible `v0.4-card-playtest-ui` baseline by exposing the Sprint7 prototype pre-roll card path through a minimal active-scene hand UI.
 
 Decision:
 
-> Sprint6 completed the `GameManager` decomposition baseline. The next sprint can start v0.4 with a deliberately small card slice: one deterministic pre-roll intervention card, one validation path, one effect path, and one scenario smoke.
+> Sprint7 completed the headless `v0.4-card-window-loop` baseline. The next sprint should keep the card system narrow and make the existing prototype path visible and testable, with UI implementation gated behind a user-confirmed wireframe/spec.
 
 Candidate stories:
 
-- As a developer, I can define a prototype card behind a focused data/service boundary.
-- As a developer, I can use existing snapshot card fields for prototype hand, discard, and pending intervention state without changing their serialized keys.
-- As a developer, I can submit a narrow card-play action through Host-authoritative validation.
-- As a tester, I can run a headless scenario that proves one valid pre-roll card play and normal turn continuation.
+- As a developer, I can follow a documented standard Godot test asset path for prototype card art.
+- As a developer, I can bind prototype card metadata to an optional test asset reference with fallback behavior.
+- As a designer/tester, I can confirm a bottom-hand card UI wireframe/spec before implementation.
+- As a tester, I can use an active-scene hand panel to inspect and play the prototype pre-roll card or skip it by rolling.
 
-See `docs/sprints/sprint7.md` for the Sprint7 baseline and acceptance direction.
+See `docs/sprints/sprint8.md` for the Sprint8 baseline and acceptance direction.
