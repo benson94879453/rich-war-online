@@ -9,6 +9,7 @@
 
 # Headless smoke scripts can generate local Godot script UIDs.
 tools/smoke_*.gd.uid
+tools/scenarios/*.gd.uid
 
 # Godot-specific ignores
 .import/
