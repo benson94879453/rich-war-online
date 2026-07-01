@@ -107,4 +107,6 @@ Sprint5 completed the first narrow `v0.3-event-building-loop` slice: a determini
 
 Sprint6 completed the `GameManager` decomposition baseline: snapshot summary tracking, property purchase/rent rules, and landing resolution now live behind focused boundaries while existing smoke and scenario checks remain stable.
 
-Next recommended direction: run Sprint7 as the first `v0.4-card-window-loop` planning and implementation sprint. The first slice should prove one deterministic pre-roll intervention card under Host authority before expanding into full decks, counter-card chains, timers, or final UI.
+Sprint7 completed the first `v0.4-card-window-loop` baseline: one deterministic pre-roll intervention card can exist in state, pass Host-authoritative validation, resolve through the card/effect service boundary, consume/discard state, and continue the normal turn flow.
+
+Next recommended direction: run Sprint8 as the visible card playtest baseline. The first visible slice should expose the Sprint7 card path through a bottom hand UI, keep layout values easy to tune, and require user-confirmed wireframe/spec approval before active-scene UI implementation.
