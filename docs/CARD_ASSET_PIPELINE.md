@@ -117,6 +117,26 @@ Required visible metadata for Sprint8:
 
 The prototype card should be able to render from metadata plus fallback visuals if `art_path` is empty or the file is missing.
 
+Runtime metadata is owned by `CardDefinition`. Sprint8 visible-card metadata includes:
+
+- `display_name`
+- `description`
+- `effect_summary`
+- `target_summary`
+- `art_path`
+
+The current prototype card defaults to:
+
+```text
+card_id:        prototype_pre_roll_grant
+display_name:   Prototype pre-roll grant
+effect_summary: +$50 to current player
+target_summary: Current player
+art_path:       res://assets/cards/test/prototype_pre_roll_grant.png
+```
+
+The default art path is a reference only. The file does not need to exist for smoke checks or gameplay to pass.
+
 ## Missing Asset Fallback
 
 Missing art must not break gameplay, smoke checks, or active-scene startup.

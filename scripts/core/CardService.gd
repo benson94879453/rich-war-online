@@ -4,6 +4,7 @@ class_name CardService
 
 const CARD_PROTOTYPE_PRE_ROLL_GRANT := &"prototype_pre_roll_grant"
 const SOURCE_CARD := &"card"
+const PROTOTYPE_PRE_ROLL_GRANT_ART_PATH := "res://assets/cards/test/prototype_pre_roll_grant.png"
 
 const CONTEXT_TARGET_PLAYER := "target_player"
 
@@ -14,14 +15,18 @@ const CardDefinitionScript := preload("res://scripts/core/CardDefinition.gd")
 var _effect_service: Variant = EffectServiceScript.new()
 
 
-func create_prototype_pre_roll_card(money_delta: int = 50) -> CardDefinition:
+func create_prototype_pre_roll_card(money_delta: int = 50, art_path: String = PROTOTYPE_PRE_ROLL_GRANT_ART_PATH) -> CardDefinition:
 	return CardDefinitionScript.new(
 		CARD_PROTOTYPE_PRE_ROLL_GRANT,
 		"Prototype pre-roll grant",
 		CardDefinitionScript.TIMING_PRE_ROLL,
 		CardDefinitionScript.TARGET_CURRENT_PLAYER,
 		EffectServiceScript.EFFECT_MONEY_DELTA,
-		money_delta
+		money_delta,
+		"Grants money to the current player during the prototype pre-roll window.",
+		"+$%d to current player" % money_delta,
+		"Current player",
+		art_path
 	)
 
 

@@ -27,7 +27,26 @@ func _run_smoke_check() -> void:
 	_expect_equal(card.target_rule, CardDefinitionScript.TARGET_CURRENT_PLAYER, "prototype target rule")
 	_expect_equal(card.effect_id, EffectServiceScript.EFFECT_MONEY_DELTA, "prototype effect id")
 	_expect_equal(card.money_delta, 60, "prototype money delta")
+	_expect_equal(card.display_name, "Prototype pre-roll grant", "prototype display name")
+	_expect_true(not card.description.is_empty(), "prototype description is visible metadata")
+	_expect_equal(card.get_effect_summary(), "+$60 to current player", "prototype effect summary")
+	_expect_equal(card.get_target_summary(), "Current player", "prototype target summary")
+	_expect_equal(card.get_art_path(), CardServiceScript.PROTOTYPE_PRE_ROLL_GRANT_ART_PATH, "prototype art path")
+	_expect_true(card.has_art_path(), "prototype card has default test art reference")
 	_expect_equal(service.validate_card_definition(card), "", "prototype card validates")
+
+	var metadata: Dictionary = card.get_visible_metadata()
+	_expect_equal(metadata.get("display_name", ""), "Prototype pre-roll grant", "metadata includes display name")
+	_expect_equal(metadata.get("description", ""), card.description, "metadata includes description")
+	_expect_equal(metadata.get("effect_summary", ""), "+$60 to current player", "metadata includes effect summary")
+	_expect_equal(metadata.get("target_summary", ""), "Current player", "metadata includes target summary")
+	_expect_equal(metadata.get("art_path", ""), CardServiceScript.PROTOTYPE_PRE_ROLL_GRANT_ART_PATH, "metadata includes art path")
+	_expect_true(bool(metadata.get("has_art_path", false)), "metadata marks art path present")
+
+	var no_art_card: CardDefinition = service.create_prototype_pre_roll_card(60, "")
+	_expect_equal(no_art_card.get_art_path(), "", "empty art path is allowed")
+	_expect_true(not no_art_card.has_art_path(), "empty art path is reported as absent")
+	_expect_equal(service.validate_card_definition(no_art_card), "", "prototype card validates without art")
 
 	var target := PlayerState.new(1, "Player 2", 900, 0, -1)
 	var result: Variant = service.apply_card(card, {
