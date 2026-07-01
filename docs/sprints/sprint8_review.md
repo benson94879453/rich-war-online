@@ -22,7 +22,13 @@ Sprint8 intentionally did not implement a full card game. It created a narrow vi
 | [#99](https://github.com/benson94879453/rich-war-online/issues/99) Draft visible card UI wireframe and implementation spec | [#106](https://github.com/benson94879453/rich-war-online/pull/106) | Done | Bottom hand layout, inactive/active states, inspect behavior, Roll skip path, and tunable implementation parameters are documented. |
 | [#100](https://github.com/benson94879453/rich-war-online/issues/100) Implement minimal active-scene card hand UI | [#107](https://github.com/benson94879453/rich-war-online/pull/107) | Done | Active UI has an always-visible bottom card hand panel, disabled/active states, enlarged inspect behavior, and Play Card bridge through the existing card intent path. |
 | [#101](https://github.com/benson94879453/rich-war-online/issues/101) Add visible card playtest manual checklist | [#108](https://github.com/benson94879453/rich-war-online/pull/108) | Done | Manual checklist records local active-scene card UI checks and keeps Host/Client checks pending unless actually run. |
-| [#102](https://github.com/benson94879453/rich-war-online/issues/102) Record visible card playtest acceptance review | This PR | In Review | This document records Sprint8 evidence, manual QA status, risks, and merge recommendation. |
+| [#102](https://github.com/benson94879453/rich-war-online/issues/102) Record visible card playtest acceptance review | [#109](https://github.com/benson94879453/rich-war-online/pull/109) | Done | This document records Sprint8 evidence, manual QA status, risks, and merge recommendation. |
+
+## Post-Review Fix
+
+| Scope | PR | Status | Result |
+| --- | --- | --- | --- |
+| Sprint8 card hand compile fix | [#110](https://github.com/benson94879453/rich-war-online/pull/110) | Done | Added the missing `StarQGame._get_string_name(...)` helper used by the visible card hand pending-intervention bridge. This fixed editor errors for pending `window_id` and `card_id` parsing. |
 
 ## Implemented Changes
 
@@ -34,11 +40,12 @@ Sprint8 intentionally did not implement a full card game. It created a narrow vi
 - Updated `scenes/UI.tscn`, `scripts/core/GameUI.gd`, and `scripts/core/StarQGame.gd` to expose one visible card hand path without moving card resolution logic into UI code.
 - Added `tools/smoke_card_hand_ui.gd` to validate the UI panel state and Play Card signal payload headlessly.
 - Added `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` for manual local and Host/Client visible-card QA.
+- Added a post-review `StarQGame` string-name parsing helper fix for the visible card hand path.
 - Updated README, Sprint8, and product backlog documentation.
 
 ## Automated Validation
 
-All closeout checks were run on `codex/issue-102-sprint8-acceptance-review` after syncing from `origin/codex/sprint8-visible-card-playtest`.
+All closeout checks were rerun on `codex/issue-102-sprint8-review-refresh` after syncing from `origin/codex/sprint8-visible-card-playtest` through PR #110.
 
 | Command | Result |
 | --- | --- |
@@ -79,18 +86,19 @@ Use `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` to record manual results before cl
 
 Automated validation is ready.
 
-Recommended decision: ready to open the final Sprint8 PR to `main` after this #102 review PR is merged into `codex/sprint8-visible-card-playtest`, with manual active-scene QA explicitly recorded as pending unless the owner runs `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` first.
+Recommended decision: ready to open the final Sprint8 PR to `main` after this review refresh is merged into `codex/sprint8-visible-card-playtest`, with manual active-scene QA explicitly recorded as pending unless the owner runs `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` first.
 
 If the project requires visual/manual acceptance before merging to `main`, block the final PR until at least the local active-scene section of `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` is executed and recorded.
 
 ## Merge Back To Main Checklist
 
-- [x] Sprint branch is up to date through PR #108.
-- [x] Sprint issue PRs #103 through #108 are merged into `codex/sprint8-visible-card-playtest`.
+- [x] Sprint branch is up to date through PR #110.
+- [x] Sprint issue PRs #103 through #110 are merged into `codex/sprint8-visible-card-playtest`.
 - [x] Closeout automated checks pass.
 - [x] Manual QA status is honestly recorded as pending.
 - [x] Remaining risks are documented.
-- [ ] #102 review PR is merged into `codex/sprint8-visible-card-playtest`.
+- [x] #102 review PR is merged into `codex/sprint8-visible-card-playtest`.
+- [ ] Review refresh PR is merged into `codex/sprint8-visible-card-playtest`.
 - [ ] Open final PR from `codex/sprint8-visible-card-playtest` to `main`.
 
 ## Conclusion
