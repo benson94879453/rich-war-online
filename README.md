@@ -217,6 +217,12 @@ Run the card service smoke check with:
 godot --headless --path . --script res://tools/smoke_card_service.gd
 ```
 
+Run the visible card hand UI smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_card_hand_ui.gd
+```
+
 Run the prototype pre-roll card smoke check with:
 
 ```bash

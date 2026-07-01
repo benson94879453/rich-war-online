@@ -88,6 +88,7 @@ func _connect_ui_actions() -> void:
 	_ui.network_host_pressed.connect(_on_network_host_pressed)
 	_ui.network_join_pressed.connect(_on_network_join_pressed)
 	_ui.host_open_seat_control_toggled.connect(_on_host_open_seat_control_toggled)
+	_ui.card_play_pressed.connect(_on_card_play_pressed)
 
 
 func _on_roll_pressed() -> void:
@@ -120,6 +121,17 @@ func _on_property_skip_pressed() -> void:
 
 	if NetworkManager.submit_skip_property():
 		_begin_pending_client_intent(NetworkManager.INTENT_SKIP_PROPERTY)
+
+
+func _on_card_play_pressed(player_id: int, card_id: StringName, window_id: StringName, target_player_id: int) -> void:
+	if _has_pending_client_intent():
+		return
+
+	if NetworkManager.submit_play_card(player_id, card_id, window_id, target_player_id):
+		_begin_pending_client_intent(NetworkManager.INTENT_PLAY_CARD)
+		_update_money_label()
+		_refresh_card_hand()
+		_update_roll_availability()
 
 
 func _on_network_host_pressed() -> void:
@@ -186,6 +198,7 @@ func _handle_game_started() -> void:
 		_ui.hide_route_actions()
 		_ui.hide_property_actions()
 		_ui.set_roll_allowed(false)
+	_refresh_card_hand()
 
 
 func _handle_round_started(payload: Dictionary) -> void:
@@ -204,12 +217,14 @@ func _handle_turn_started(payload: Dictionary) -> void:
 
 	_roll_is_ready = player_id >= 0 and NetworkManager.can_control_player(player_id)
 	_update_roll_availability()
+	_refresh_card_hand()
 
 
 func _handle_dice_rolled(payload: Dictionary) -> void:
 	_roll_is_ready = false
 	_update_dice_label(int(payload.get("dice_value", 0)))
 	_update_roll_availability()
+	_refresh_card_hand()
 
 
 func _handle_map_player_moved(payload: Dictionary) -> void:
@@ -492,8 +507,10 @@ func _on_network_status_changed(message: String) -> void:
 
 func _on_network_intent_accepted(_intent_type: String, _request_id: int) -> void:
 	_clear_pending_client_intent()
+	_update_money_label()
 	_update_roll_availability()
 	_refresh_pending_action_controls()
+	_refresh_card_hand()
 
 
 func _on_network_intent_rejected(intent_type: String, reason: String, _request_id: int) -> void:
@@ -501,6 +518,7 @@ func _on_network_intent_rejected(intent_type: String, reason: String, _request_i
 	if _is_stale_property_rejection(intent_type, reason):
 		_update_roll_availability()
 		_refresh_pending_action_controls()
+		_refresh_card_hand()
 		return
 
 	var message := "Rejected %s: %s" % [intent_type, reason]
@@ -508,11 +526,13 @@ func _on_network_intent_rejected(intent_type: String, reason: String, _request_i
 	_add_event_log_line(message)
 	_update_roll_availability()
 	_refresh_pending_action_controls()
+	_refresh_card_hand()
 
 
 func _on_network_local_player_changed(_player_id: int) -> void:
 	_update_roll_availability()
 	_refresh_pending_action_controls()
+	_refresh_card_hand()
 
 
 func _on_network_state_snapshot_received(snapshot: Dictionary) -> void:
@@ -558,6 +578,7 @@ func _refresh_from_state_snapshot(snapshot: Dictionary = {}, apply_snapshot_log:
 	_roll_is_ready = _can_local_roll()
 	_refresh_pending_action_controls()
 	_update_roll_availability()
+	_refresh_card_hand()
 
 
 func _apply_snapshot_ui_summary(snapshot: Dictionary, apply_snapshot_log: bool) -> void:
@@ -615,6 +636,36 @@ func _refresh_pending_action_controls() -> void:
 		return
 
 	_ui.hide_route_actions()
+	_refresh_card_hand()
+
+
+func _refresh_card_hand() -> void:
+	if _ui == null:
+		return
+
+	var card_definition: CardDefinition = GameManager.card_service.create_prototype_pre_roll_card()
+	var metadata: Dictionary = card_definition.get_visible_metadata()
+	var is_playable := false
+	var acting_player_id := -1
+	var target_player_id := -1
+	var window_id := CardDefinition.TIMING_PRE_ROLL
+
+	if GameManager.state != null and GameManager.state.has_pending_intervention():
+		var pending_intervention: Dictionary = GameManager.state.pending_intervention
+		acting_player_id = int(pending_intervention.get("acting_player_id", -1))
+		target_player_id = int(pending_intervention.get("target_player_id", -1))
+		window_id = _get_string_name(pending_intervention.get("window_id", CardDefinition.TIMING_PRE_ROLL))
+		var card_id := _get_string_name(pending_intervention.get("card_id", &""))
+		is_playable = (
+			card_id == CardService.CARD_PROTOTYPE_PRE_ROLL_GRANT
+			and window_id == CardDefinition.TIMING_PRE_ROLL
+			and acting_player_id >= 0
+			and GameManager.state.has_card_in_hand(acting_player_id, card_id)
+			and NetworkManager.can_control_player(acting_player_id)
+			and not _has_pending_client_intent()
+		)
+
+	_ui.set_card_hand_state(metadata, is_playable, acting_player_id, window_id, target_player_id)
 
 
 func _get_board_data() -> BoardData:
@@ -643,6 +694,8 @@ func _begin_pending_client_intent(intent_type: String) -> void:
 		NetworkManager.INTENT_BUY_PROPERTY, NetworkManager.INTENT_SKIP_PROPERTY:
 			if _ui != null:
 				_ui.hide_property_actions()
+		NetworkManager.INTENT_PLAY_CARD:
+			_refresh_card_hand()
 
 	_update_roll_availability()
 
