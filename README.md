@@ -102,6 +102,7 @@ res://
     sprints/sprint7.md
     sprints/sprint7_review.md
     sprints/sprint8.md
+    sprints/sprint8_review.md
   scenes/
     StarQGame.tscn
     Board.tscn
