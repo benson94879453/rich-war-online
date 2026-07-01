@@ -668,6 +668,17 @@ func _refresh_card_hand() -> void:
 	_ui.set_card_hand_state(metadata, is_playable, acting_player_id, window_id, target_player_id)
 
 
+func _get_string_name(value: Variant) -> StringName:
+	if value == null:
+		return &""
+
+	var text := str(value).strip_edges()
+	if text.is_empty():
+		return &""
+
+	return StringName(text)
+
+
 func _get_board_data() -> BoardData:
 	if _board == null:
 		return null
