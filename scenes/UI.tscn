@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/GameUI.gd" id="1_ui"]
+[ext_resource type="Script" path="res://scripts/core/CardHandPanel.gd" id="2_card_hand"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_ui")
@@ -162,3 +163,18 @@ text = "Log: -"
 
 [node name="LogBottomMarker" type="Control" parent="LogPanel/LogMargin/LogScroll/LogContent"]
 custom_minimum_size = Vector2(1, 1)
+
+[node name="CardHandPanel" type="Control" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -360.0
+offset_top = -244.0
+offset_right = 360.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("2_card_hand")

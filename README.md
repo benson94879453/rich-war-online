@@ -47,9 +47,9 @@ Do not use legacy/demo scenes to judge `v0.1-local-core-loop` readiness. Stale G
 - Lobby, room code, or matchmaking flow.
 - Property upgrades and property valuation.
 - Pass Go salary rules.
-- Card draw, chance, fate, and special tile systems.
+- Full card draw, chance, fate, and special tile systems.
 - Player status effects.
-- Intervention windows and intervention cards.
+- Production intervention-window UX and full intervention-card system.
 - Stock market system.
 - End-game scoring and full bankruptcy settlement.
 - Production Web export pipeline.
@@ -73,6 +73,9 @@ res://
     ACTIVE_BOARD_RESOURCE.md
     MAP_VALIDATION_CHECKLIST.md
     MAP_VALIDATION_SMOKE_PLAN.md
+    CARD_ASSET_PIPELINE.md
+    CARD_UI_WIREFRAME.md
+    VISIBLE_CARD_PLAYTEST_CHECKLIST.md
     MVP_SCOPE.md
     PRODUCT_BACKLOG.md
     CHANGE_CONTROL.md
@@ -98,6 +101,8 @@ res://
     sprints/sprint6_review.md
     sprints/sprint7.md
     sprints/sprint7_review.md
+    sprints/sprint8.md
+    sprints/sprint8_review.md
   scenes/
     StarQGame.tscn
     Board.tscn
@@ -176,7 +181,7 @@ The minimal card-play action payload shape is:
 }
 ```
 
-`target_player_id` is included when the pending intervention window has a fixed target. Sprint7 keeps this as an intent envelope; card effect resolution, card consumption, and visible card UI are handled by later Sprint7 slices.
+`target_player_id` is included when the pending intervention window has a fixed target. Sprint7 established the headless card-window path; Sprint8 moves toward a visible active-scene card playtest surface without turning it into a full card system.
 
 Run the local 10-roll action pipeline scenario with:
 
@@ -212,6 +217,12 @@ Run the card service smoke check with:
 
 ```bash
 godot --headless --path . --script res://tools/smoke_card_service.gd
+```
+
+Run the visible card hand UI smoke check with:
+
+```bash
+godot --headless --path . --script res://tools/smoke_card_hand_ui.gd
 ```
 
 Run the prototype pre-roll card smoke check with:
@@ -306,6 +317,7 @@ godot --headless --path . --script res://tools/smoke_reconnect_status_snapshot.g
 
 Use `docs/MANUAL_TEST_CHECKLIST.md` for baseline validation.
 Use `docs/MAP_VALIDATION_CHECKLIST.md` when map resource, spawn, route, tile placement, or property marker data changes.
+Use `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` for Sprint8 visible card UI manual QA.
 
 For the current multiplayer path:
 

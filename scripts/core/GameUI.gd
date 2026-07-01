@@ -10,6 +10,7 @@ signal grid_route_choice_pressed(direction: int)
 signal network_host_pressed
 signal network_join_pressed(address: String)
 signal host_open_seat_control_toggled(enabled: bool)
+signal card_play_pressed(player_id: int, card_id: StringName, window_id: StringName, target_player_id: int)
 
 
 @onready var network_status_label: Label = $NetworkPanel/NetworkMargin/NetworkColumn/NetworkStatusLabel as Label
@@ -35,6 +36,7 @@ signal host_open_seat_control_toggled(enabled: bool)
 @onready var log_scroll: ScrollContainer = $LogPanel/LogMargin/LogScroll as ScrollContainer
 @onready var log_label: Label = $LogPanel/LogMargin/LogScroll/LogContent/LogLabel as Label
 @onready var log_bottom_marker: Control = $LogPanel/LogMargin/LogScroll/LogContent/LogBottomMarker as Control
+@onready var card_hand_panel: CardHandPanel = $CardHandPanel as CardHandPanel
 
 var _route_options_by_direction: Dictionary = {}
 var _grid_route_directions_by_button: Dictionary = {}
@@ -50,6 +52,8 @@ func _ready() -> void:
 		network_address_input.text_submitted.connect(_on_network_address_submitted)
 	if host_open_seat_check_box != null:
 		host_open_seat_check_box.toggled.connect(_on_host_open_seat_toggled)
+	if card_hand_panel != null:
+		card_hand_panel.play_card_pressed.connect(_on_card_play_pressed)
 	if roll_button != null:
 		roll_button.pressed.connect(_on_roll_button_pressed)
 	if buy_button != null:
@@ -176,6 +180,17 @@ func set_log_text(value: String) -> void:
 		_scroll_log_to_bottom_after_layout()
 
 
+func set_card_hand_state(
+		metadata: Dictionary,
+		is_playable: bool,
+		acting_player_id: int,
+		window_id: StringName,
+		target_player_id: int
+) -> void:
+	if card_hand_panel != null:
+		card_hand_panel.set_card_state(metadata, is_playable, acting_player_id, window_id, target_player_id)
+
+
 func _on_host_button_pressed() -> void:
 	network_host_pressed.emit()
 
@@ -190,6 +205,10 @@ func _on_network_address_submitted(_value: String) -> void:
 
 func _on_host_open_seat_toggled(enabled: bool) -> void:
 	host_open_seat_control_toggled.emit(enabled)
+
+
+func _on_card_play_pressed(player_id: int, card_id: StringName, window_id: StringName, target_player_id: int) -> void:
+	card_play_pressed.emit(player_id, card_id, window_id, target_player_id)
 
 
 func _on_roll_button_pressed() -> void:
