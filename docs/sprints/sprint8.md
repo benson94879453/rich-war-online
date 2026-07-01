@@ -82,7 +82,7 @@ Sprint8 builds on the following completed boundaries:
 | Backlog ID | Issue | Status | Work item | Acceptance |
 | --- | --- | --- | --- | --- |
 | PB-054 | [#96](https://github.com/benson94879453/rich-war-online/issues/96) | In Progress | Plan visible card playtest baseline | Sprint8 plan, scope, out-of-scope items, UI gate, issue order, validation expectations, and branch strategy are documented. |
-| PB-055 | [#97](https://github.com/benson94879453/rich-war-online/issues/97) | Planned | Define card test asset pipeline guide | Standard Godot asset paths, naming, ratio guidance, and fallback behavior are documented. |
+| PB-055 | [#97](https://github.com/benson94879453/rich-war-online/issues/97) | In Review | Define card test asset pipeline guide | Standard Godot asset paths, naming, ratio guidance, and fallback behavior are documented. |
 | PB-056 | [#98](https://github.com/benson94879453/rich-war-online/issues/98) | Planned | Bind prototype card metadata to test asset reference | Prototype card metadata can support a visible card surface with optional test art and safe fallback behavior. |
 | PB-057 | [#99](https://github.com/benson94879453/rich-war-online/issues/99) | Planned | Draft visible card UI wireframe and implementation spec | Bottom-hand UI, disabled/active states, inspect behavior, tunable parameters, and user-confirmation gate are documented. |
 | PB-058 | [#100](https://github.com/benson94879453/rich-war-online/issues/100) | Blocked | Implement minimal active-scene card hand UI | After #99 confirmation, the prototype card can be seen, inspected, played during pre-roll, or skipped by rolling. |
