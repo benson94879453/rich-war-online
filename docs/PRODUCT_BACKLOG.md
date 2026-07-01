@@ -98,8 +98,8 @@ Prove a stable multiplayer board-game core loop that can later support intervent
 | PB-056 | [#98](https://github.com/benson94879453/rich-war-online/issues/98) | P1 | Tech Debt | Done | sprint8 | Bind prototype card metadata to test asset reference | Prototype card metadata can support a visible card surface with optional test art and safe fallback behavior. |
 | PB-057 | [#99](https://github.com/benson94879453/rich-war-online/issues/99) | P1 | Spec | Done | sprint8 | Draft visible card UI wireframe and implementation spec | Bottom-hand UI, disabled/active states, inspect behavior, tunable parameters, and user-confirmation gate are documented. |
 | PB-058 | [#100](https://github.com/benson94879453/rich-war-online/issues/100) | P1 | Story | Done | sprint8 | Implement minimal active-scene card hand UI | After #99 confirmation, the prototype card can be seen, inspected, played during pre-roll, or skipped by rolling. |
-| PB-059 | [#101](https://github.com/benson94879453/rich-war-online/issues/101) | P1 | QA | In Review | sprint8 | Add visible card playtest manual checklist | Manual checks cover inactive/active hand states, inspect, card play, roll skip, and Host/Client pending status. |
-| PB-060 | [#102](https://github.com/benson94879453/rich-war-online/issues/102) | P1 | Review | Planned | sprint8 | Record visible card playtest acceptance review | Sprint8 evidence is summarized with manual QA status, remaining risks, and a merge recommendation. |
+| PB-059 | [#101](https://github.com/benson94879453/rich-war-online/issues/101) | P1 | QA | Done | sprint8 | Add visible card playtest manual checklist | Manual checks cover inactive/active hand states, inspect, card play, roll skip, and Host/Client pending status. |
+| PB-060 | [#102](https://github.com/benson94879453/rich-war-online/issues/102) | P1 | Review | In Review | sprint8 | Record visible card playtest acceptance review | Sprint8 evidence is summarized with manual QA status, remaining risks, and a merge recommendation. |
 
 ## Ready Criteria
 

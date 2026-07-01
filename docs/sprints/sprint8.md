@@ -86,8 +86,8 @@ Sprint8 builds on the following completed boundaries:
 | PB-056 | [#98](https://github.com/benson94879453/rich-war-online/issues/98) | Done | Bind prototype card metadata to test asset reference | Prototype card metadata can support a visible card surface with optional test art and safe fallback behavior. |
 | PB-057 | [#99](https://github.com/benson94879453/rich-war-online/issues/99) | Done | Draft visible card UI wireframe and implementation spec | Bottom-hand UI, disabled/active states, inspect behavior, tunable parameters, and user-confirmation gate are documented. |
 | PB-058 | [#100](https://github.com/benson94879453/rich-war-online/issues/100) | Done | Implement minimal active-scene card hand UI | After #99 confirmation, the prototype card can be seen, inspected, played during pre-roll, or skipped by rolling. |
-| PB-059 | [#101](https://github.com/benson94879453/rich-war-online/issues/101) | In Review | Add visible card playtest manual checklist | Manual checks cover inactive/active hand states, inspect, card play, roll skip, and Host/Client pending status. |
-| PB-060 | [#102](https://github.com/benson94879453/rich-war-online/issues/102) | Planned | Record visible card playtest acceptance review | Sprint8 evidence is summarized with manual QA status, remaining risks, and a merge recommendation. |
+| PB-059 | [#101](https://github.com/benson94879453/rich-war-online/issues/101) | Done | Add visible card playtest manual checklist | Manual checks cover inactive/active hand states, inspect, card play, roll skip, and Host/Client pending status. |
+| PB-060 | [#102](https://github.com/benson94879453/rich-war-online/issues/102) | In Review | Record visible card playtest acceptance review | Sprint8 evidence is summarized with manual QA status, remaining risks, and a merge recommendation. |
 
 ## Recommended Order
 
