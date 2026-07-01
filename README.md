@@ -75,6 +75,7 @@ res://
     MAP_VALIDATION_SMOKE_PLAN.md
     CARD_ASSET_PIPELINE.md
     CARD_UI_WIREFRAME.md
+    VISIBLE_CARD_PLAYTEST_CHECKLIST.md
     MVP_SCOPE.md
     PRODUCT_BACKLOG.md
     CHANGE_CONTROL.md
@@ -315,6 +316,7 @@ godot --headless --path . --script res://tools/smoke_reconnect_status_snapshot.g
 
 Use `docs/MANUAL_TEST_CHECKLIST.md` for baseline validation.
 Use `docs/MAP_VALIDATION_CHECKLIST.md` when map resource, spawn, route, tile placement, or property marker data changes.
+Use `docs/VISIBLE_CARD_PLAYTEST_CHECKLIST.md` for Sprint8 visible card UI manual QA.
 
 For the current multiplayer path:
 
